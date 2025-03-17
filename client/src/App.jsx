@@ -8,7 +8,6 @@ import Campaigns from './pages/Campaigns';
 import Gallery from './pages/Gallery';
 import Support from './pages/Support';
 import Contact from './pages/Contact';
-import Admin from './pages/Admin';
 import NariShakti from './pages/campaigns/NariShakti';
 import SuSikshaPathshala from './pages/campaigns/SuSikshaPathshala';
 import NayiUdaan from './pages/campaigns/NayiUdaan';
@@ -20,6 +19,8 @@ import Internship from './pages/support/internship';
 import Donate from './pages/support/Doantion';
 import AooBatenKarein from './pages/campaigns/AooBatenKarein';
 import NayiSambhawnayein from './pages/campaigns/nayisambhawnayein';
+import AdminDashboard from './pages/Dashboards/adminDashboard';
+import Login from './pages/login';
 
 function App() {
   return (
@@ -45,7 +46,8 @@ function App() {
             <Route path="/support/internship" element={<Internship />} />
             <Route path="/support/donate" element={<Donate />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
           </Routes>
         </main>
         <Footer />

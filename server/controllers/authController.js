@@ -4,7 +4,7 @@ import User from '../models/User.js';
 // Generate JWT token
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: '1d',
   });
 };
 
@@ -14,9 +14,10 @@ const generateToken = (id, role) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log(email,password);
     const user = await User.findOne({ email });
 
+    console.log(user)
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,

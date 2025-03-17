@@ -51,12 +51,12 @@ ngo-backend/
 ## Dependencies
 Install the following npm packages:
 ```bash
-npm install express mongoose bcryptjs jsonwebtoken dotenv multer cloudinary cors
+npm install express mongoose bcrypt jsonwebtoken dotenv multer cloudinary cors
 ```
 
 - **express**: Web framework for Node.js
 - **mongoose**: MongoDB ODM
-- **bcryptjs**: Password hashing
+- **bcrypt**: Password hashing
 - **jsonwebtoken**: JWT for authentication
 - **dotenv**: Environment variable management
 - **multer**: File upload handling
