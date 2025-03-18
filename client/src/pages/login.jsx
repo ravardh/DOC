@@ -6,29 +6,40 @@ import logo from "../assets/logo.png";
 function Login() {
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    
     try {
       const response = await axios.post('/api/auth/login', loginData);
-      console.log(response.data)
       const data = response.data;
 
-      localStorage.setItem('user', JSON.stringify(data));
+      // Store user data and token separately
+      localStorage.setItem('user', JSON.stringify({
+        _id: data._id,
+        email: data.email,
+        role: data.role
+      }));
+      localStorage.setItem('token', data.token);
 
       // Redirect based on user role
       if (data.role === 'admin') {
         navigate('/admin-dashboard');
-      } else if (user.role === 'hr') {
+      } else if (data.role === 'hr') {
         navigate('/hr-dashboard');
-      } else if (user.role === 'team') {
+      } else if (data.role === 'team') {
         navigate('/team-dashboard');
       } else {
         setError('Unauthorized role');
       }
     } catch (err) {
-      setError('Invalid credentials');
+      setError(err.response?.data?.message || 'Invalid credentials');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -43,12 +54,13 @@ function Login() {
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="grid gap-3">
             <input
-              type="text"
+              type="email"
               required
-              placeholder="Username"
+              placeholder="Email"
               className="w-full px-3 py-2 border rounded-md"
               value={loginData.email}
               onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+              disabled={isLoading}
             />
             <input
               type="password"
@@ -57,10 +69,15 @@ function Login() {
               className="w-full px-3 py-2 border rounded-md"
               value={loginData.password}
               onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+              disabled={isLoading}
             />
           </div>
-          <button type="submit" className="w-full py-2 text-white bg-[#FF6F00] hover:bg-[#dc6b16] rounded-md">
-            Sign in
+          <button 
+            type="submit" 
+            className={`w-full py-2 text-white bg-[#FF6F00] hover:bg-[#dc6b16] rounded-md ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
       </div>

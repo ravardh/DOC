@@ -12,6 +12,17 @@ export const submitContact = async (req, res) => {
   }
 };
 
+// Contact Form
+export const getContact = async (req, res) => {
+  try {
+    const donations = await Contact.find().sort({ date: -1 });
+    res.json(donations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 // Donations
 export const submitDonation = async (req, res) => {
   try {
@@ -40,3 +51,25 @@ export const getDonations = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 }; 
+
+
+export const updateDonationStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { receiptGenerated } = req.body;
+
+    const donation = await Donation.findByIdAndUpdate(
+      id,
+      { receiptGenerated },
+      { new: true }
+    );
+
+    if (!donation) {
+      return res.status(404).json({ message: 'Donation not found' });
+    }
+
+    res.json(donation);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
