@@ -21,6 +21,7 @@ import AooBatenKarein from "./pages/campaigns/AooBatenKarein";
 import NayiSambhawnayein from "./pages/campaigns/nayisambhawnayein";
 import AdminDashboard from "./pages/Dashboards/adminDashboard";
 import Login from "./pages/login";
+import HRDashboard from "./pages/Dashboards/hrDashboard";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/hr-dashboard" element={<HRDashboard />} />
           </Routes>
         </main>
         <Footer />
