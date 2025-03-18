@@ -8,7 +8,7 @@ import Team from "../models/Team.js";
 import Student from "../models/Student.js";
 import CoreTeam from "../models/CoreTeam.js";
 import Donation from "../models/Donation.js";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -83,10 +83,11 @@ const seedApplicants = async () => {
         phone: "1234567890",
         gender: "male",
         dob: new Date("1990-01-01"),
-        interests: ["Education", "Environment"],
-        availability: "Weekends",
+        interests: "fund Raising",
+        availability: "7",
         experience: "5 years in teaching",
         status: "pending",
+        reference: "Facebook",
       },
       {
         type: "intern",
@@ -95,53 +96,14 @@ const seedApplicants = async () => {
         phone: "9876543210",
         gender: "female",
         dob: new Date("1995-05-15"),
-        interests: ["Social Work", "Child Care"],
-        availability: "Full Time",
-        course: "Social Work",
-        college: "University of Social Sciences",
+        interests: "Graphics Designing",
+        availability: "Weekends",
+        course: "B.tech",
+        college: "ABC college of Technology",
         duration: "6 months",
+        reference: "instagram",
         status: "interview",
         interviewDate: new Date("2024-04-01"),
-      },
-      {
-        type: "volunteer",
-        name: "Michael Chen",
-        email: "michael@example.com",
-        phone: "5555555555",
-        gender: "male",
-        dob: new Date("1988-08-20"),
-        interests: ["Healthcare", "Elderly Care"],
-        availability: "Evenings",
-        experience: "3 years in healthcare",
-        status: "pending",
-      },
-      {
-        type: "intern",
-        name: "Emily Davis",
-        email: "emily@example.com",
-        phone: "4444444444",
-        gender: "female",
-        dob: new Date("1997-12-10"),
-        interests: ["Education", "Youth Development"],
-        availability: "Full Time",
-        course: "Education",
-        college: "Teachers College",
-        duration: "3 months",
-        status: "interview",
-        interviewDate: new Date("2024-04-05"),
-      },
-      {
-        type: "volunteer",
-        name: "David Wilson",
-        email: "david@example.com",
-        phone: "3333333333",
-        gender: "male",
-        dob: new Date("1992-03-25"),
-        interests: ["Environment", "Community Development"],
-        availability: "Weekends",
-        experience: "2 years in environmental projects",
-        status: "onboarded",
-        joiningDate: new Date("2024-03-15"),
       },
     ];
 

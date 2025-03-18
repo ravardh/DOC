@@ -54,25 +54,85 @@ export const deleteGalleryImage = async (req, res) => {
 // Applicant Controllers
 export const submitVolunteerApplication = async (req, res) => {
   try {
+    const { name, email, phone, gender, dob, interests, availability, reference, experience } = req.body;
+
+    // **Basic Validations**
+    if (!name || !email || !phone || !gender || !dob || !availability || !experience) {
+      return res.status(400).json({ message: "All required fields must be filled." });
+    }
+
+    // Check for duplicate email or phone
+    const existingApplicant = await Applicant.findOne({ $or: [{ email }, { phone }] });
+    if (existingApplicant) {
+      return res.status(400).json({ message: "Applicant with this email or phone already exists." });
+    }
+
+    // **Create Applicant in DB**
     const applicant = await Applicant.create({
-      ...req.body,
-      type: 'volunteer',
+      type: "volunteer",
+      name,
+      email,
+      phone,
+      gender,
+      dob,
+      interests,
+      availability,
+      reference,
+      experience,
     });
-    res.status(201).json(applicant);
+
+    return res.status(201).json({ message: "Application submitted successfully!", applicant });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error in submitVolunteerApplication:", error);
+    return res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
 
 export const submitInternApplication = async (req, res) => {
   try {
+    const { name, email, phone, gender, dob, interests, availability, reference, course, college, duration } = req.body;
+
+    // Validate required fields for intern type
+    if (!name || !email || !phone || !gender || !dob || !interests || !availability || !course || !college || !duration) {
+      return res.status(400).json({ message: "All required fields must be provided." });
+    }
+
+    // Ensure gender is valid
+    const validGenders = ['male', 'female', 'other'];
+    if (!validGenders.includes(gender.toLowerCase())) {
+      return res.status(400).json({ message: "Invalid gender value." });
+    }
+
+    // Check if applicant with the same email or phone already exists
+    const existingApplicant = await Applicant.findOne({ $or: [{ email }, { phone }] });
+    if (existingApplicant) {
+      return res.status(409).json({ message: "Applicant with this email or phone already exists." });
+    }
+
+    // Create intern application
     const applicant = await Applicant.create({
-      ...req.body,
-      type: 'intern',
+      type: "intern",
+      name,
+      email: email.toLowerCase(),
+      phone,
+      gender,
+      dob,
+      interests,
+      availability,
+      reference,
+      course,
+      college,
+      duration,
     });
-    res.status(201).json(applicant);
+
+    return res.status(201).json({
+      message: "Intern application submitted successfully.",
+      applicant,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error submitting intern application:", error);
+    return res.status(500).json({ message: "Internal Server Error. Please try again later." });
   }
 };
 

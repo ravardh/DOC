@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
+import axios from "../../config/api";
 
 function Internship() {
   const [formData, setFormData] = useState({
@@ -10,31 +11,50 @@ function Internship() {
     gender: "",
     dob: "",
     course: "",
-    university: "",
+    college: "",
+    interests: "",
     duration: "",
     availability: "",
-    resume: "",
+    reference: "",
     agreeToTerms: false,
   });
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.gender ||
-      !formData.dob ||
-      !formData.course ||
-      !formData.university ||
-      !formData.duration ||
-      !formData.availability ||
-      !formData.agreeToTerms
+      Object.values(formData).some((value) => value === "" || value === false)
     ) {
       alert("Please fill all required fields and accept terms.");
       return;
     }
-    console.log("Submitting:", formData);
+    try {
+      const response = await axios.post("/api/hr/applicants/intern", formData);
+      setMessage({
+        text: "Application submitted successfully!",
+        type: "success",
+      });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        gender: "",
+        dob: "",
+        course: "",
+        college: "",
+        interests: "",
+        duration: "",
+        availability: "",
+        reference: "",
+        agreeToTerms: false,
+      });
+    } catch (error) {
+      setMessage({ text: error.message, type: "error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -62,7 +82,7 @@ function Internship() {
                 Apply for Internship
               </h2>
               <form onSubmit={handleSubmit} className="space-y-6">
-              <input
+                <input
                   type="text"
                   name="name"
                   value={formData.name}
@@ -102,16 +122,18 @@ function Internship() {
                   <option value="other">Other</option>
                 </select>
                 <div className="flex justify-around items-center">
-                <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-                <input
-                  type="date"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleChange}
-                  required
-                  placeholder="Date of Birth"
-                  className="mt-1 px-5 w-6/12 h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                />
+                  <label className="block text-sm font-medium text-gray-700">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    required
+                    placeholder="Date of Birth"
+                    className="mt-1 px-5 w-6/12 h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
+                  />
                 </div>
                 <input
                   type="text"
@@ -124,19 +146,35 @@ function Internship() {
                 />
                 <input
                   type="text"
-                  name="university"
-                  value={formData.university}
+                  name="college"
+                  value={formData.college}
                   onChange={handleChange}
                   required
                   placeholder="University/College"
                   className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
                 />
                 <select
+                  name="interests"
+                  value={formData.interests}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
+                >
+                  <option value="">Area of Interest</option>
+                  <option value="teaching">Teaching</option>
+                  <option value="fundraising">Fundraising</option>
+                  <option value="events">Event Management</option>
+                  <option value="social-media">Social Media</option>
+                  <option value="graphic-Designing">Graphic Designing</option>
+                  <option value="content-writing">Content Writing</option>
+                  <option value="administration">Administration</option>
+                </select>
+                <select
                   name="duration"
                   value={formData.duration}
                   onChange={handleChange}
                   required
-                 className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
+                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
                 >
                   <option value="">Internship Duration</option>
                   <option value="3-month">3 Month</option>
@@ -151,8 +189,26 @@ function Internship() {
                   className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
                 >
                   <option value="">Availability</option>
-                  <option value="full-time">Full Time</option>
-                  <option value="part-time">Part Time</option>
+                  <option value="full-time">WeekDays</option>
+                  <option value="part-time">WeekEnds</option>
+                  <option value="always">Always</option>
+                </select>
+                <select
+                  name="reference"
+                  value={formData.reference}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
+                >
+                  <option value="">Where did you hear about us?</option>
+                  <option value="facebook">Facebook</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="youtube">YouTube</option>
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="offline">Offline Campaign</option>
+                  <option value="seminar">College Seminar</option>
+                  <option value="word-of-mouth">Word of Mouth</option>
+                  <option value="other">Other</option>
                 </select>
                 <div className="flex items-start">
                   <input
@@ -167,10 +223,25 @@ function Internship() {
                     I agree to the internship terms and conditions.
                   </label>
                 </div>
-                <button type="submit" className="submit-button">
-                  Submit Application
+                <button
+                  type="submit"
+                  className="w-full bg-[#FF6F00] text-white px-6 py-3 rounded-md hover:bg-[#FF8F00] transition duration-300"
+                  disabled={loading}
+                >
+                  {loading ? "Submitting..." : "Submit Application"}
                 </button>
               </form>
+              {message.text && (
+                <p
+                  className={`mt-4 text-center ${
+                    message.type === "success"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {message.text}
+                </p>
+              )}
             </div>
             <div className="bg-white rounded-lg shadow-md p-8">
               <h2 className="text-2xl font-semibold mb-6">

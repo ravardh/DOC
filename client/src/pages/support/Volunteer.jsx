@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
+import axios from "../../config/api";
 
 function Volunteer() {
   const [formData, setFormData] = useState({
@@ -16,23 +17,46 @@ function Volunteer() {
     agreeToTerms: false,
   });
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.gender ||
-      !formData.dob ||
-      !formData.area ||
-      !formData.availability ||
-      !formData.referralSource ||
-      !formData.agreeToTerms
-    ) {
-      alert("Please fill all required fields and accept terms.");
+    setLoading(true);
+    setMessage("");
+
+    if (!formData.agreeToTerms) {
+      setMessage("Please accept the terms and conditions.");
+      setLoading(false);
       return;
     }
-    console.log("Submitting:", formData);
+
+    try {
+      const response = await axios.post(
+        "/api/hr/applicants/volunteer",
+        formData
+      );
+      setMessage({
+        text: "Application submitted successfully!",
+        type: "success",
+      });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        gender: "",
+        dob: "",
+        area: "",
+        experience: "",
+        availability: "",
+        referralSource: "",
+        agreeToTerms: false,
+      });
+    } catch (error) {
+      setMessage({ text: error.message, type: "error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -42,7 +66,6 @@ function Volunteer() {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
   return (
     <div className="min-h-screen bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,16 +123,18 @@ function Volunteer() {
                   <option value="other">Other</option>
                 </select>
                 <div className="flex justify-around items-center">
-                <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-                <input
-                  type="date"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleChange}
-                  required
-                  placeholder="Date of Birth"
-                  className="mt-1 px-5 w-6/12 h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                />
+                  <label className="block text-sm font-medium text-gray-700">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    required
+                    placeholder="Date of Birth"
+                    className="mt-1 px-5 w-6/12 h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
+                  />
                 </div>
                 <select
                   name="area"
@@ -123,6 +148,8 @@ function Volunteer() {
                   <option value="fundraising">Fundraising</option>
                   <option value="events">Event Management</option>
                   <option value="social-media">Social Media</option>
+                  <option value="graphic-Designing">Graphic Designing</option>
+                  <option value="content-writing">Content Writing</option>
                   <option value="administration">Administration</option>
                 </select>
                 <textarea
@@ -130,21 +157,20 @@ function Volunteer() {
                   value={formData.experience}
                   onChange={handleChange}
                   rows="4"
-                  placeholder="Previous Experience"
-                  className="mt-1 px-5 w-full rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
+                  placeholder="Previous Experience in Details"
+                  className="mt-1 p-3 w-full rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
                 ></textarea>
-                <select
+                <input
+                  type="number"
                   name="availability"
                   value={formData.availability}
                   onChange={handleChange}
+                  max={10}
+                  min={5}
                   required
+                  placeholder="Your Avaibility in Hours per Week (min 5 hours)"
                   className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                >
-                  <option value="">Select Availability</option>
-                  <option value="weekdays">Weekdays</option>
-                  <option value="weekends">Weekends</option>
-                  <option value="both">Both</option>
-                </select>
+                />
                 <select
                   name="referralSource"
                   value={formData.referralSource}
@@ -156,6 +182,7 @@ function Volunteer() {
                   <option value="facebook">Facebook</option>
                   <option value="instagram">Instagram</option>
                   <option value="youtube">YouTube</option>
+                  <option value="linkedin">LinkedIn</option>
                   <option value="offline">Offline Campaign</option>
                   <option value="seminar">College Seminar</option>
                   <option value="word-of-mouth">Word of Mouth</option>
@@ -177,10 +204,22 @@ function Volunteer() {
                 <button
                   type="submit"
                   className="w-full bg-[#FF6F00] text-white px-6 py-3 rounded-md hover:bg-[#FF8F00] transition duration-300"
+                  disabled={loading}
                 >
-                  Submit Application
+                  {loading ? "Submitting..." : "Submit Application"}
                 </button>
               </form>
+              {message.text && (
+                <p
+                  className={`mt-4 text-center ${
+                    message.type === "success"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {message.text}
+                </p>
+              )}
             </div>
             <div className="bg-white rounded-lg shadow-md p-8">
               <h2 className="text-2xl font-semibold mb-6">
