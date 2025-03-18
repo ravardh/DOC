@@ -1,23 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import axios from "../config/api";
 import img1 from "../assets/img1.jpg";
 import img2 from "../assets/img2.jpg";
 import img3 from "../assets/img3.jpg";
 import img4 from "../assets/img4.jpg";
-import vishal from "../assets/Vishal.webp";
-import preeti from "../assets/preeti.webp";
-import navneet from "../assets/navneet.webp";
-import sidharth from "../assets/Sidharth.webp";
-import ayush from "../assets/Ayush.webp";
-import raj from "../assets/Raj-Vardhan.webp";
-import himanshu from "../assets/Himanshu.webp";
-import jatin from "../assets/Jatin-Verma.webp";
-import sanchit from "../assets/Sanchit.webp";
-import rahul from "../assets/Rahul.webp";
-import shubham from "../assets/shubham.webp";
-import alok from "../assets/Alok.webp";
-import vishal_k from "../assets/Vishal-kohli.webp";
-
 
 const aboutContent = {
   title: "About Us",
@@ -47,88 +34,81 @@ const aboutContent = {
       image: img4,
     },
   ],
-  team: [
-    { name: "Vishal Hindustani", role: "President/Founder", image: vishal },
-    { name: "Preeti Verma", role: "Chair Women", image: preeti },
-    { name: "Navneet Kaur", role: "Vice Chairperson", image: navneet },
-    { name: "Sidharth Gautam", role: "Vice President", image: sidharth },
-    { name: "Ayush Singh Dogra", role: "General Secretary", image: ayush },
-    { name: "Raj Vardhan", role: "Joint Secretary", image: raj },
-    { name: "Himanshu Jain", role: "Treasurer", image: himanshu },
-    { name: "Jatin Verma", role: "Executive Member", image: jatin },
-    { name: "Sanchit Gupta", role: "Executive Member", image: sanchit },
-    { name: "Rahul Yaduvanshi", role: "Executive Member", image: rahul },
-    { name: "Shubham Behal", role: "Executive Member", image: shubham },
-    { name: "Alok Mishra", role: "Executive Member", image: alok },
-    { name: "Vishal Kohli", role: "Executive Member", image: vishal_k },
-  ],
 };
 
 function About() {
+  const [coreTeam, setCoreTeam] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("/api/admin/core-team")
+      .then((response) => {
+        setCoreTeam(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-5xl font-extrabold text-center text-gray-900 mb-12">
-            {aboutContent.title}
-          </h1>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <h1 className="text-5xl font-extrabold text-center text-gray-900 mb-12">{aboutContent.title}</h1>
           <div className="space-y-12">
             {aboutContent.sections.map((section, index) => (
               <motion.div
                 key={index}
-                className={`flex flex-col gap-5 md:flex-row ${
-                  index % 2 === 0 ? "md:flex-row-reverse" : ""
-                } items-center bg-white rounded-lg shadow-lg p-6 md:p-10`}
+                className={`flex flex-col gap-5 md:flex-row ${index % 2 === 0 ? "md:flex-row-reverse" : ""} items-center bg-white rounded-lg shadow-lg p-6 md:p-10`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
                 <div className="md:w-1/2">
-                  <h2 className="text-3xl font-semibold text-[#FF6F00] mb-4">
-                    {section.heading}
-                  </h2>
+                  <h2 className="text-3xl font-semibold text-[#FF6F00] mb-4">{section.heading}</h2>
                   <p className="text-gray-600 text-lg">{section.content}</p>
                 </div>
                 <div className="md:w-1/2 mt-6 md:mt-0 md:ml-6">
-                  <img
-                    src={section.image}
-                    alt={section.heading}
-                    className="w-full rounded-lg shadow-md"
-                  />
+                  <img src={section.image} alt={section.heading} className="w-full rounded-lg shadow-md " />
                 </div>
               </motion.div>
             ))}
           </div>
           <div className="mt-16">
-            <h2 className="text-4xl font-extrabold text-center text-[#FF6F00] mb-8">
-              Meet Our Team
-
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {aboutContent.team.map((member, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg shadow-lg p-6 text-center"
-                >
-                  <img
-                    src={member.image || "/path/to/default-image.png"}
-                    alt={member.name}
-                    className="w-32 h-32 rounded-full mx-auto mb-4"
-                  />
-                  <h3 className="text-2xl font-semibold text-gray-800">
-                    {member.name}
-                  </h3>
-                  <p className="text-[#FF6F00]">{member.role}</p>
-                </div>
-              ))}
-            </div>
+            <h2 className="text-4xl font-extrabold text-center text-[#FF6F00] mb-8">Meet Our Core Team</h2>
+            {loading ? (
+              <p className="text-center text-xl font-semibold">Loading...</p>
+            ) : error ? (
+              <p className="text-center text-red-500">Error: {error}</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {coreTeam.map((member, index) => (
+                  <div key={index} className="bg-white rounded-lg shadow-lg p-6 text-center border-2">
+                    <img
+                      src={member.profilePhotoPath || "/path/to/default-image.png"}
+                      alt={member.name}
+                      className="w-48 h-60 rounded-lg mx-auto mb-4 border-2"
+                    />
+                    <h3 className="text-2xl font-semibold text-gray-800">{member.name}</h3>
+                    <p className="text-[#FF6F00]">{member.position}</p>
+                    <div className="mt-2 flex justify-center space-x-4">
+                      {member.linkedin && (
+                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600">LinkedIn</a>
+                      )}
+                      {member.instagram && (
+                        <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-pink-600">Instagram</a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
             <p className="text-center text-[#FF6F00] mt-8 text-3xl font-semibold">
-              “It is literally true that you can succeed best and quickest by
-              helping others to succeed.”
+              “It is literally true that you can succeed best and quickest by helping others to succeed.”
             </p>
           </div>
         </motion.div>

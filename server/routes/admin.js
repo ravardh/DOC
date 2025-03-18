@@ -22,7 +22,7 @@ router.delete('/users/:id', protect, admin, deleteUser);
 
 // Core team routes
 router.post('/core-team', protect, admin, upload.single('profilePhoto'), addCoreTeamMember);
-router.get('/core-team', protect, admin, getCoreTeamMembers);
+router.get('/core-team', getCoreTeamMembers);
 router.put('/core-team/:id', protect, admin, upload.single('profilePhoto'), updateCoreTeamMember);
 router.delete('/core-team/:id', protect, admin, deleteCoreTeamMember);
 
