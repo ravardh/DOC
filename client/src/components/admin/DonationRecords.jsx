@@ -26,7 +26,7 @@ function DonationRecords() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const response = await axios.put(`/api/public/donations/${id}/status`, {
+      await axios.put(`/api/public/donations/${id}/status`, {
         receiptGenerated: newStatus,
       });
 
@@ -37,12 +37,15 @@ function DonationRecords() {
       );
     } catch (error) {
       console.error("Error updating status:", error);
+      setError("Failed to update receipt status");
     }
   };
 
   const filteredDonations = donations.filter((donation) => {
     if (filter === "all") return true;
-    return donation.receiptStatus === filter;
+    if (filter === "pending") return !donation.receiptGenerated;
+    if (filter === "done") return donation.receiptGenerated;
+    return true;
   });
 
   if (loading) {
@@ -65,8 +68,7 @@ function DonationRecords() {
           >
             <option value="all">All Donations</option>
             <option value="pending">Pending Receipt</option>
-            <option value="sent">Receipt Sent</option>
-            <option value="delivered">Receipt Delivered</option>
+            <option value="done">Receipt Generated</option>
           </select>
         </div>
       </div>
@@ -103,7 +105,7 @@ function DonationRecords() {
                   {new Date(donation.date).toLocaleDateString()}
                 </td>
                 <td className="px-3 py-4 whitespace-nowrap">
-                <select
+                  <select
                     value={donation.receiptGenerated}
                     onChange={(e) => handleStatusChange(donation._id, e.target.value === "true")}
                     disabled={donation.receiptGenerated}
@@ -116,16 +118,14 @@ function DonationRecords() {
                   </select>
                 </td>
                 <td className="px-3 py-4 whitespace-nowrap">
-                  {/* View Screenshot Button */}
-                  <button
-                    onClick={() => setSelectedScreenshot(donation.screenshotPath)}
-                    className="mr-2 px-1 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-700"
-                  >
-                    View Screenshot
-                  </button>
-
-                  {/* Status Dropdown */}
-                  
+                  {donation.screenshotPath && (
+                    <button
+                      onClick={() => setSelectedScreenshot(donation.screenshotPath)}
+                      className="mr-2 px-1 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-700"
+                    >
+                      View Screenshot
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -135,16 +135,20 @@ function DonationRecords() {
 
       {/* Screenshot Modal */}
       {selectedScreenshot && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded shadow-lg max-w-lg">
-            <h3 className="text-lg font-semibold mb-2">Donation Screenshot</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-4 rounded shadow-lg max-w-lg w-full mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Donation Screenshot</h3>
+              <button
+                onClick={() => setSelectedScreenshot(null)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             <img src={selectedScreenshot} alt="Donation Screenshot" className="w-full rounded" />
-            <button
-              onClick={() => setSelectedScreenshot(null)}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
-            >
-              Close
-            </button>
           </div>
         </div>
       )}

@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const applicantSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      enum: ['volunteer', 'intern'],
+      enum: ["volunteer", "intern"],
       required: true,
     },
     name: {
@@ -17,7 +17,6 @@ const applicantSchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
-
     },
     phone: {
       type: String,
@@ -26,7 +25,7 @@ const applicantSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: ['male', 'female', 'other'],
+      enum: ["male", "female", "other"],
       required: true,
     },
     dob: {
@@ -50,37 +49,54 @@ const applicantSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: function () {
-        return this.type === 'volunteer';
+        return this.type === "volunteer";
       },
     },
     course: {
       type: String,
       trim: true,
       required: function () {
-        return this.type === 'intern';
+        return this.type === "intern";
       },
     },
     college: {
       type: String,
       trim: true,
       required: function () {
-        return this.type === 'intern';
+        return this.type === "intern";
       },
     },
     duration: {
       type: String,
       trim: true,
       required: function () {
-        return this.type === 'intern';
+        return this.type === "intern";
       },
     },
     status: {
       type: String,
-      enum: ['pending', 'interview', 'onboarded', 'rejected'],
-      default: 'pending',
+      enum: ["pending", "interview", "onboarded", "rejected"],
+      default: "pending",
+    },
+    assignedPosition: {
+      type: String,
+      default: "",
+    },
+    assignedTeam: {
+      type: String,
+      default: "",
     },
     interviewDate: {
       type: Date,
+      default: "",
+    },
+    doj: {
+      type: Date,
+      default: "",
+    },
+    dol: {
+      type: Date,
+      default: "",
     },
   },
   {
@@ -89,12 +105,12 @@ const applicantSchema = new mongoose.Schema(
 );
 
 // Ensure interviewDate is set only if status is "interview"
-applicantSchema.pre('save', function (next) {
-  if (this.interviewDate && this.status === 'pending') {
-    this.status = 'interview';
+applicantSchema.pre("save", function (next) {
+  if (this.interviewDate && this.status === "pending") {
+    this.status = "interview";
   }
   next();
 });
 
-const Applicant = mongoose.model('Applicant', applicantSchema);
+const Applicant = mongoose.model("Applicant", applicantSchema);
 export default Applicant;

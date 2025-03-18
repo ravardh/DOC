@@ -27,17 +27,16 @@ function Login() {
       localStorage.setItem('token', data.token);
 
       // Redirect based on user role
-      if (data.role === 'admin') {
-        navigate('/admin-dashboard');
-      } else if (data.role === 'hr') {
-        navigate('/hr-dashboard');
-      } else if (data.role === 'team') {
-        navigate('/team-dashboard');
-      } else {
-        setError('Unauthorized role');
+      switch (data.role) {
+        case 'admin': navigate('/admin-dashboard'); break;
+        case 'hr': navigate('/hr-dashboard'); break;
+        case 'team': navigate('/team-dashboard'); break;
+        default:
+          setError('Unauthorized role');
+          navigate('/'); // Redirect unauthorized users
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid credentials');
+      setError(err?.response?.data?.message || 'Invalid credentials');
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +73,7 @@ function Login() {
           </div>
           <button 
             type="submit" 
-            className={`w-full py-2 text-white bg-[#FF6F00] hover:bg-[#dc6b16] rounded-md ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+            className={`w-full py-2 text-white bg-[#FF6F00] hover:bg-[#dc6b16] rounded-md flex justify-center items-center ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
             disabled={isLoading}
           >
             {isLoading ? 'Signing in...' : 'Sign in'}

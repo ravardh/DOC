@@ -27,9 +27,7 @@ const clearData = async () => {
   try {
     await User.deleteMany({});
     await Applicant.deleteMany({});
-    await Gallery.deleteMany({});
     await Contact.deleteMany({});
-    await Team.deleteMany({});
     await Student.deleteMany({});
     await CoreTeam.deleteMany({});
     await Donation.deleteMany({});
@@ -114,49 +112,6 @@ const seedApplicants = async () => {
   }
 };
 
-// Seed Gallery
-const seedGallery = async () => {
-  try {
-    const gallery = [
-      {
-        imagePath:
-          "https://res.cloudinary.com/your-cloud-name/image/upload/v1/gallery/event1.jpg",
-        category: "Events",
-        name: "Annual Fundraiser 2024",
-      },
-      {
-        imagePath:
-          "https://res.cloudinary.com/your-cloud-name/image/upload/v1/gallery/education1.jpg",
-        category: "Education",
-        name: "School Donation Drive",
-      },
-      {
-        imagePath:
-          "https://res.cloudinary.com/your-cloud-name/image/upload/v1/gallery/health1.jpg",
-        category: "Healthcare",
-        name: "Medical Camp 2024",
-      },
-      {
-        imagePath:
-          "https://res.cloudinary.com/your-cloud-name/image/upload/v1/gallery/environment1.jpg",
-        category: "Environment",
-        name: "Tree Plantation Drive",
-      },
-      {
-        imagePath:
-          "https://res.cloudinary.com/your-cloud-name/image/upload/v1/gallery/community1.jpg",
-        category: "Community",
-        name: "Community Clean-up Day",
-      },
-    ];
-
-    await Gallery.insertMany(gallery);
-    console.log("Seeded gallery");
-  } catch (error) {
-    console.error("Error seeding gallery:", error);
-  }
-};
-
 // Seed Contacts
 const seedContacts = async () => {
   try {
@@ -192,94 +147,6 @@ const seedContacts = async () => {
     console.log("Seeded contacts");
   } catch (error) {
     console.error("Error seeding contacts:", error);
-  }
-};
-
-// Seed Team
-const seedTeam = async () => {
-  try {
-    const team = [
-      {
-        name: "Sarah Brown",
-        address: "123 Main St, City",
-        email: "sarah@ngo.com",
-        contactNumber: "1234567890",
-        whatsappNumber: "1234567890",
-        gender: "female",
-        dob: new Date("1985-03-15"),
-        availability: "Full Time",
-        ngoExperience: true,
-        workMode: "hybrid",
-        teamType: "volunteer",
-        department: "Education",
-        joiningDate: new Date("2024-01-01"),
-      },
-      {
-        name: "James Wilson",
-        address: "456 Park Ave, City",
-        email: "james@ngo.com",
-        contactNumber: "9876543210",
-        whatsappNumber: "9876543210",
-        gender: "male",
-        dob: new Date("1990-07-20"),
-        availability: "Full Time",
-        ngoExperience: true,
-        workMode: "offline",
-        teamType: "volunteer",
-        department: "Healthcare",
-        joiningDate: new Date("2023-12-01"),
-      },
-      {
-        name: "Maria Garcia",
-        address: "789 Oak St, City",
-        email: "maria@ngo.com",
-        contactNumber: "5555555555",
-        whatsappNumber: "5555555555",
-        gender: "female",
-        dob: new Date("1988-11-30"),
-        availability: "Part Time",
-        ngoExperience: false,
-        workMode: "online",
-        teamType: "volunteer",
-        department: "Environment",
-        joiningDate: new Date("2024-02-15"),
-      },
-      {
-        name: "Robert Chen",
-        address: "321 Pine St, City",
-        email: "robert@ngo.com",
-        contactNumber: "4444444444",
-        whatsappNumber: "4444444444",
-        gender: "male",
-        dob: new Date("1992-04-25"),
-        availability: "Full Time",
-        ngoExperience: true,
-        workMode: "hybrid",
-        teamType: "volunteer",
-        department: "Community Development",
-        joiningDate: new Date("2023-11-01"),
-      },
-      {
-        name: "Lisa Anderson",
-        address: "654 Maple St, City",
-        email: "lisa@ngo.com",
-        contactNumber: "3333333333",
-        whatsappNumber: "3333333333",
-        gender: "female",
-        dob: new Date("1987-09-10"),
-        availability: "Full Time",
-        ngoExperience: true,
-        workMode: "offline",
-        teamType: "volunteer",
-        department: "Education",
-        joiningDate: new Date("2024-01-15"),
-      },
-    ];
-
-    await Team.insertMany(team);
-    console.log("Seeded team");
-  } catch (error) {
-    console.error("Error seeding team:", error);
   }
 };
 
