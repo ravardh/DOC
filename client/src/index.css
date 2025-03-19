@@ -1,3 +1,95 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes slide {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+.animate-slide {
+  animation: slide 30s ease-in-out infinite;
+}
+
+@keyframes scrolling {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-scrolling {
+  animation: scrolling 20s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Breaking News Styles */
+.breaking-news-container {
+  background-color: #FF6F00;
+  overflow: hidden;
+  position: relative;
+}
+
+.breaking-news-content {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: scrolling 20s linear infinite;
+}
+
+/* Add smooth transition for announcement changes */
+.announcement-transition {
+  transition: all 0.5s ease-in-out;
+}
+
+/* News Ticker Animation */
+.news-ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+}
+
+.news-ticker-move {
+  display: inline-flex;
+  animation: tickerh 50s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes tickerh {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Ensure smooth animation */
+.news-ticker-move {
+  will-change: transform;
+}

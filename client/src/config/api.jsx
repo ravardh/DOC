@@ -42,7 +42,7 @@ axiosInstance.interceptors.response.use(
     // Handle other errors
     const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
     return Promise.reject(new Error(errorMessage));
-  }
+  } 
 );
 
 export default axiosInstance;

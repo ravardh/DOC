@@ -1,409 +1,319 @@
-Below is a detailed document outlining the backend structure for your Node.js server with MongoDB as the database. This document includes the project structure, API endpoints, database schema, and additional considerations for implementation.
+# Drops of Change NGO - Backend API
 
----
+This is the backend API for the Drops of Change NGO website, built with Node.js, Express, and MongoDB.
 
-# Backend Documentation for NGO Management System
+## Technology Stack
 
-## Overview
-
-This backend is built using **Node.js** (JavaScript) with **MongoDB** as the database and integrates with **Cloudinary** for image storage. It provides APIs for managing an NGO's operations, including user authentication, HR functionalities, admin controls, team management, student records, and donation handling.
-
----
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: JWT (JSON Web Tokens)
+- **File Storage**: Multer for local storage, AWS S3 for production
+- **Email**: Nodemailer
+- **Validation**: Express-validator
+- **Payment Integration**: Razorpay
 
 ## Project Structure
 
-Here’s a suggested folder structure for the backend:
-
 ```
-ngo-backend/
-├── config/                # Configuration files
-│   ├── db.js              # MongoDB connection setup
-│   └── cloudinary.js      # Cloudinary configuration
-├── models/                # MongoDB schemas
-│   ├── User.js            # Admin, HR, Team Member schema
-│   ├── Applicant.js       # Volunteer and Intern applicants
-│   ├── Gallery.js         # Gallery images
-│   ├── Contact.js         # Contact form submissions
-│   ├── Team.js            # Onboarded team members
-│   ├── Student.js         # Student records
-│   ├── CoreTeam.js        # Core team members
-│   └── Donation.js        # Donation records
-├── routes/                # API route definitions
-│   ├── auth.js            # Authentication routes
-│   ├── hr.js              # HR-specific routes
-│   ├── admin.js           # Admin-specific routes
-│   └── public.js          # Public-facing routes (e.g., contact, donation)
-├── middleware/            # Middleware functions
-│   ├── auth.js            # Authentication and role-based access control
-│   └── upload.js          # File upload handling (e.g., Multer + Cloudinary)
-├── controllers/           # Business logic for routes
-│   ├── authController.js  # Login, logout, etc.
-│   ├── hrController.js    # HR functionalities
-│   ├── adminController.js # Admin functionalities
-│   └── publicController.js# Public functionalities
-├── utils/                 # Utility functions
-│   └── errorHandler.js    # Centralized error handling
-├── .env                   # Environment variables
-├── server.js              # Entry point
-└── package.json           # Dependencies and scripts
+/server
+├── /config              # Configuration files and environment variables
+├── /controllers         # Request handlers for different routes
+│   ├── authController.js
+│   ├── donationController.js
+│   ├── publicController.js
+│   ├── studentController.js
+│   ├── userController.js
+│   └── ...
+├── /middleware          # Custom middleware functions
+│   ├── auth.js          # Authentication middleware
+│   ├── errorHandler.js  # Error handling middleware
+│   ├── upload.js        # File upload middleware
+│   └── ...
+├── /models              # Mongoose schema definitions
+│   ├── announcement.js
+│   ├── donation.js
+│   ├── student.js
+│   ├── user.js
+│   ├── volunteer.js
+│   └── ...
+├── /routes              # API route definitions
+│   ├── authRoutes.js
+│   ├── donationRoutes.js
+│   ├── publicRoutes.js
+│   ├── studentRoutes.js
+│   └── ...
+├── /utils               # Utility functions and helper methods
+│   ├── email.js
+│   ├── fileUpload.js
+│   ├── paymentGateway.js
+│   └── ...
+├── /uploads             # Local file uploads (for development)
+├── .env.example         # Example environment variables
+├── package.json         # Project dependencies and scripts
+└── server.js            # Entry point of the application
 ```
-
----
-
-## Dependencies
-
-Install the following npm packages:
-
-```bash
-npm install express mongoose bcrypt jsonwebtoken dotenv multer cloudinary cors
-```
-
-- **express**: Web framework for Node.js
-- **mongoose**: MongoDB ODM
-- **bcrypt**: Password hashing
-- **jsonwebtoken**: JWT for authentication
-- **dotenv**: Environment variable management
-- **multer**: File upload handling
-- **cloudinary**: Cloud storage for images
-- **cors**: Enable CORS for frontend integration
-
----
-
-## Environment Variables
-
-Create a `.env` file in the root directory:
-
-```
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/ngo_db
-JWT_SECRET=your_jwt_secret_key
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-```
-
----
-
-## Database Schema (MongoDB)
-
-### 1. User Schema (`models/User.js`)
-
-For Admin, HR, and Team Members.
-
-```javascript
-const mongoose = require("mongoose");
-const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ["admin", "hr", "team"], required: true },
-  createdAt: { type: Date, default: Date.now },
-});
-module.exports = mongoose.model("User", userSchema);
-```
-
-### 2. Applicant Schema (`models/Applicant.js`)
-
-Unified schema for Volunteers and Interns.
-
-```javascript
-const applicantSchema = new mongoose.Schema({
-  type: { type: String, enum: ["volunteer", "intern"], required: true },
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: true },
-  gender: { type: String, enum: ["male", "female", "other"], required: true },
-  dob: { type: Date, required: true },
-  interests: [String],
-  availability: { type: String, required: true },
-  reference: { type: String },
-  // Volunteer-specific
-  experience: { type: String },
-  // Intern-specific
-  course: { type: String },
-  college: { type: String },
-  duration: { type: String },
-  status: {
-    type: String,
-    enum: ["pending", "interview", "onboarded", "rejected"],
-    default: "pending",
-  },
-  interviewDate: { type: Date },
-  createdAt: { type: Date, default: Date.now },
-});
-module.exports = mongoose.model("Applicant", applicantSchema);
-```
-
-### 3. Gallery Schema (`models/Gallery.js`)
-
-```javascript
-const gallerySchema = new mongoose.Schema({
-  imagePath: { type: String, required: true }, // Cloudinary URL
-  category: { type: String, required: true },
-  name: { type: String, required: true },
-  uploadTimestamp: { type: Date, default: Date.now },
-});
-module.exports = mongoose.model("Gallery", gallerySchema);
-```
-
-### 4. Contact Schema (`models/Contact.js`)
-
-```javascript
-const contactSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  message: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
-});
-module.exports = mongoose.model("Contact", contactSchema);
-```
-
-### 5. Team Schema (`models/Team.js`)
-
-```javascript
-const teamSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  address: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  contactNumber: { type: String, required: true },
-  whatsappNumber: { type: String },
-  gender: { type: String, enum: ["male", "female", "other"], required: true },
-  dob: { type: Date, required: true },
-  reference: { type: String },
-  availability: { type: String, required: true },
-  ngoExperience: { type: Boolean, default: false },
-  identityProofPath: { type: String }, // Cloudinary URL
-  passportPhotoPath: { type: String }, // Cloudinary URL
-  workMode: {
-    type: String,
-    enum: ["online", "offline", "hybrid"],
-    required: true,
-  },
-  teamType: { type: String, enum: ["volunteer", "intern"], required: true },
-  department: { type: String, required: true },
-  joiningDate: { type: Date, required: true },
-});
-module.exports = mongoose.model("Team", teamSchema);
-```
-
-### 6. Student Schema (`models/Student.js`)
-
-```javascript
-const studentSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  gender: { type: String, enum: ["male", "female", "other"], required: true },
-  fatherName: { type: String, required: true },
-  motherName: { type: String, required: true },
-  dob: { type: Date, required: true },
-  admissionDate: { type: Date, required: true },
-  age: { type: Number, required: true },
-  address: { type: String, required: true },
-  area: { type: String, required: true },
-  contactNumber: { type: String, required: true },
-  admittedInSchool: { type: Boolean, default: false },
-  schoolName: { type: String },
-  classStudying: { type: String },
-  aadharCard: { type: String },
-  endDate: { type: Date },
-});
-module.exports = mongoose.model("Student", studentSchema);
-```
-
-### 7. CoreTeam Schema (`models/CoreTeam.js`)
-
-```javascript
-const coreTeamSchema = new mongoose.Schema({
-  profilePhotoPath: { type: String }, // Cloudinary URL
-  name: { type: String, required: true },
-  position: { type: String, required: true },
-  linkedin: { type: String },
-  instagram: { type: String },
-  active: { type: Boolean, default: true },
-  joiningDate: { type: Date, required: true },
-  endingDate: { type: Date },
-  order: { type: Number, required: true },
-});
-module.exports = mongoose.model("CoreTeam", coreTeamSchema);
-```
-
-### 8. Donation Schema (`models/Donation.js`)
-
-```javascript
-const donationSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  screenshotPath: { type: String }, // Cloudinary URL
-  email: { type: String, required: true },
-  amount: { type: Number, required: true },
-  mode: { type: String, required: true },
-  utr: { type: String, required: true },
-  date: { type: Date, required: true },
-  receiptRequested: { type: Boolean, default: true },
-  receiptGenerated: { type: Boolean, default: false },
-});
-module.exports = mongoose.model("Donation", donationSchema);
-```
-
----
 
 ## API Endpoints
 
-### Authentication Routes (`routes/auth.js`)
+### Authentication
 
-| Method | Endpoint           | Role | Description                   |
-| ------ | ------------------ | ---- | ----------------------------- |
-| POST   | `/api/auth/login`  | All  | Login with email and password |
-| POST   | `/api/auth/logout` | All  | Logout (invalidate token)     |
+- `POST /api/auth/login` - Login and get authentication token
+- `GET /api/auth/me` - Get current user profile
+- `POST /api/auth/logout` - Logout current user
 
-### HR Routes (`routes/hr.js`)
+### Admin Management
 
-| Method | Endpoint                       | Description                      |
-| ------ | ------------------------------ | -------------------------------- |
-| POST   | `/api/hr/applicants/volunteer` | Submit volunteer application     |
-| POST   | `/api/hr/applicants/intern`    | Submit intern application        |
-| GET    | `/api/hr/applicants`           | Get all applicants               |
-| PUT    | `/api/hr/applicants/:id/`      | Update the Applicant             |
-| GET    | `/api/hr/contact`              | Get all contact form submissions |
-| GET    | `/api/hr/students`             | Get all student records          |
-| POST   | `/api/hr/students`             | Add a new student record         |
-| PUT    | `/api/hr/students/:id`         | Update student record            |
+- `POST /api/admin/users` - Create a new admin user
+- `GET /api/admin/users` - Get all admin users
+- `GET /api/admin/users/:id` - Get admin user by ID
+- `PUT /api/admin/users/:id` - Update admin user
+- `DELETE /api/admin/users/:id` - Delete admin user
+- `GET /api/admin/dashboard` - Get admin dashboard statistics
 
-### Admin Routes (`routes/admin.js`)
+### Students Management
 
-| Method | Endpoint                  | Description                     |
-| ------ | ------------------------- | ------------------------------- |
-| POST   | `/api/admin/users`        | Create a new user (Admin/HR)    |
-| GET    | `/api/admin/users`        | Get all users                   |
-| PUT    | `/api/admin/users/:id`    | Update user details             |
-| DELETE | `/api/admin/users/:id`    | Delete a user                   |
-| POST   | `/api/admin/coreteam`     | Add a core team member          |
-| GET    | `/api/admin/coreteam`     | Get all core team members       |
-| PUT    | `/api/admin/coreteam/:id` | Update core team member details |
-| DELETE | `/api/admin/coreteam/:id` | Delete a core team member       |
+- `GET /api/hr/students` - Get all students
+- `POST /api/hr/students` - Add a new student
+- `GET /api/hr/students/:id` - Get student by ID
+- `PUT /api/hr/students/:id` - Update student by ID
+- `DELETE /api/hr/students/:id` - Delete student by ID
 
-### Public Routes (`routes/public.js`)
+### Volunteers/Interns Management
 
-| Method | Endpoint              | Description             |
-| ------ | --------------------- | ----------------------- |
-| POST   | `/api/public/contact` | Submit contact form     |
-| POST   | `/api/public/donate`  | Submit donation details |
+- `GET /api/hr/volunteers` - Get all volunteers/interns
+- `POST /api/hr/volunteers` - Add a new volunteer/intern
+- `GET /api/hr/volunteers/:id` - Get volunteer/intern by ID
+- `PUT /api/hr/volunteers/:id` - Update volunteer/intern by ID
+- `DELETE /api/hr/volunteers/:id` - Delete volunteer/intern by ID
+- `PUT /api/hr/volunteers/:id/status` - Update volunteer/intern status
 
----
+### Announcement Management
 
-## Middleware
+- `GET /api/public/Announcement` - Get all public announcements
+- `POST /api/public/Announcement` - Create an announcement (admin only)
+- `PUT /api/public/Announcement/:id` - Update an announcement (admin only)
+- `DELETE /api/public/Announcement/:id` - Delete an announcement (admin only)
 
-### Authentication (`middleware/auth.js`)
+### Contact Form
 
-```javascript
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+- `POST /api/public/contact` - Submit contact form
+- `GET /api/hr/contact` - Get all contact form submissions (admin only)
 
-const auth = async (req, res, next) => {
-  const token = req.header("Authorization")?.replace("Bearer ", "");
-  if (!token) return res.status(401).json({ error: "No token provided" });
+### Donation Management
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    if (!user) throw new Error();
-    req.user = user;
-    next();
-  } catch (error) {
-    res.status(401).json({ error: "Invalid token" });
-  }
-};
+- `POST /api/public/donation` - Submit a donation (public)
+- `GET /api/admin/donations` - Get all donations (admin only)
+- `GET /api/admin/donations/:id` - Get donation by ID (admin only)
+- `PUT /api/admin/donations/:id` - Update donation status (admin only)
+- `GET /api/admin/donations/statistics` - Get donation statistics (admin only)
 
-const restrictTo =
-  (...roles) =>
-  (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ error: "Access denied" });
-    }
-    next();
-  };
+## Database Models
 
-module.exports = { auth, restrictTo };
-```
-
-### File Upload (`middleware/upload.js`)
+### User Model
 
 ```javascript
-const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: { folder: "ngo", allowed_formats: ["jpg", "png", "pdf"] },
-});
-
-const upload = multer({ storage });
-module.exports = upload;
+{
+  name: String,
+  email: String,
+  password: String,
+  role: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
----
-
-## Example Implementation (`server.js`)
+### Student Model
 
 ```javascript
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const authRoutes = require("./routes/auth");
-const hrRoutes = require("./routes/hr");
-const adminRoutes = require("./routes/admin");
-const publicRoutes = require("./routes/public");
-const { auth } = require("./middleware/auth");
-
-dotenv.config();
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err));
-
-app.use("/api/auth", authRoutes);
-app.use("/api/hr", auth, hrRoutes);
-app.use("/api/admin", auth, adminRoutes);
-app.use("/api/public", publicRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+{
+  name: String,
+  DOB: Date,
+  DOJ: Date,
+  gender: String,
+  fathersName: String,
+  mothersName: String,
+  address: String,
+  contactNumber: String,
+  admittedInSchool: Boolean,
+  schoolName: String,
+  grade: String,
+  attendancePercentage: Number,
+  isActive: Boolean,
+  photo: String,
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
----
+### Volunteer/Intern Model
 
-## Additional Considerations
+```javascript
+{
+  name: String,
+  type: String, // volunteer or intern
+  DOB: Date,
+  DOJ: Date,
+  DOL: Date,
+  email: String,
+  contactNumber: String,
+  address: String,
+  qualification: String,
+  position: String,
+  department: String,
+  status: String,
+  photo: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-1. **Security**:
+### Announcement Model
 
-   - Hash passwords using `bcryptjs`.
-   - Use JWT for session management.
-   - Validate all inputs to prevent injection attacks.
-   - Use HTTPS in production.
+```javascript
+{
+  Title: String,
+  Announcement: String,
+  order: Number,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-2. **Cloudinary Integration**:
+### Donation Model
 
-   - Store images (gallery, identity proofs, etc.) on Cloudinary and save the URL in MongoDB.
+```javascript
+{
+  name: String,
+  email: String,
+  phone: String,
+  amount: Number,
+  purpose: String,
+  paymentId: String,
+  status: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
 
-3. **Scalability**:
+## Setup and Installation
 
-   - Add pagination for GET requests (e.g., `/api/hr/team`, `/api/hr/students`).
-   - Use indexing in MongoDB for frequently queried fields (e.g., `email`, `name`).
+### Prerequisites
 
-4. **Error Handling**:
+- Node.js (v16 or later)
+- MongoDB (local or Atlas)
+- npm or yarn
 
-   - Implement a centralized error handler in `utils/errorHandler.js`.
+### Installation Steps
 
-5. **Frontend Integration**:
-   - Ensure APIs return JSON responses compatible with the frontend dashboard.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-org/drops-of-change.git
+   cd drops-of-change/server
+   ```
 
----
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-This document provides a comprehensive foundation for your backend. You can expand it by adding specific controller logic, input validation, and testing as needed. Let me know if you’d like help with any specific part of the implementation!
+3. Create a `.env` file in the `/server` directory with the following variables:
+   ```
+   PORT=5000
+   MONGODB_URI=mongodb://localhost:27017/drops-of-change
+   JWT_SECRET=your_jwt_secret
+   JWT_EXPIRE=30d
+   EMAIL_SERVICE=gmail
+   EMAIL_USERNAME=your_email@gmail.com
+   EMAIL_PASSWORD=your_email_app_password
+   CLIENT_URL=http://localhost:3000
+   RAZORPAY_KEY_ID=your_razorpay_key_id
+   RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. The API will be available at `http://localhost:5000/api`
+
+## Running for Production
+
+To start the server in production mode:
+
+```bash
+npm start
+# or
+yarn start
+```
+
+## Error Handling
+
+The API uses a centralized error handling mechanism. All errors are passed through the errorHandler middleware which formats and returns appropriate HTTP responses.
+
+## Authentication and Authorization
+
+The API uses JWT for authentication. Protected routes require a valid JWT token to be included in the request header:
+
+```
+Authorization: Bearer {your_jwt_token}
+```
+
+## Data Validation
+
+All incoming data is validated using express-validator before processing.
+
+## File Uploads
+
+Files are handled using Multer middleware. In development, files are stored locally in the `/uploads` directory. In production, files are uploaded to AWS S3.
+
+## Environment Variables
+
+For security reasons, sensitive information like API keys, database credentials, and JWT secrets are stored in environment variables.
+
+## Contributing
+
+1. Create a feature branch:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. Make your changes
+
+3. Run tests:
+   ```bash
+   npm test
+   ```
+
+4. Commit your changes:
+   ```bash
+   git commit -m "Add your commit message"
+   ```
+
+5. Push to the branch:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+6. Create a Pull Request
+
+## Best Practices
+
+- Follow RESTful API design principles
+- Validate all input data
+- Handle errors gracefully
+- Use async/await for asynchronous operations
+- Keep controllers lean by moving business logic to services
+- Write clear and descriptive comments
+- Secure sensitive routes with appropriate authentication
+
+## Contact
+
+For any questions or support regarding the backend API, please contact the development team.

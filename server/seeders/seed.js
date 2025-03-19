@@ -2,12 +2,11 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "../models/User.js";
 import Applicant from "../models/Applicant.js";
-import Gallery from "../models/Gallery.js";
 import Contact from "../models/Contact.js";
-import Team from "../models/Team.js";
 import Student from "../models/Student.js";
 import CoreTeam from "../models/CoreTeam.js";
 import Donation from "../models/Donation.js";
+import Announcement from "../models/announcement.js";
 import bcrypt from "bcrypt";
 
 dotenv.config();
@@ -31,36 +30,78 @@ const clearData = async () => {
     await Student.deleteMany({});
     await CoreTeam.deleteMany({});
     await Donation.deleteMany({});
+    await Announcement.deleteMany({});
     console.log("Cleared existing data");
   } catch (error) {
     console.error("Error clearing data:", error);
   }
 };
 
+const seedAnnouncements = async () => {
+  try {
+    const announcements = [
+      {
+        "Title": "Sushiksha Pathshala",
+        "Announcement": "Sushiksha Pathshala expands to new slum areas!",
+        "order": 1
+      },
+      {
+        "Title": "Volunteer drive",
+        "Announcement": "Volunteer drive this weekend - Join us to teach!",
+        "order": 2
+      },
+      {
+        "Title": "Project Nayi Udaan",
+        "Announcement": "Project Nayi Udaan adopts 5 more children this month!",
+        "order": 3
+      },
+      {
+        "Title": "Help us",
+        "Announcement": "Help us collect books and stationery for underprivileged kids.",
+        "order": 4
+      },
+      {
+        "Title": "Education awareness",
+        "Announcement": "Education awareness campaign launched in Delhi slums!",
+        "order": 5
+      }
+    ]
+    
+
+    await Announcement.insertMany(announcements);
+    console.log("Seeded Announcements");
+    process.exit();
+  } catch (error) {
+    console.error("Error seeding announcements", error);
+    process.exit(1);
+  }
+};
+
+
 // Seed Users
 const seedUsers = async () => {
   try {
     const users = [
       {
-        email: "admin@ngo.com",
-        password: await bcrypt.hash("admin123", 10),
+        email: "admin@dropsofchange.in",
+        password: await bcrypt.hash("Admin.Raj@2025", 10),
         role: "admin",
       },
       {
-        email: "hr@ngo.com",
-        password: await bcrypt.hash("hr123", 10),
+        email: "hr@dropsofchange.in",
+        password: await bcrypt.hash("Hr.Sanchit@2025", 10),
         role: "hr",
       },
-      {
-        email: "teamMember1@ngo.com",
-        password: await bcrypt.hash("team123", 10),
-        role: "team",
-      },
-      {
-        email: "teamMember2@ngo.com",
-        password: await bcrypt.hash("team123", 10),
-        role: "team",
-      },
+      // {
+      //   email: "teamMember1@ngo.com",
+      //   password: await bcrypt.hash("team123", 10),
+      //   role: "team",
+      // },
+      // {
+      //   email: "teamMember2@ngo.com",
+      //   password: await bcrypt.hash("team123", 10),
+      //   role: "team",
+      // },
     ];
 
     await User.insertMany(users);
@@ -386,12 +427,11 @@ const seedDatabase = async () => {
     await clearData();
     await seedUsers();
     await seedApplicants();
-    await seedGallery();
     await seedContacts();
-    await seedTeam();
     await seedStudents();
     await seedCoreTeam();
     await seedDonations();
+    await seedAnnouncements();
     console.log("Database seeded successfully");
     process.exit(0);
   } catch (error) {

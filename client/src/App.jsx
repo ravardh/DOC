@@ -22,10 +22,12 @@ import NayiSambhawnayein from "./pages/campaigns/nayisambhawnayein";
 import AdminDashboard from "./pages/Dashboards/adminDashboard";
 import Login from "./pages/login";
 import HRDashboard from "./pages/Dashboards/hrDashboard";
+import ScrollToTop from "./components/common/Scrolltop";
 
 function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <ScrollToTop />
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-grow">

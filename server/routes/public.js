@@ -4,7 +4,11 @@ import {
   submitDonation,
   getDonations,
   getContact,
-  updateDonationStatus
+  updateDonationStatus,
+  removeAnnouncement,
+  allAnnouncement,
+  newAnnouncement,
+  updateAnnouncement
 } from "../controllers/publicController.js";
 import upload from "../middleware/upload.js";
 
@@ -18,6 +22,12 @@ router.get("/contact", getContact);
 router.post("/donations", upload.single("screenshot"), submitDonation);
 router.get("/donations", getDonations);
 router.put('/donations/:id/status', updateDonationStatus);
+
+//Breaking News
+router.post("/Announcement" , newAnnouncement);
+router.get("/Announcement" , allAnnouncement);
+router.delete("/Announcement/:id" , removeAnnouncement);
+router.put("/Announcement/:id" , updateAnnouncement)
 
 
 export default router;

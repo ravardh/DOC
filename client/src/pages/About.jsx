@@ -12,25 +12,25 @@ const aboutContent = {
     {
       heading: "Who We Are",
       content:
-        "We are a team of change-makers who believe that every helping hand can raise a child and create a better future for them. The founder of the organization, Vishal Hindustani, has been working in society since 2017 for the education of children living in slums and settlements. He and his team have been engaged in social service work since then, even during dire situations like the COVID-19 pandemic.",
+        "The founder of the organization, Vishal Hindustani has been working in the society since the year 2017 for the education of the children living in slums and settlements, he and his team have been doing social service work since 2017 even in the dreadful situation like Corona.He believes that small efforts can bring big changes in the society which may be the reason why he named the organization “Drops of Change” means, just like few drops of rain become a lake and a pond, similarly big changes can be brought in the society by small efforts. Since January 2022 the NGO has been working towards educating underprivileged children in slums & settlements.",
       image: img1,
     },
     {
       heading: "Our Vision",
       content:
-        "A poverty-free India where slums and dumps are a thing of the past. We aim to work in the field of education across the country, striving to create an equitable society where education drives transformation. Many children in slum areas are forced into labor at a young age due to financial constraints. Drops of Change aspires to reignite their passion for schooling.",
+        "Through Drops of change, we want to work in the field of education all over the country. We intend to create an equitable society and education has the power to put a dent in this endeavor. The children of slum areas are put to work at young ages and discontinue their education due to financial constraints. Drops of Change aspires to rekindle their desire to start schooling again. An enlightened citizen lays the premise for a developed nation ahead. Kids today are the leaders of tomorrow. We wish to uplift underserved households socially and economically by imparting education to the young ones and making them responsible so that future generations can lead the overall development of their families and, eventually, the country. There is no shortage of talent in India. Handicrafts such as sculpting idols, embroidery, quilt stitching, etc., are integral to our country’s rich heritage. Youngsters interested in this area deserve equal attention, and ‘Drops of change’ is striving hard to encourage them. We aim to eliminate the skill gap and help them become employable.",
       image: img2,
     },
     {
       heading: "Aim",
       content:
-        "We focus on improving the lives of marginalized communities. A significant portion of our society lacks essential resources needed to move ahead. In today’s fast-paced world, continuous learning and self-improvement are crucial. Our goal is to enhance their chances of survival and success by providing better education and skill development.",
+        "We are currently aiming to improve the lives of marginalized societies. A sizable portion of our community lacks the key resources to move ahead and prosper in their lives. In today’s fast-paced life, constant learning and improving oneself are indispensable. We wish to create better possibilities for disadvantaged communities by upskilling and educating their little ones. We aspire to maximize their chances of survival in this rapidly moving world and cope with reality better.",
       image: img3,
     },
     {
       heading: "Motive",
       content:
-        "The founder, Mr. Vishal Hindustani, has always been passionate about contributing to society and helping those in need. He believes that shaping children's minds is easier than changing adults. If we aim to bring positive change, we must focus on the younger generation. These principles form the foundation of Drops of Change.",
+        "The founder, Mr. Vishal Hindustani, has had his heart set on contributing socially and helping people since childhood. He believes that adding value to others’ life is the only way to justify yours. This mindset elicited the desire to establish his own NGO and bring like-minded people together. He and his team have been working toward the mission since then. He also believes that changing and molding children’s minds is comparatively easy. And if we wish to bring positive societal changes, we must set our sights on the younger crowd. Shaping their character and teaching moral values to them will eventually reflect in the overall society in the longer run. These two combined form the basic why and wherefore of “Drops Of Change.”",
       image: img4,
     },
   ],
