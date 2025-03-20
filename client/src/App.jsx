@@ -23,8 +23,8 @@ import AdminDashboard from "./pages/Dashboards/adminDashboard";
 import Login from "./pages/login";
 import HRDashboard from "./pages/Dashboards/hrDashboard";
 import ScrollToTop from "./components/common/Scrolltop";
-import StreetAnimalCare from "./pages/Campaigns/StreetAnimalCare";
-import GreenEarth from "./pages/Campaigns/GreenEarth";
+import StreetAnimalCare from "./pages/campaigns/StreetAnimalCare";
+import GreenEarth from "./pages/campaigns/GreenEarth";
 
 function App() {
   return (
