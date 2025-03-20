@@ -1,7 +1,19 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { 
+  ArrowRight, 
+  Heart, 
+  GraduationCap, 
+  Sparkles, 
+  Rocket, 
+  Theater, 
+  Bell, 
+  MessageCircle, 
+  Dog, 
+  Leaf,
+  Stethoscope 
+} from "lucide-react";
 
 function Campaigns() {
   const navigate = useNavigate();
@@ -12,70 +24,70 @@ function Campaigns() {
       description: "Promoting true happiness through healthcare initiatives and wellness education.",
       url: "/campaigns/khushhaali",
       color: "from-blue-500 to-blue-600",
-      icon: "🏥"
+      icon: (props) => <Stethoscope {...props} />
     },
     {
       title: "Nari Shakti",
       description: "Empowering women through education, skills development, and support.",
       url: "/campaigns/narishakti",
       color: "from-purple-500 to-purple-600",
-      icon: "👩"
+      icon: (props) => <Heart {...props} />
     },
     {
       title: "Su-Siksha Pathshala",
       description: "Quality education for underprivileged children.",
       url: "/campaigns/susikshapathshala",
       color: "from-green-500 to-green-600",
-      icon: "📚"
+      icon: (props) => <GraduationCap {...props} />
     },
     {
       title: "Nayi Sambhawnayein",
       description: "Creating new possibilities through skill development.",
       url: "/campaigns/nayisambhawnayein",
       color: "from-yellow-500 to-yellow-600",
-      icon: "✨"
+      icon: (props) => <Sparkles {...props} />
     },
     {
       title: "Nayi Udaan",
       description: "Supporting dreams and aspirations of youth.",
       url: "/campaigns/nayiudaan",
       color: "from-red-500 to-red-600",
-      icon: "🚀"
+      icon: (props) => <Rocket {...props} />
     },
     {
       title: "Mehfil-E-Muskaan",
       description: "Celebrating talent and creativity through inclusive performances.",
       url: "/campaigns/mehfilemuskaan",
       color: "from-pink-500 to-pink-600",
-      icon: "🎭"
+      icon: (props) => <Theater {...props} />
     },
     {
       title: "Jagrukta Abhiyan",
       description: "Spreading awareness about social issues.",
       url: "/campaigns/jagruktaabhiyan",
       color: "from-indigo-500 to-indigo-600",
-      icon: "🔔"
+      icon: (props) => <Bell {...props} />
     },
     {
       title: "Aoo Baten Karein",
       description: "Creating dialogue for social change.",
       url: "/campaigns/aoobatenkarein",
       color: "from-teal-500 to-teal-600",
-      icon: "💭"
+      icon: (props) => <MessageCircle {...props} />
     },
     {
       title: "Paws & Care",
       description: "Nurturing and protecting street animals through feeding programs.",
       url: "/campaigns/streetanimalcare",
       color: "from-amber-500 to-amber-600",
-      icon: "🐾"
+      icon: (props) => <Dog {...props} />
     },
     {
       title: "Green Earth Initiative",
       description: "Creating a greener future through tree planting and conservation.",
       url: "/campaigns/greenearth",
       color: "from-emerald-500 to-emerald-600",
-      icon: "🌳"
+      icon: (props) => <Leaf {...props} />
     }
   ];
 
@@ -111,7 +123,9 @@ function Campaigns() {
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               <div className={`bg-gradient-to-r ${campaign.color} p-6`}>
-                <div className="text-4xl mb-4">{campaign.icon}</div>
+                <div className="text-white mb-4">
+                  {campaign.icon({ className: "w-12 h-12 stroke-[1.5]" })}
+                </div>
                 <h3 className="text-xl font-semibold text-white mb-2">{campaign.title}</h3>
                 <p className="text-white/90 text-sm">{campaign.description}</p>
               </div>

@@ -31,7 +31,7 @@ router.delete('/coreteam/:id', protect, admin, deleteCoreTeamMember);
 
 // Gallery Routes
 router.post('/addImage', protect, admin, upload.single('photo'), addGalleryPicture);
-router.get('/gallery', protect, admin, getGalleryPicture);
+router.get('/gallery', getGalleryPicture);
 router.delete('/images/:id', protect, admin, deleteGalleryPicture);
 
 export default router; 
