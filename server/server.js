@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-
+import morgan from "morgan"
 // Import routes
 import authRoutes from "./routes/auth.js";
 import hrRoutes from "./routes/hr.js";
@@ -20,13 +20,15 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+
 
 // Routes
 app.use("/api/auth", authRoutes);

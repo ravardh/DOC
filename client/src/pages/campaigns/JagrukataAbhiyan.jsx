@@ -1,45 +1,79 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import jagrukataImage from "../../assets/JagrukataAbhiyan.png";
+import React from "react";
+import CampaignLayout from "../../components/campaigns/CampaignLayout";
+import jagrukataAbhiyan from "../../assets/JagrukataAbhiyan.png";
 
 function JagrukataAbhiyan() {
-  return (
-    <div className="min-h-screen bg-gray-50 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">Jagrukata Abhiyan</h1>
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <img 
-              src={jagrukataImage} 
-              alt="Jagrukata Abhiyan Event" 
-              className="w-full h-96 object-cover rounded-lg mb-8" 
-            />
-            <div className="prose max-w-none">
-              <h2 className="text-2xl font-semibold mb-4">Spreading Awareness, Empowering Lives</h2>
-              <p className="text-gray-600 mb-6">
-                Jagrukata Abhiyan is an initiative aimed at spreading awareness about crucial social issues such as education,
-                health, environment, and digital literacy. Our goal is to educate communities and enable them to make informed decisions.
+  const campaignData = {
+    title: "Jagrukata Abhiyan",
+    image: jagrukataAbhiyan,
+    description: "Raising awareness and empowering communities through education and social consciousness.",
+    locations: [
+      "Ambala Cantt",
+      "Topkhana Basti (Ambala)",
+      "Chandigarh",
+      "Panchkula"
+    ],
+    stats: [
+      { value: "5000+", label: "People Reached" },
+      { value: "10+", label: "Awareness Camps" },
+      { value: "8+", label: "Partner NGOs" },
+      { value: "100+", label: "Volunteers" }
+    ],
+    content: (
+      <>
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Creating Awareness</h2>
+            <p className="text-gray-600">
+              Jagrukata Abhiyan is our comprehensive awareness campaign that focuses on educating 
+              communities about various social issues, health concerns, and educational opportunities. 
+              We believe that awareness is the first step towards positive change.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-indigo-50 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold text-indigo-800 mb-2">Health Awareness</h3>
+              <p className="text-gray-600">
+                Regular health camps and educational sessions on hygiene and wellness.
               </p>
-              <h3 className="text-xl font-semibold mb-3">Key Focus Areas</h3>
-              <ul className="list-disc pl-6 mb-6 text-gray-600">
-                <li>Health and Hygiene Awareness</li>
-                <li>Environmental Conservation</li>
-                <li>Financial and Digital Literacy</li>
-                <li>Educational and Social Rights</li>
-              </ul>
-              <p className="text-gray-600 mb-6">
-                Join us in this movement to enlighten communities and build a society that thrives on knowledge and awareness.
+            </div>
+            <div className="bg-teal-50 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold text-teal-800 mb-2">Social Issues</h3>
+              <p className="text-gray-600">
+                Workshops and campaigns on important social topics.
               </p>
             </div>
           </div>
-        </motion.div>
-      </div>
-    </div>
-  );
+
+          <div className="bg-gradient-to-r from-[#FF6F00] to-[#FF8F00] p-6 rounded-xl text-white">
+            <h3 className="text-xl font-semibold mb-3">Join Our Campaign</h3>
+            <ul className="space-y-2">
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+                Organize awareness camps
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+                Volunteer as a speaker
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+                Support our outreach programs
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+                Help spread awareness
+              </li>
+            </ul>
+          </div>
+        </div>
+      </>
+    ),
+    callToAction: "Support Our Campaign"
+  };
+
+  return <CampaignLayout {...campaignData} />;
 }
 
 export default JagrukataAbhiyan;

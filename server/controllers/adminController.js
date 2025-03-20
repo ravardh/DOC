@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import CoreTeam from '../models/CoreTeam.js';
+import Gallery from '../models/Gallery.js';
 import cloudinary from '../config/cloudinary.js';
 
 // User Management
@@ -106,4 +107,58 @@ export const deleteCoreTeamMember = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}; 
+};
+
+// Gallery Management
+export const addGalleryPicture = async (req, res) => {
+  try {
+    let imageUrl = "";
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = result.secure_url;
+    }
+
+    const newGalleryImage = await Gallery.create({
+      title: req.body.title,
+      description: req.body.description,
+      category: req.body.category,
+      imageUrl: imageUrl,
+    });
+
+    res.status(201).json(newGalleryImage);
+  } catch (error) {
+    console.error('Error in addGalleryPicture:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getGalleryPicture = async (req, res) => {
+  try {
+    const images = await Gallery.find().sort('-createdAt');
+    res.json(images);
+  } catch (error) {
+    console.error('Error in getGalleryPicture:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteGalleryPicture = async (req, res) => {
+  try {
+    const image = await Gallery.findById(req.params.id);
+    if (!image) {
+      return res.status(404).json({ message: 'Image not found' });
+    }
+
+    // Extract public_id from Cloudinary URL if needed
+    if (image.imageUrl) {
+      const publicId = image.imageUrl.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    await Gallery.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error('Error in deleteGalleryPicture:', error);
+    res.status(500).json({ message: error.message });
+  }
+};

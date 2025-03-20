@@ -8,6 +8,9 @@ import {
   getCoreTeamMembers,
   updateCoreTeamMember,
   deleteCoreTeamMember,
+  addGalleryPicture,
+  getGalleryPicture,
+  deleteGalleryPicture,
 } from '../controllers/adminController.js';
 import { protect, admin } from '../middleware/auth.js';
 import upload from '../middleware/upload.js';
@@ -25,5 +28,10 @@ router.post('/core-team', protect, admin, upload.single('profilePhoto'), addCore
 router.get('/core-team', getCoreTeamMembers);
 router.put('/core-team/:id', protect, admin, upload.single('profilePhoto'), updateCoreTeamMember);
 router.delete('/core-team/:id', protect, admin, deleteCoreTeamMember);
+
+// Gallery Routes
+router.post('/addImage', protect, admin, upload.single('photo'), addGalleryPicture);
+router.get('/gallery', protect, admin, getGalleryPicture);
+router.delete('/images/:id', protect, admin, deleteGalleryPicture);
 
 export default router; 

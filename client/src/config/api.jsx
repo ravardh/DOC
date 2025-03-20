@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:4500",
   withCredentials: true,
-  timeout: 10000, // 10 seconds timeout
+  timeout: 60000, // 60 seconds timeout
 });
 
 // Add a request interceptor to attach the Bearer token from localStorage

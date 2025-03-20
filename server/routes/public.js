@@ -11,6 +11,7 @@ import {
   updateAnnouncement
 } from "../controllers/publicController.js";
 import upload from "../middleware/upload.js";
+import { getGalleryPicture } from '../controllers/adminController.js';
 
 const router = express.Router();
 
@@ -29,5 +30,7 @@ router.get("/Announcement" , allAnnouncement);
 router.delete("/Announcement/:id" , removeAnnouncement);
 router.put("/Announcement/:id" , updateAnnouncement)
 
+// Gallery Routes
+router.get('/gallery', getGalleryPicture);
 
 export default router;

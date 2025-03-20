@@ -13,11 +13,8 @@ const generateToken = (id, role) => {
 // @access  Public
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    console.log(email,password);
+    const { email, password } = req.body;   
     const user = await User.findOne({ email });
-
-    console.log(user)
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,

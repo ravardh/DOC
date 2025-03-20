@@ -66,6 +66,16 @@ const HRDashboard = () => {
 
   const navigate = useNavigate();
 
+  const interestOptions = [
+    { value: 'teaching', label: 'Teaching' },
+    { value: 'fundraising', label: 'Fundraising' },
+    { value: 'events', label: 'Event Management' },
+    { value: 'social-media', label: 'Social Media' },
+    { value: 'graphic-Designing', label: 'Graphic Designing' },
+    { value: 'content-writing', label: 'Content Writing' },
+    { value: 'administration', label: 'Administration' },
+  ];
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user || user.role !== "hr") {
@@ -593,6 +603,10 @@ const HRDashboard = () => {
                     </div>
                   );
                 })}
+                <div>
+                  <span className="font-semibold">Interests:</span>{' '}
+                  {interestOptions.find(opt => opt.value === selectedItem?.interests)?.label || selectedItem?.interests}
+                </div>
               </div>
             </div>
             <div className="sticky bottom-0 bg-white p-6 border-t">
@@ -626,8 +640,25 @@ const HRDashboard = () => {
             </div>
             <div className="p-6 overflow-y-auto flex-1">
               <div className="grid grid-cols-2 gap-6">
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Interests
+                  </label>
+                  <select
+                    value={editFormData?.interests || ''}
+                    onChange={(e) => setEditFormData({ ...editFormData, interests: e.target.value })}
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="">Select Interest</option>
+                    {interestOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 {Object.entries(selectedItem).map(([key, value]) => {
-                  if (!shouldShowField(key)) return null;
+                  if (!shouldShowField(key) || key === 'interests') return null;
                   
                   let inputType = "text";
                   let inputValue = value;

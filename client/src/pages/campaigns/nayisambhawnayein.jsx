@@ -1,47 +1,63 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import nayiSambhawnayeinImage from "../../assets/nayisamb.png";
+import React from "react";
+import CampaignLayout from "../../components/campaigns/CampaignLayout";
+import nayiSambhawnayein from "../../assets/nayisamb.png";
 
 function NayiSambhawnayein() {
-  return (
-    <div className="min-h-screen bg-gray-50 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">Project: Nayi Sambhawnayein</h1>
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <img 
-              src={nayiSambhawnayeinImage} 
-              alt="Nayi Sambhawnayein Project" 
-              className="w-full h-96 object-cover rounded-lg mb-8" 
-            />
-            <div className="prose max-w-none">
-              <h2 className="text-2xl font-semibold mb-4">Creating New Opportunities for a Brighter Future</h2>
-              <p className="text-gray-600 mb-6">
-                Nayi Sambhawnayein is an initiative dedicated to fostering skill development, employment opportunities,
-                and career growth for individuals looking for a better future. Through workshops, training sessions,
-                and mentorship, we empower people to unlock their full potential and secure meaningful employment.
-              </p>
-              <h3 className="text-xl font-semibold mb-3">Our Goals</h3>
-              <ul className="list-disc pl-6 mb-6 text-gray-600">
-                <li>Providing vocational and skill development training</li>
-                <li>Connecting individuals with job opportunities</li>
-                <li>Encouraging entrepreneurship and self-reliance</li>
-                <li>Offering mentorship and career guidance</li>
-              </ul>
-              <p className="text-gray-600 mb-6">
-                With Nayi Sambhawnayein, we believe in creating a world full of opportunities for everyone,
-                ensuring that no talent goes unnoticed and every dream has the potential to be realized.
-              </p>
-            </div>
+  const campaignData = {
+    title: "Nayi Sambhawnayein",
+    image: nayiSambhawnayein,
+    description: "Creating new possibilities and opportunities for underprivileged communities through education and skill development.",
+    locations: [
+      "Delhi NCR",
+      "Haryana",
+      "Punjab"
+    ],
+    stats: [
+      { value: "300+", label: "Lives Impacted" },
+      { value: "10+", label: "Programs" },
+      { value: "30+", label: "Volunteers" },
+      { value: "5", label: "Centers" }
+    ],
+    content: (
+      <>
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">About the Initiative</h2>
+            <p className="text-gray-600">
+              Nayi Sambhawnayein is dedicated to creating new possibilities for underprivileged communities 
+              through various educational and skill development programs. We believe in the power of 
+              education and training to transform lives and create sustainable change.
+            </p>
           </div>
-        </motion.div>
-      </div>
-    </div>
-  );
+
+          <div className="bg-gradient-to-r from-[#FF6F00] to-[#FF8F00] p-6 rounded-xl text-white">
+            <h3 className="text-xl font-semibold mb-3">Join Our Mission</h3>
+            <ul className="space-y-2">
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+                Support our educational programs
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+                Volunteer as a mentor
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+                Donate resources and materials
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-white rounded-full mr-2"></span>
+                Help us expand our reach
+              </li>
+            </ul>
+          </div>
+        </div>
+      </>
+    ),
+    callToAction: "Support Our Initiative"
+  };
+
+  return <CampaignLayout {...campaignData} />;
 }
 
 export default NayiSambhawnayein;
