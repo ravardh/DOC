@@ -8,15 +8,15 @@ function NayiUdaan() {
     image: nayiUdaan,
     description: "Empowering youth to soar high through education, mentorship, and career guidance.",
     locations: [
-      "Delhi",
-      "Haryana",
-      "Punjab",
-      "Uttar Pradesh"
+      "Ambala Cantt",
+      "Topkhana Basti (Ambala)",
+      "Chandigarh",
+      "Panchkula"
     ],
     stats: [
-      { value: "200+", label: "Students Supported" },
-      { value: "15+", label: "Career Programs" },
-      { value: "40+", label: "Mentors" },
+      { value: "50+", label: "Students Supported" },
+      { value: "5+", label: "Career Programs" },
+      { value: "30+", label: "Mentors" },
       { value: "90%", label: "Success Rate" }
     ],
     content: (

@@ -8,16 +8,16 @@ function StreetAnimalCare() {
     image: streetAnimalCare,
     description: "Nurturing and protecting our street animals through community-driven feeding programs and healthcare initiatives.",
     locations: [
-      "Delhi NCR",
-      "Haryana",
-      "Punjab",
-      "Uttar Pradesh"
+      "Ambala Cantt",
+      "Topkhana Basti (Ambala)",
+      "Chandigarh",
+      "Panchkula"
     ],
     stats: [
-      { value: "500+", label: "Animals Fed Daily" },
-      { value: "30+", label: "Feeding Points" },
+      { value: "500+", label: "Animals Feeded Monthly" },
+      { value: "12+", label: "Feeding Points" },
       { value: "100+", label: "Volunteers" },
-      { value: "1000+", label: "Medical Aids" }
+      { value: "300+", label: "Medical Aids" }
     ],
     content: (
       <>

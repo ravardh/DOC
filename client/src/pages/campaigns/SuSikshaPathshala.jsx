@@ -8,16 +8,16 @@ function SuSikshaPathshala() {
     image: sushiksha,
     description: "Empowering underprivileged children through quality education and creating pathways to brighter futures.",
     locations: [
-      "Ambala",
-      "Panchkula",
-      "Karnal",
-      "Delhi"
+     "Ambala Cantt",
+      "Topkhana Basti (Ambala)",
+      "Chandigarh",
+      "Panchkula"
     ],
     stats: [
-      { value: "500+", label: "Children Educated" },
+      { value: "800+", label: "Children Educated" },
       { value: "4", label: "Cities" },
       { value: "50+", label: "Volunteers" },
-      { value: "8", label: "Adopted Children" }
+      { value: "10+", label: "Adopted Children" }
     ],
     content: (
       <>

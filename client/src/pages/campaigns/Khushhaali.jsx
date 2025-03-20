@@ -8,14 +8,14 @@ function Khushhaali() {
     image: khushhaali,
     description: "Promoting true happiness through comprehensive healthcare initiatives and wellness education.",
     locations: [
-      "Delhi NCR",
-      "Haryana",
-      "Punjab",
-      "Rural Communities"
+      "Ambala Cantt",
+      "Topkhana Basti (Ambala)",
+      "Chandigarh",
+      "Panchkula"
     ],
     stats: [
-      { value: "1000+", label: "Patients Helped" },
-      { value: "20+", label: "Medical Camps" },
+      { value: "500+", label: "Patients Helped" },
+      { value: "90+", label: "Medical Camps" },
       { value: "50+", label: "Doctors" },
       { value: "100+", label: "Volunteers" }
     ],

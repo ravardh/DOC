@@ -8,10 +8,10 @@ function MehfilEMuskaan() {
     image: mehfilEMuskaan,
     description: "Celebrating talent and creativity through inclusive performances and artistic expression.",
     locations: [
-      "Delhi NCR",
-      "Haryana",
-      "Punjab",
-      "Virtual Events"
+      "Ambala Cantt",
+      "Topkhana Basti (Ambala)",
+      "Chandigarh",
+      "Panchkula"
     ],
     stats: [
       { value: "50+", label: "Performers" },

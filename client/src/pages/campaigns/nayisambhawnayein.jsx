@@ -8,15 +8,16 @@ function NayiSambhawnayein() {
     image: nayiSambhawnayein,
     description: "Creating new possibilities and opportunities for underprivileged communities through education and skill development.",
     locations: [
-      "Delhi NCR",
-      "Haryana",
-      "Punjab"
+      "Ambala Cantt",
+      "Topkhana Basti (Ambala)",
+      "Chandigarh",
+      "Panchkula"
     ],
     stats: [
-      { value: "300+", label: "Lives Impacted" },
+      { value: "500+", label: "Lives Impacted" },
       { value: "10+", label: "Programs" },
       { value: "30+", label: "Volunteers" },
-      { value: "5", label: "Centers" }
+      { value: "3", label: "Centers" }
     ],
     content: (
       <>

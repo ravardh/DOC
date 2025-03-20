@@ -8,16 +8,16 @@ function NariShakti() {
     image: nariShakti,
     description: "Celebrating and empowering the vital force of feminine strength, resilience, and determination that shapes our world.",
     locations: [
-      "Delhi NCR",
-      "Haryana",
-      "Punjab",
-      "Uttar Pradesh"
+    "Ambala Cantt",
+      "Topkhana Basti (Ambala)",
+      "Chandigarh",
+      "Panchkula"
     ],
     stats: [
-      { value: "1000+", label: "Women Empowered" },
+      { value: "1000+", label: "Women/Girls Empowered" },
       { value: "50+", label: "Programs" },
       { value: "20+", label: "Communities" },
-      { value: "100+", label: "Success Stories" }
+      { value: "30+", label: "Success Stories" }
     ],
     content: (
       <>
