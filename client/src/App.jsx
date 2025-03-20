@@ -37,27 +37,27 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/campaigns" element={<Campaigns />} />
-            <Route path="/campaigns/nari-shakti" element={<NariShakti />} />
+            <Route path="/campaigns/narishakti" element={<NariShakti />} />
             <Route
-              path="/campaigns/su-siksha-pathshala"
+              path="/campaigns/susikshapathshala"
               element={<SuSikshaPathshala />}
             />
-            <Route path="/campaigns/nayi-udaan" element={<NayiUdaan />} />
+            <Route path="/campaigns/nayiudaan" element={<NayiUdaan />} />
             <Route path="/campaigns/khushhaali" element={<Khushhaali />} />
             <Route
-              path="/campaigns/mehfil-e-muskaan"
+              path="/campaigns/mehfilemuskaan"
               element={<MehfilEMuskaan />}
             />
             <Route
-              path="/campaigns/jagrukata-abhiyan"
+              path="/campaigns/jagrukataabhiyan"
               element={<JagrukataAbhiyan />}
             />
             <Route
-              path="/campaigns/aao-baat-karein"
+              path="/campaigns/aaobaatkarein"
               element={<AooBatenKarein />}
             />
             <Route
-              path="/campaigns/nayi-sambhawnayein"
+              path="/campaigns/nayisambhawnayein"
               element={<NayiSambhawnayein />}
             />
             <Route

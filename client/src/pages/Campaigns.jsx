@@ -24,7 +24,7 @@ function Campaigns() {
     {
       title: "Su-Siksha Pathshala",
       description: "Quality education for underprivileged children.",
-      url: "/campaigns/susikshaPathshala",
+      url: "/campaigns/susikshapathshala",
       color: "from-green-500 to-green-600",
       icon: "📚"
     },
