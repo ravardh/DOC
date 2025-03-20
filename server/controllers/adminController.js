@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import CoreTeam from '../models/CoreTeam.js';
-import Gallery from '../models/Gallery.js';
+import Gallery from '../models/gallery.js';
 import cloudinary from '../config/cloudinary.js';
 
 // User Management
