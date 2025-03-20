@@ -49,11 +49,11 @@ function App() {
               element={<MehfilEMuskaan />}
             />
             <Route
-              path="/campaigns/jagrukataabhiyan"
+              path="/campaigns/jagruktaabhiyan"
               element={<JagrukataAbhiyan />}
             />
             <Route
-              path="/campaigns/aaobaatkarein"
+              path="/campaigns/aoobatenkarein"
               element={<AooBatenKarein />}
             />
             <Route
