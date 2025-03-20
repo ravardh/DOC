@@ -24,10 +24,10 @@ router.put('/users/:id', protect, admin, updateUser);
 router.delete('/users/:id', protect, admin, deleteUser);
 
 // Core team routes
-router.post('/core-team', protect, admin, upload.single('profilePhoto'), addCoreTeamMember);
-router.get('/core-team', getCoreTeamMembers);
-router.put('/core-team/:id', protect, admin, upload.single('profilePhoto'), updateCoreTeamMember);
-router.delete('/core-team/:id', protect, admin, deleteCoreTeamMember);
+router.post('/coreteam', protect, admin, upload.single('profilePhoto'), addCoreTeamMember);
+router.get('/coreteam', getCoreTeamMembers);
+router.put('/coreteam/:id', protect, admin, upload.single('profilePhoto'), updateCoreTeamMember);
+router.delete('/coreteam/:id', protect, admin, deleteCoreTeamMember);
 
 // Gallery Routes
 router.post('/addImage', protect, admin, upload.single('photo'), addGalleryPicture);

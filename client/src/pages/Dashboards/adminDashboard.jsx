@@ -65,7 +65,7 @@ const AdminDashboard = () => {
       const [usersRes, donationsRes, coreTeamRes] = await Promise.all([
         axios.get('/api/admin/users'),
         axios.get('/api/public/donations'),
-        axios.get('/api/admin/core-team'),
+        axios.get('/api/admin/coreteam'),
       ]);
 
       setUsers(usersRes.data);
@@ -186,7 +186,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         toast.error("Only JPG, PNG and WebP images are allowed");
         return;
