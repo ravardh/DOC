@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import QR from "../../assets/DOCQRCODE.png";
 import axios from "../../config/api";
+import { motion } from "framer-motion";
+import { Building2, Receipt, FileCheck, Landmark } from "lucide-react";
 
 const DonationPage = () => {
   const [name, setName] = useState("");
@@ -54,32 +56,104 @@ const DonationPage = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <div className="bg-[#FF6F00] text-white p-4 rounded-md text-center mb-6">
-        <h2 className="text-2xl font-bold">We're here to inform you!</h2>
+      <div className="bg-[#FF6F00] text-white p-6 rounded-lg text-center mb-8">
+        <h2 className="text-3xl font-bold mb-3">Make a Difference Today!</h2>
         <p className="text-lg">
-          Now our NGO has got <strong>80G and 12A</strong> certification!
+          Your contribution helps us create lasting impact. All donations are
+          eligible for tax benefits under sections 80G and 12A.
         </p>
       </div>
 
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-[#80CBC4]">
-          What is 80G & 12A?
+      {/* Tax Benefits Section */}
+      <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
+        <h2 className="text-2xl font-semibold mb-6 text-[#80CBC4] flex items-center">
+          <Receipt className="mr-2" /> Tax Benefits & Certifications
         </h2>
-        <p>
-          <strong>80G:</strong> Allows donors to claim tax deduction benefits on
-          donations.
-        </p>
-        <p>
-          <strong>12A:</strong> Provides tax exemption for NGOs, reducing their
-          tax liability.
-        </p>
-        <p className="mt-2 text-sm text-gray-600">
-          Donations are eligible for tax exemption under 80G.
-        </p>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+              <FileCheck className="mr-2 text-[#FF6F00]" /> Section 80G Benefits
+            </h3>
+            <ul className="list-disc list-inside text-gray-600 space-y-2">
+              <li>50% tax deduction on your donation amount</li>
+              <li>Valid for both individual and corporate donors</li>
+              <li>
+                Applicable for donations made in any mode (Cash/Bank
+                Transfer/UPI)
+              </li>
+              <li>Digital donation receipts provided instantly</li>
+              <li>No maximum limit on donation amount for deduction</li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+              <Landmark className="mr-2 text-[#FF6F00]" /> Section 12A
+              Registration
+            </h3>
+            <ul className="list-disc list-inside text-gray-600 space-y-2">
+              <li>Official recognition of our charitable status</li>
+              <li>Complete transparency in fund utilization</li>
+              <li>Regular auditing and compliance</li>
+              <li>Tax exemption on our income</li>
+              <li>Enhanced credibility and trust</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 mb-6">
-        <div className="flex-1 bg-white shadow-md rounded-lg p-6">
+      {/* CSR Section */}
+      <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
+        <h2 className="text-2xl font-semibold mb-6 text-[#80CBC4] flex items-center">
+          <Building2 className="mr-2" /> Corporate Social Responsibility (CSR)
+        </h2>
+
+        <div className="space-y-4">
+          <p className="text-gray-700">
+            Partner with us for your CSR initiatives! We offer:
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <h3 className="font-semibold text-[#FF6F00]">
+                Why Choose Us for CSR?
+              </h3>
+              <ul className="list-disc list-inside text-gray-600 space-y-2">
+                <li>Registered under Section 80G and 12A</li>
+                <li>Transparent fund utilization</li>
+                <li>Regular impact reports</li>
+                <li>Customized CSR programs</li>
+                <li>Professional documentation</li>
+              </ul>
+            </div>
+            <div className="space-y-3">
+              <h3 className="font-semibold text-[#FF6F00]">CSR Focus Areas</h3>
+              <ul className="list-disc list-inside text-gray-600 space-y-2">
+                <li>Education and Skill Development</li>
+                <li>Healthcare Initiatives</li>
+                <li>Community Development</li>
+                <li>Women Empowerment</li>
+                <li>Environmental Sustainability</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-600">
+              For CSR partnerships and detailed proposals, please contact us at{" "}
+              <a
+                href="mailto:contactus@dropsofchange.in"
+                className="text-[#FF6F00] hover:underline"
+              >
+                contactus@dropsofchange.in
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Existing Bank Details Section */}
+      <div className="flex flex-col md:flex-row gap-6 mb-8">
+        <div className="flex-1 bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-4 text-[#80CBC4]">
             Bank Transfer Details
           </h2>
@@ -107,7 +181,7 @@ const DonationPage = () => {
           </p>
         </div>
 
-        <div className="flex-1 bg-white shadow-md rounded-lg p-6 text-center">
+        <div className="flex-1 bg-white shadow-lg rounded-lg p-6 text-center">
           <h2 className="text-xl font-semibold mb-4 text-[#80CBC4]">
             Scan & Pay
           </h2>
@@ -117,12 +191,13 @@ const DonationPage = () => {
             className="mx-auto w-70 h-100 rounded-md"
           />
           <p className="mt-2 text-gray-600">
-            Scan the QR code to donate via UPI.
+            Scan the QR code to donate via UPI
           </p>
         </div>
       </div>
 
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+      {/* Existing Receipt Request Form */}
+      <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4 text-[#80CBC4]">
           Request for Donation Receipt
         </h2>
