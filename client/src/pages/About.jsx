@@ -43,7 +43,7 @@ function About() {
 
   useEffect(() => {
     axios
-      .get("/api/admin/core-team")
+      .get("/api/admin/coreteam")
       .then((response) => {
         setCoreTeam(response.data);
         setLoading(false);

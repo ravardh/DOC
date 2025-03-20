@@ -1,14 +1,14 @@
-import User from '../models/User.js';
-import CoreTeam from '../models/CoreTeam.js';
-import Gallery from '../models/gallery.js';
-import cloudinary from '../config/cloudinary.js';
+import User from "../models/User.js";
+import CoreTeam from "../models/CoreTeam.js";
+import Gallery from "../models/gallery.js";
+import cloudinary from "../config/cloudinary.js";
 
 // User Management
 export const createUser = async (req, res) => {
   try {
     const userExists = await User.findOne({ email: req.body.email });
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const user = await User.create(req.body);
@@ -24,7 +24,7 @@ export const createUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password');
+    const users = await User.find().select("-password");
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -37,7 +37,7 @@ export const updateUser = async (req, res) => {
       req.params.id,
       { $set: req.body },
       { new: true }
-    ).select('-password');
+    ).select("-password");
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -47,7 +47,7 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.json({ message: 'User deleted' });
+    res.json({ message: "User deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -56,25 +56,44 @@ export const deleteUser = async (req, res) => {
 // Core Team Management
 export const addCoreTeamMember = async (req, res) => {
   try {
-    let profilePhotoPath = '';
+    console.log("adding core team member");
+
+    let profilePhotoPath = "";
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path);
       profilePhotoPath = result.secure_url;
     }
 
-    const coreTeam = await CoreTeam.create({
-      ...req.body,
+    console.log("Photo Uploaded");
+    console.log(req.body);
+
+    const { name, position, linkedin, instagram, order } = req.body;
+
+    const coreTeamData = {
       profilePhotoPath,
-    });
+      name,
+      position,
+      linkedin,
+      instagram,
+      order: parseInt(order) || 1,
+    };
+
+    console.log("Processed Core Team Data:", coreTeamData);
+
+    const coreTeam = await CoreTeam.create(coreTeamData);
+
+    console.log("Core team member added:", coreTeam);
+
     res.status(201).json(coreTeam);
   } catch (error) {
+    console.error("Error adding core team member:", error.message);
     res.status(500).json({ message: error.message });
   }
 };
 
 export const getCoreTeamMembers = async (req, res) => {
   try {
-    const coreTeam = await CoreTeam.find({ active: true }).sort('order');
+    const coreTeam = await CoreTeam.find({ active: true }).sort("order");
     res.json(coreTeam);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -103,7 +122,7 @@ export const updateCoreTeamMember = async (req, res) => {
 export const deleteCoreTeamMember = async (req, res) => {
   try {
     await CoreTeam.findByIdAndUpdate(req.params.id, { active: false });
-    res.json({ message: 'Core team member deactivated' });
+    res.json({ message: "Core team member deactivated" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -127,17 +146,17 @@ export const addGalleryPicture = async (req, res) => {
 
     res.status(201).json(newGalleryImage);
   } catch (error) {
-    console.error('Error in addGalleryPicture:', error);
+    console.error("Error in addGalleryPicture:", error);
     res.status(500).json({ message: error.message });
   }
 };
 
 export const getGalleryPicture = async (req, res) => {
   try {
-    const images = await Gallery.find().sort('-createdAt');
+    const images = await Gallery.find().sort("-createdAt");
     res.json(images);
   } catch (error) {
-    console.error('Error in getGalleryPicture:', error);
+    console.error("Error in getGalleryPicture:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -146,19 +165,19 @@ export const deleteGalleryPicture = async (req, res) => {
   try {
     const image = await Gallery.findById(req.params.id);
     if (!image) {
-      return res.status(404).json({ message: 'Image not found' });
+      return res.status(404).json({ message: "Image not found" });
     }
 
     // Extract public_id from Cloudinary URL if needed
     if (image.imageUrl) {
-      const publicId = image.imageUrl.split('/').pop().split('.')[0];
+      const publicId = image.imageUrl.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(publicId);
     }
 
     await Gallery.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Image deleted successfully' });
+    res.json({ message: "Image deleted successfully" });
   } catch (error) {
-    console.error('Error in deleteGalleryPicture:', error);
+    console.error("Error in deleteGalleryPicture:", error);
     res.status(500).json({ message: error.message });
   }
 };
