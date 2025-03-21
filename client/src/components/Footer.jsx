@@ -13,7 +13,7 @@ function Footer() {
           {/* Organization Info */}
           <div>
             <div className="flex items-center mb-4">
-              <span className="ml-2 text-xl font-bold">Drops of Change</span>
+              <span className="text-lg font-bold text-[#FF6F00]">Drops of Change Welfare Society</span>
             </div>
             <p className="text-gray-400">
               Reaching every corner of the nation to educate young minds and eradicate unemployment 
@@ -23,7 +23,7 @@ function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4 text-[#FF6F00]">Quick Links</h3>
             <ul className="space-y-2">
               <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
               <li><Link to="/campaigns" className="text-gray-400 hover:text-white">Our Campaigns</Link></li>
@@ -34,7 +34,7 @@ function Footer() {
 
           {/* Support Us */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Support Us</h3>
+            <h3 className="text-lg font-semibold mb-4 text-[#FF6F00]">Support Us</h3>
             <ul className="space-y-2">
               <li><Link to="/support/donate" className="text-gray-400 hover:text-white">Donate</Link></li>
               <li><Link to="/support/volunteer" className="text-gray-400 hover:text-white">Volunteer</Link></li>
@@ -45,7 +45,7 @@ function Footer() {
 
           {/* Social Media & Contact */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
+            <h3 className="text-lg font-semibold mb-4 text-[#FF6F00]">Connect With Us</h3>
             <div className="flex space-x-4">
               <a href="https://www.linkedin.com/company/drops-of-change-welfare-society/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
                 <LinkedIn className="h-6 w-6" />
@@ -69,7 +69,7 @@ function Footer() {
         </div>
 
         {/* Footer Bottom Section */}
-        <div className="border-t border-gray-800 mt-8 pt-8 flex justify-between">
+        <div className="border-t border-gray-800 mt-4 pt-4 flex justify-between">
           <p className="text-gray-400">
             © {new Date().getFullYear()} Drops of Change. All rights reserved.
           </p>

@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import TopHeader from "./components/TopHeader";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -32,7 +31,7 @@ function App() {
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ScrollToTop />
       <div className="flex flex-col min-h-screen">
-        <TopHeader />
+        
         <Navbar />
         <main className="flex-grow">
           <Routes>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../config/api";
 import { useNavigate } from "react-router-dom";
-import { 
+import {
   FaSignOutAlt, 
   FaUserFriends, 
-  FaUserGraduate, 
-  FaUserTie, 
+  FaUserGraduate,
+  FaUserTie,
   FaEnvelope,
   FaTimes,
   FaBullhorn,
@@ -386,15 +386,15 @@ const HRDashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">HR Dashboard</h1>
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center"
-        >
-          <FaSignOutAlt className="mr-2" />
-          Logout
-        </button>
-      </div>
+              <h1 className="text-3xl font-bold">HR Dashboard</h1>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center"
+              >
+                <FaSignOutAlt className="mr-2" />
+                Logout
+              </button>
+            </div>
 
       {/* Tabs */}
       <div className="flex space-x-4 mb-6">
@@ -442,7 +442,7 @@ const HRDashboard = () => {
           <FaEnvelope className="mr-2" />
           Contacts ({contacts.length})
         </button>
-        <button
+                        <button
           onClick={() => setActiveTab("announcements")}
           className={`px-4 py-2 rounded-md flex items-center ${
             activeTab === "announcements"
@@ -452,8 +452,8 @@ const HRDashboard = () => {
         >
           <FaBullhorn className="mr-2" />
           Announcements ({announcements.length})
-        </button>
-      </div>
+                        </button>
+            </div>
 
       {/* Content */}
       <div className="mt-6">
@@ -471,7 +471,7 @@ const HRDashboard = () => {
             onStatusChange={handleApplicantStatusChange}
             onEdit={handleEdit}
             onOnboard={(intern) => {
-              setSelectedApplicant(intern);
+                            setSelectedApplicant(intern);
               setShowOnboardingModal(true);
             }}
             onViewDetails={handleViewDetails}
@@ -499,8 +499,8 @@ const HRDashboard = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Announcements</h2>
-              <button
-                onClick={() => {
+                        <button
+                          onClick={() => {
                   setSelectedAnnouncement(null);
                   setAnnouncementFormData({
                     Title: "",
@@ -540,18 +540,18 @@ const HRDashboard = () => {
                       <td className="px-6 py-4">{announcement.Announcement}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex space-x-2">
-                          <button
+                        <button
                             onClick={() => handleEditAnnouncement(announcement)}
                             className="text-indigo-600 hover:text-indigo-900"
                           >
                             <FaEditIcon />
-                          </button>
-                          <button
+                        </button>
+                        <button
                             onClick={() => handleDeleteAnnouncement(announcement._id)}
                             className="text-red-600 hover:text-red-900"
                           >
                             <FaTrash />
-                          </button>
+                        </button>
                         </div>
                       </td>
                     </tr>
@@ -570,14 +570,14 @@ const HRDashboard = () => {
             <div className="sticky top-0 bg-white p-6 border-b">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Details for {selectedItem.name}</h2>
-                <button
+              <button
                   onClick={handleCloseModals}
-                  className="text-gray-500 hover:text-gray-700"
-                >
+                className="text-gray-500 hover:text-gray-700"
+              >
                   <FaTimes />
-                </button>
-              </div>
+              </button>
             </div>
+                  </div>
             <div className="p-6 overflow-y-auto flex-1">
               <div className="grid grid-cols-2 gap-6">
                 {Object.entries(selectedItem).map(([key, value]) => {
@@ -603,20 +603,20 @@ const HRDashboard = () => {
                     </div>
                   );
                 })}
-                <div>
+                    <div>
                   <span className="font-semibold">Interests:</span>{' '}
                   {interestOptions.find(opt => opt.value === selectedItem?.interests)?.label || selectedItem?.interests}
-                </div>
-              </div>
-            </div>
+                    </div>
+                    </div>
+                  </div>
             <div className="sticky bottom-0 bg-white p-6 border-t">
               <div className="flex justify-end">
-                <button
+              <button
                   onClick={handleCloseModals}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                 >
                   Close
-                </button>
+              </button>
               </div>
             </div>
           </div>
@@ -630,14 +630,14 @@ const HRDashboard = () => {
             <div className="sticky top-0 bg-white p-6 border-b">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Edit {selectedItem.name}</h2>
-                <button
+              <button
                   onClick={handleCloseModals}
-                  className="text-gray-500 hover:text-gray-700"
-                >
+                className="text-gray-500 hover:text-gray-700"
+              >
                   <FaTimes />
-                </button>
-              </div>
+              </button>
             </div>
+                  </div>
             <div className="p-6 overflow-y-auto flex-1">
               <div className="grid grid-cols-2 gap-6">
                 <div className="col-span-2">
@@ -656,7 +656,7 @@ const HRDashboard = () => {
                       </option>
                     ))}
                   </select>
-                </div>
+                  </div>
                 {Object.entries(selectedItem).map(([key, value]) => {
                   if (!shouldShowField(key) || key === 'interests') return null;
                   
@@ -684,7 +684,7 @@ const HRDashboard = () => {
                           <option value="true">Yes</option>
                           <option value="false">No</option>
                         </select>
-                      </div>
+                  </div>
                     );
                   }
 
@@ -706,7 +706,7 @@ const HRDashboard = () => {
                           <option value="active">Active</option>
                           <option value="inactive">Inactive</option>
                         </select>
-                      </div>
+                  </div>
                     );
                   }
 
@@ -725,7 +725,7 @@ const HRDashboard = () => {
                           <option value="volunteer">Volunteer</option>
                           <option value="intern">Intern</option>
                         </select>
-                      </div>
+                  </div>
                     );
                   }
 
@@ -739,26 +739,26 @@ const HRDashboard = () => {
                         value={inputValue || ""}
                         onChange={(e) => setEditFormData({ ...editFormData, [key]: e.target.value })}
                         className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
+                    />
+                  </div>
                   );
                 })}
+                </div>
               </div>
-            </div>
             <div className="sticky bottom-0 bg-white p-6 border-t">
               <div className="flex justify-end space-x-3">
-                <button
+              <button
                   onClick={handleCloseModals}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                >
-                  Cancel
-                </button>
-                <button
+              >
+                Cancel
+              </button>
+              <button
                   onClick={handleEditSubmit}
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                >
+              >
                   Save Changes
-                </button>
+              </button>
               </div>
             </div>
           </div>
@@ -814,10 +814,10 @@ const HRDashboard = () => {
                         className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       />
                     )}
-                  </div>
+                      </div>
                 ))}
-              </div>
-            </div>
+                      </div>
+                  </div>
             <div className="sticky bottom-0 bg-white p-6 border-t">
               <div className="flex justify-end space-x-3">
                 <button
@@ -834,7 +834,7 @@ const HRDashboard = () => {
                 </button>
               </div>
             </div>
-          </div>
+                </div>
         </div>
       )}
 
@@ -845,14 +845,14 @@ const HRDashboard = () => {
             <div className="sticky top-0 bg-white p-6 border-b">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">Onboard {selectedApplicant.name}</h2>
-                <button
+              <button
                   onClick={() => setShowOnboardingModal(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
+                className="text-gray-500 hover:text-gray-700"
+              >
                   <FaTimes />
-                </button>
-              </div>
+              </button>
             </div>
+                </div>
             <div className="p-6 overflow-y-auto flex-1">
               <div className="grid grid-cols-2 gap-6">
                 <div className="col-span-2">
@@ -903,29 +903,29 @@ const HRDashboard = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Date of Leaving
                   </label>
-                  <input
+                      <input
                     type="date"
                     value={formatDateForInput(onboardingData.dol)}
                     onChange={(e) => setOnboardingData({ ...onboardingData, dol: e.target.value })}
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
+                      />
+                    </div>
+                    </div>
               </div>
-            </div>
             <div className="sticky bottom-0 bg-white p-6 border-t">
               <div className="flex justify-end space-x-3">
-                <button
+              <button
                   onClick={() => setShowOnboardingModal(false)}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                >
-                  Cancel
-                </button>
-                <button
+              >
+                Cancel
+              </button>
+              <button
                   onClick={handleOnboardingSubmit}
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                >
+              >
                   Complete Onboarding
-                </button>
+              </button>
               </div>
             </div>
           </div>
@@ -941,7 +941,7 @@ const HRDashboard = () => {
                 <h2 className="text-xl font-semibold">
                   {selectedAnnouncement ? 'Edit Announcement' : 'Add New Announcement'}
                 </h2>
-                <button
+              <button
                   onClick={() => {
                     setShowAnnouncementModal(false);
                     setSelectedAnnouncement(null);
@@ -952,12 +952,12 @@ const HRDashboard = () => {
                     });
                     setError(null);
                   }}
-                  className="text-gray-500 hover:text-gray-700"
-                >
+                className="text-gray-500 hover:text-gray-700"
+              >
                   <FaTimes />
-                </button>
-              </div>
+              </button>
             </div>
+                </div>
             <div className="p-6 overflow-y-auto flex-1">
               {error && (
                 <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -1025,11 +1025,11 @@ const HRDashboard = () => {
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
-              </div>
-            </div>
+                </div>
+                </div>
             <div className="sticky bottom-0 bg-white p-6 border-t">
               <div className="flex justify-end space-x-3">
-                <button
+              <button
                   onClick={() => {
                     setShowAnnouncementModal(false);
                     setSelectedAnnouncement(null);
@@ -1041,10 +1041,10 @@ const HRDashboard = () => {
                     setError(null);
                   }}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                >
-                  Cancel
-                </button>
-                <button
+              >
+                Cancel
+              </button>
+              <button
                   onClick={handleAnnouncementSubmit}
                   disabled={!announcementFormData.Title?.trim() || !announcementFormData.Announcement?.trim()}
                   className={`px-4 py-2 text-sm font-medium text-white rounded-md ${
@@ -1054,7 +1054,7 @@ const HRDashboard = () => {
                   }`}
                 >
                   {selectedAnnouncement ? 'Save Changes' : 'Add Announcement'}
-                </button>
+              </button>
               </div>
             </div>
           </div>

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logo from "../assets/cropped-drops-of-change-ngo-logo.webp"
+import TopHeader from "./TopHeader";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav className="bg-white  border-b-2 border-[#FF6F00] shadow-md sticky top-0 z-50">
+      <TopHeader />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center w-36">
