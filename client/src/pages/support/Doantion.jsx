@@ -11,6 +11,8 @@ const DonationPage = () => {
   const [paymentMode, setPaymentMode] = useState("Bank Transfer");
   const [utr, setUtr] = useState("");
   const [screenshot, setScreenshot] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   const handleScreenshotChange = (e) => {
     setScreenshot(e.target.files[0]);
@@ -18,9 +20,15 @@ const DonationPage = () => {
 
   const handleReceiptRequest = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage({ text: "", type: "" });
 
     if (!name || !email || !amount || !utr) {
-      alert("Please fill all required fields.");
+      setMessage({
+        text: "Please fill all required fields.",
+        type: "error",
+      });
+      setLoading(false);
       return;
     }
 
@@ -39,9 +47,11 @@ const DonationPage = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      alert(
-        `Receipt request submitted for INR ${amount}. Receipt will be sent to ${email}.`
-      );
+      setMessage({
+        text: `Receipt request submitted for INR ${amount}. Receipt will be sent to ${email}.`,
+        type: "success",
+      });
+
       setName("");
       setEmail("");
       setAmount("");
@@ -50,7 +60,12 @@ const DonationPage = () => {
       setScreenshot(null);
     } catch (error) {
       console.error("Error submitting donation:", error);
-      alert("Failed to submit donation. Please try again.");
+      setMessage({
+        text: "Failed to submit donation. Please try again.",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -282,14 +297,23 @@ const DonationPage = () => {
               onChange={handleScreenshotChange}
             />
           </div>
-
           <button
             type="submit"
             className="w-full bg-[#FF6F00] text-white py-2 rounded-md hover:bg-[#FF8F00] transition-all duration-300"
+            disabled={loading}
           >
-            Request Receipt 📄
+            {loading ? "Submitting..." : "Request Receipt 📄"}
           </button>
         </form>
+        {message.text && (
+          <p
+            className={`mt-4 text-center ${
+              message.type === "success" ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {message.text}
+          </p>
+        )}
       </div>
     </div>
   );

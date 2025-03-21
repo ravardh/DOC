@@ -82,7 +82,7 @@ const AdminDashboard = () => {
 
   const fetchGalleryImages = async () => {
     try {
-      const response = await axios.get("/api/admin/images");
+      const response = await axios.get("/api/admin/gallery");
       setGalleryImages(response.data);
       // Store in localStorage
       localStorage.setItem("galleryImages", JSON.stringify(response.data));

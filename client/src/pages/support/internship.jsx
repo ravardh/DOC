@@ -24,10 +24,14 @@ function Internship() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage({ text: "", type: "" });
+
     if (
       Object.values(formData).some((value) => value === "" || value === false)
     ) {
       alert("Please fill all required fields and accept terms.");
+      setLoading(false);
       return;
     }
     try {

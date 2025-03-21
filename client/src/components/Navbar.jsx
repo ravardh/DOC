@@ -7,12 +7,12 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white  border-b-2 border-[#FF6F00] shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-[#FF6F00]">
-              Drops of Change
+          <div className="flex items-center w-36">
+            <Link to="/" className=" font-bold text-[#FF6F00]">
+              <img src={logo} alt="Drops of Change"/>
             </Link>
           </div>
 

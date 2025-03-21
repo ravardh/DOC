@@ -80,7 +80,7 @@ function Home() {
                   title: "KIDS EDUCATION",
                   description:
                     "Provide on site classes / Primary education / Formal education to underprivileged / slum kids.",
-                  navigate: "/campaigns/su-siksha-pathshala",
+                  navigate: "/campaigns/susikshapathshala",
                   color: "bg-[#FF6F00]",
                 },
                 {
@@ -88,7 +88,7 @@ function Home() {
                   title: "SUPPORT HOMELESS",
                   description:
                     "A gateway from child labour to education. Education is a child's right and it can be never denied.",
-                  navigate: "/campaigns/jagrukata-abhiyan",
+                  navigate: "/campaigns/jagruktaabhiyan",
                   color: "bg-[#FF6F00]",
                 },
                 {
@@ -96,7 +96,7 @@ function Home() {
                   title: "SPONSOR A CHILD",
                   description:
                     "Donate For Child Education. Sponsor a Child. Donate Online. Because education is for everyone.",
-                  navigate: "/campaigns/nayi-udaan",
+                  navigate: "/campaigns/nayiudaan",
                   color: "bg-[#FF6F00]",
                 },
                 {
@@ -104,7 +104,7 @@ function Home() {
                   title: "SKILL DEVELOPMENT",
                   description:
                     "Help students to learn from various skill development programs so that they don't indulge in begging.",
-                  navigate: "/campaigns/nayi-sambhawnayein",
+                  navigate: "/campaigns/nayisambhawnayein",
                   color: "bg-[#FF6F00]",
                 },
               ].map((initiative, index) => (

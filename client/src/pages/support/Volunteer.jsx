@@ -23,10 +23,13 @@ function Volunteer() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setMessage({ text: "", type: "" });
 
     if (!formData.agreeToTerms) {
-      setMessage("Please accept the terms and conditions.");
+      setMessage({
+        text: "Please accept the terms and conditions.",
+        type: "error",
+      });
       setLoading(false);
       return;
     }

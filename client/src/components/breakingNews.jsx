@@ -45,7 +45,7 @@ const BreakingNews = () => {
   );
 
   return (
-    <div className="bg-[#FF6F00] text-white relative overflow-hidden">
+    <div className="bg-teal-300 border-b-2 border-[#FF6F00] text-gray-950 relative overflow-hidden">
       <div className="flex items-center h-8">
         <div className="flex-shrink-0 px-4 border-r border-white/30 h-full flex items-center">
           <FaBullhorn className="h-5 w-5 animate-pulse" />
