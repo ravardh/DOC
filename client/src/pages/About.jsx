@@ -5,6 +5,8 @@ import img1 from "../assets/img1.jpg";
 import img2 from "../assets/img2.jpg";
 import img3 from "../assets/img3.jpg";
 import img4 from "../assets/img4.jpg";
+import { IoLogoInstagram as Insta } from "react-icons/io5";
+import { FaLinkedinIn as LinkedIn } from "react-icons/fa";
 
 const aboutContent = {
   title: "About Us",
@@ -57,29 +59,45 @@ function About() {
   return (
     <div className="min-h-screen bg-gray-100 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <h1 className="text-5xl font-extrabold text-center text-gray-900 mb-12">{aboutContent.title}</h1>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h1 className="text-5xl font-extrabold text-center text-gray-900 mb-12">
+            {aboutContent.title}
+          </h1>
           <div className="space-y-12">
             {aboutContent.sections.map((section, index) => (
               <motion.div
                 key={index}
-                className={`flex flex-col gap-5 md:flex-row ${index % 2 === 0 ? "md:flex-row-reverse" : ""} items-center bg-white rounded-lg shadow-lg p-6 md:p-10`}
+                className={`flex flex-col gap-5 md:flex-row ${
+                  index % 2 === 0 ? "md:flex-row-reverse" : ""
+                } items-center bg-white rounded-lg shadow-lg p-6 md:p-10`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
                 <div className="md:w-1/2">
-                  <h2 className="text-3xl font-semibold text-[#FF6F00] mb-4">{section.heading}</h2>
+                  <h2 className="text-3xl font-semibold text-[#FF6F00] mb-4">
+                    {section.heading}
+                  </h2>
                   <p className="text-gray-600 text-lg">{section.content}</p>
                 </div>
                 <div className="md:w-1/2 mt-6 md:mt-0 md:ml-6">
-                  <img src={section.image} alt={section.heading} className="w-full rounded-lg shadow-md " />
+                  <img
+                    src={section.image}
+                    alt={section.heading}
+                    className="w-full rounded-lg shadow-md "
+                  />
                 </div>
               </motion.div>
             ))}
           </div>
           <div className="mt-16">
-            <h2 className="text-4xl font-extrabold text-center text-[#FF6F00] mb-8">Meet Our Core Team</h2>
+            <h2 className="text-4xl font-extrabold text-center text-[#FF6F00] mb-8">
+              Meet Our Core Team
+            </h2>
             {loading ? (
               <p className="text-center text-xl font-semibold">Loading...</p>
             ) : error ? (
@@ -87,20 +105,41 @@ function About() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {coreTeam.map((member, index) => (
-                  <div key={index} className="bg-white rounded-lg shadow-lg p-6 text-center border-2">
+                  <div
+                    key={index}
+                    className="bg-white rounded-lg shadow-lg p-6 text-center border-2"
+                  >
                     <img
-                      src={member.profilePhotoPath || "/path/to/default-image.png"}
+                      src={
+                        member.profilePhotoPath || "/path/to/default-image.png"
+                      }
                       alt={member.name}
                       className="w-48 h-60 rounded-lg mx-auto mb-4 border-2"
                     />
-                    <h3 className="text-2xl font-semibold text-gray-800">{member.name}</h3>
+                    <h3 className="text-2xl font-semibold text-gray-800">
+                      {member.name}
+                    </h3>
                     <p className="text-[#FF6F00]">{member.position}</p>
                     <div className="mt-2 flex justify-center space-x-4">
                       {member.linkedin && (
-                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600">LinkedIn</a>
+                        <a
+                          href={member.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600"
+                        >
+                          <LinkedIn className="h-6 w-6 transition-transform duration-300 hover:scale-125" />
+                        </a>
                       )}
                       {member.instagram && (
-                        <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="text-pink-600">Instagram</a>
+                        <a
+                          href={member.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-pink-600"
+                        >
+                          <Insta className="h-6 w-6 transition-transform duration-300 hover:scale-125" />
+                        </a>
                       )}
                     </div>
                   </div>
@@ -108,7 +147,8 @@ function About() {
               </div>
             )}
             <p className="text-center text-[#FF6F00] mt-8 text-3xl font-semibold">
-              “It is literally true that you can succeed best and quickest by helping others to succeed.”
+              “It is literally true that you can succeed best and quickest by
+              helping others to succeed.”
             </p>
           </div>
         </motion.div>
