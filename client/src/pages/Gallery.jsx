@@ -151,14 +151,14 @@ function Gallery() {
                   {image.title}
                 </h3>
                 <p className="text-gray-600 mb-4">{image.description}</p>
-                <div className="flex items-center text-sm text-gray-500">
+                {/* <div className="flex items-center text-sm text-gray-500">
                   <Calendar className="w-4 h-4 mr-2" />
                   {new Date(image.date || Date.now()).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   })}
-                </div>
+                </div> */}
               </div>
             </motion.div>
           ))}
