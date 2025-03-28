@@ -35,21 +35,21 @@ function Campaigns() {
     },
     {
       title: "Su-Siksha Pathshala",
-      description: "Quality education for underprivileged children.",
+      description: "Providing quality education to underprivileged children for a better future.",
       url: "/campaigns/susikshapathshala",
       color: "from-green-500 to-green-600",
       icon: (props) => <GraduationCap {...props} />
     },
     {
       title: "Nayi Sambhawnayein",
-      description: "Creating new possibilities through skill development.",
+      description: "Fostering new opportunities by empowering individuals through skill development.",
       url: "/campaigns/nayisambhawnayein",
       color: "from-yellow-500 to-yellow-600",
       icon: (props) => <Sparkles {...props} />
     },
     {
       title: "Nayi Udaan",
-      description: "Supporting dreams and aspirations of youth.",
+      description: "Empowering youth by supporting their dreams and aspirations for success.",
       url: "/campaigns/nayiudaan",
       color: "from-red-500 to-red-600",
       icon: (props) => <Rocket {...props} />
@@ -63,14 +63,14 @@ function Campaigns() {
     },
     {
       title: "Jagrukta Abhiyan",
-      description: "Spreading awareness about social issues.",
+      description: "Raising awareness and fostering understanding of important social issues.",
       url: "/campaigns/jagruktaabhiyan",
       color: "from-indigo-500 to-indigo-600",
       icon: (props) => <Bell {...props} />
     },
     {
       title: "Aoo Baten Karein",
-      description: "Creating dialogue for social change.",
+      description: "Facilitating conversations to inspire and drive meaningful social change.",
       url: "/campaigns/aoobatenkarein",
       color: "from-teal-500 to-teal-600",
       icon: (props) => <MessageCircle {...props} />
@@ -132,7 +132,7 @@ function Campaigns() {
               <div className="p-4">
                 <button
                   onClick={() => navigate(campaign.url)}
-                  className="w-full flex items-center justify-center space-x-2 bg-gray-50 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
+                  className="w-full flex items-center justify-center space-x-2 bg-gray-50 hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors duration-300"
                 >
                   <span>Learn More</span>
                   <ArrowRight className="w-4 h-4" />

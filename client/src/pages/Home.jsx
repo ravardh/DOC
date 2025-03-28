@@ -103,7 +103,7 @@ function Home() {
                   icon: Briefcase,
                   title: "SKILL DEVELOPMENT",
                   description:
-                    "Help students to learn from various skill development programs so that they don't indulge in begging.",
+                    "Help students to learn various skill development programs so that they don't indulge in begging.",
                   navigate: "/campaigns/nayisambhawnayein",
                   color: "bg-[#FF6F00]",
                 },
@@ -128,7 +128,7 @@ function Home() {
                       {initiative.description}
                     </p>
                     <div className="mt-6 flex items-center text-white/90 group-hover:text-white transition-colors">
-                      <span className="mr-2">Learn More</span>
+                      <span className="mr-2 text-xl font-bold">Learn More</span>
                       <ArrowRight className="h-5 w-5 transform group-hover:translate-x-2 transition-transform" />
                     </div>
                   </div>
