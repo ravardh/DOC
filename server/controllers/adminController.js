@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import CoreTeam from "../models/CoreTeam.js";
 import Gallery from "../models/gallery.js";
 import cloudinary from "../config/cloudinary.js";
+import Publication from "../models/Publication.js";
 
 // User Management
 export const createUser = async (req, res) => {
@@ -179,5 +180,85 @@ export const deleteGalleryPicture = async (req, res) => {
   } catch (error) {
     console.error("Error in deleteGalleryPicture:", error);
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Publication Controllers
+export const createPublication = async (req, res) => {
+  try {
+    const { title, type, description, publishDate, fileUrl, flipbookUrl } = req.body;
+
+    // Check for cover image in req.file (multer)
+    if (!req.file) {
+      return res.status(400).json({ message: "Cover image is required" });
+    }
+
+    if (!fileUrl) {
+      return res.status(400).json({ message: "File URL is required" });
+    }
+
+    if (!flipbookUrl) {
+      return res.status(400).json({ message: "Flipbook URL is required" });
+    }
+
+    console.log("Received file:", req.file);
+    console.log("Request body:", req.body);
+
+    // Upload cover image to Cloudinary
+    const coverImageResult = await cloudinary.uploader.upload(req.file.path, {
+      folder: "publications/covers",
+      resource_type: "image",
+    });
+
+    console.log("Cloudinary upload result:", coverImageResult);
+
+    // Create new publication
+    const publication = await Publication.create({
+      title,
+      type,
+      description,
+      publishDate,
+      fileUrl,
+      flipbookUrl,
+      coverImage: coverImageResult.secure_url,
+      isActive: true,
+    });
+
+    res.status(201).json(publication);
+  } catch (error) {
+    console.error("Error creating publication:", error);
+    res.status(500).json({ message: "Error creating publication: " + error.message });
+  }
+};
+
+export const getPublications = async (req, res) => {
+  try {
+    const publications = await Publication.find().sort({ publishDate: -1 });
+    res.json(publications);
+  } catch (error) {
+    console.error("Error fetching publications:", error);
+    res.status(500).json({ message: "Error fetching publications" });
+  }
+};
+
+export const deletePublication = async (req, res) => {
+  try {
+    const publication = await Publication.findById(req.params.id);
+    if (!publication) {
+      return res.status(404).json({ message: "Publication not found" });
+    }
+
+    // Delete files from Cloudinary
+    if (publication.coverImage) {
+      const publicId = publication.coverImage.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    // Use findByIdAndDelete instead of remove()
+    await Publication.findByIdAndDelete(req.params.id);
+    res.json({ message: "Publication deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting publication:", error);
+    res.status(500).json({ message: "Error deleting publication" });
   }
 };

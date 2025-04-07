@@ -2,9 +2,10 @@ import React from "react";
 import { ArrowRight, Users, School, Heart, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 import hero from "../assets/hero.webp";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BreakingNews from "../components/breakingNews";
 import ImageSliderWithCurtain from "../components/imageCurtain";
+import { FaFileAlt } from "react-icons/fa";
 
 function Home() {
   const navigate = useNavigate();
@@ -247,6 +248,15 @@ function Home() {
               We envision our
               country as a better place to live in.
               </div>
+            </div>
+            <div className="text-center mt-8 w-1/2 mx-auto">
+            <Link
+              to="/publications"
+              className="flex items-center justify-center gap-2 bg-[#FF6F00] text-white px-6 py-3 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
+            >
+              <FaFileAlt className="w-5 h-5" />
+              <span>Explore Our Publications</span>
+            </Link>
             </div>
           </div>
         </section>

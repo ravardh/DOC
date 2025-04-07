@@ -3,6 +3,7 @@ import Donation from '../models/Donation.js';
 import cloudinary from '../config/cloudinary.js';
 import AnnouncementModel from '../models/announcement.js';
 import mongoose from 'mongoose';
+import Publication from '../models/Publication.js';
 
 // Contact Form
 export const submitContact = async (req, res) => {
@@ -220,5 +221,35 @@ export const removeAnnouncement = async (req, res) => {
   } catch (error) {
     console.error('Delete announcement error:', error);
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Publication Controllers
+export const getPublicPublications = async (req, res) => {
+  try {
+    const publications = await Publication.find({ isActive: true })
+      .sort({ publishDate: -1 });
+    res.json(publications);
+  } catch (error) {
+    console.error("Error fetching publications:", error);
+    res.status(500).json({ message: "Error fetching publications" });
+  }
+};
+
+export const getPublicationById = async (req, res) => {
+  try {
+    const publication = await Publication.findOne({
+      _id: req.params.id,
+      isActive: true
+    });
+    
+    if (!publication) {
+      return res.status(404).json({ message: "Publication not found" });
+    }
+    
+    res.json(publication);
+  } catch (error) {
+    console.error("Error fetching publication:", error);
+    res.status(500).json({ message: "Error fetching publication" });
   }
 };

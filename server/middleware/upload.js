@@ -8,21 +8,20 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const filetypes = /jpeg|jpg|png|webp/;
+  const filetypes = /jpeg|jpg|png|webp|pdf/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
 
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error('Only JPG, PNG and WebP images are allowed'));
+    cb(new Error('Only JPG, PNG, PDF and WebP files are allowed'));
   }
 };
 
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5000000 }, // 5MB limit
 });
 
 export default upload; 

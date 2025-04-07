@@ -9,11 +9,13 @@ import {
   FaDonate,
   FaUserFriends,
   FaSignOutAlt,
+  FaFileAlt,
 } from 'react-icons/fa';
 import UserForm from '../../components/admin/UserForm';
 import CoreTeamForm from '../../components/admin/CoreTeamForm';
 import DonationRecords from '../../components/admin/DonationRecords';
 import Contacts from '../../components/admin/Contacts';
+import PublicationManager from '../../components/admin/PublicationManager';
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { Trash2, Upload, Image as ImageIcon } from "lucide-react";
@@ -301,6 +303,17 @@ const AdminDashboard = () => {
         >
           <ImageIcon className="inline-block mr-2" />
           Gallery
+        </button>
+        <button
+          onClick={() => setActiveTab('publications')}
+          className={`px-4 py-2 rounded-lg ${
+            activeTab === 'publications'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700'
+          }`}
+        >
+          <FaFileAlt className="inline-block mr-2" />
+          Publications
         </button>
       </div>
 
@@ -596,6 +609,8 @@ const AdminDashboard = () => {
             </motion.div>
           </div>
         )}
+
+        {activeTab === 'publications' && <PublicationManager />}
       </div>
 
       {/* User Details Modal */}

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Mail, Phone, Clock } from "lucide-react";
 import axios from "../config/api";
+import { Link } from "react-router-dom";
+import { FaFileAlt, FaHeart } from "react-icons/fa";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -40,6 +42,23 @@ const Contact = () => {
             Get in touch with us for any queries or support
           </p>
         </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <Link
+              to="/publications"
+              className="flex items-center justify-center gap-2 bg-[#FF6F00] text-white px-6 py-3 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
+            >
+              <FaFileAlt className="w-5 h-5" />
+              <span>Explore Our Publications</span>
+            </Link>
+            <Link
+              to="/support/donate"
+              className="flex items-center justify-center gap-2 bg-white text-[#FF6F00] border-2 border-[#FF6F00] px-6 py-3 rounded-lg hover:bg-[#FF6F00] hover:text-white transition-colors duration-300"
+            >
+              <FaHeart className="w-5 h-5" />
+              <span>Support Our Cause</span>
+            </Link>
+          </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* Contact Information */}

@@ -8,6 +8,8 @@ import Campaigns from "./pages/Campaigns";
 import Gallery from "./pages/Gallery";
 import Support from "./pages/Support";
 import Contact from "./pages/Contact";
+import Publications from "./pages/Publications";
+import NotFound from "./pages/NotFound";
 import NariShakti from "./pages/campaigns/NariShakti";
 import SuSikshaPathshala from "./pages/campaigns/SuSikshaPathshala";
 import NayiUdaan from "./pages/campaigns/NayiUdaan";
@@ -38,6 +40,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/campaigns" element={<Campaigns />} />
+            <Route path="/publications" element={<Publications />} />
             <Route path="/campaigns/narishakti" element={<NariShakti />} />
             <Route
               path="/campaigns/susikshapathshala"
@@ -80,6 +83,7 @@ function App() {
             <Route path="/hr-dashboard" element={<HRDashboard />} />
             <Route path="/campaigns/streetanimalcare" element={<StreetAnimalCare />} />
             <Route path="/campaigns/greenearth" element={<GreenEarth />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />

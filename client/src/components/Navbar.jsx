@@ -35,9 +35,13 @@ function Navbar() {
             <Link to="/about" className="text-gray-700 hover:text-[#FF6F00]">
               About Us
             </Link>
+            <Link to="/publications" className="text-gray-700 hover:text-[#FF6F00]">
+              Publications
+            </Link>
             <Link to="/contact" className="text-gray-700 hover:text-[#FF6F00]">
               Contact
             </Link>
+            
             <Link
               to="/support/donate"
               className="bg-[#FF6F00] text-white px-4 py-2 rounded-md hover:bg-[#FF8F00]"

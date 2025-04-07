@@ -8,7 +8,9 @@ import {
   removeAnnouncement,
   allAnnouncement,
   newAnnouncement,
-  updateAnnouncement
+  updateAnnouncement,
+  getPublicPublications,
+  getPublicationById
 } from "../controllers/publicController.js";
 import upload from "../middleware/upload.js";
 import { getGalleryPicture } from '../controllers/adminController.js';
@@ -66,5 +68,9 @@ router.post("/increment-visitor", async (req, res) => {
     res.status(500).json({ message: "Error incrementing visitor count" });
   }
 });
+
+// Publication Routes
+router.get("/publications", getPublicPublications);
+router.get("/publications/:id", getPublicationById);
 
 export default router;

@@ -1,13 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Heart, Users, BookOpen } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Link} from "react-router-dom";
+import { FaFileAlt } from "react-icons/fa";
 
 function Support() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
+    <div className="min-h-screen bg-gray-50 pt-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -72,8 +73,21 @@ function Support() {
                 Apply Now
               </button>
             </motion.div>
+            
           </div>
         </motion.div>
+        <div>
+            <div className="text-center mt-8 w-1/2 mx-auto">
+            <span className="text-gray-600 mb-6 text-lg font-bold">Want to know more about our work?</span>
+            <Link
+              to="/publications"
+              className="flex items-center justify-center gap-2 bg-[#FF6F00] text-white px-6 py-3 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
+            >
+              <FaFileAlt className="w-5 h-5" />
+              <span>Explore Our Publications</span>
+            </Link>
+            </div>
+            </div>
       </div>
     </div>
   );
