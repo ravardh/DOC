@@ -43,10 +43,20 @@ const PublicationManager = () => {
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (!file.type.startsWith("image/")) {
-        toast.error("Please upload an image file");
+      // Check file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("File size is too large. Maximum size is 10MB.");
+        e.target.value = ""; // Clear the file input
         return;
       }
+
+      // Check file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please upload an image file (JPEG, PNG, or WebP)");
+        e.target.value = ""; // Clear the file input
+        return;
+      }
+
       setCoverImage(file);
       setCoverPreview(URL.createObjectURL(file));
     }
@@ -74,7 +84,7 @@ const PublicationManager = () => {
       formDataToSend.append("fileUrl", formData.fileUrl);
       formDataToSend.append("flipbookUrl", formData.flipbookUrl);
       
-      // Add the file - make sure to use the exact field name expected by the server
+      // Add the file
       formDataToSend.append("coverImage", coverImage);
 
       // Log what we're sending
@@ -93,6 +103,8 @@ const PublicationManager = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        maxContentLength: 50 * 1024 * 1024, // 50MB
+        maxBodyLength: 50 * 1024 * 1024, // 50MB
       });
 
       console.log("Server response:", response.data);
@@ -114,7 +126,13 @@ const PublicationManager = () => {
       fetchPublications();
     } catch (error) {
       console.error("Error adding publication:", error);
-      toast.error(error.response?.data?.message || "Failed to add publication");
+      if (error.response?.status === 413) {
+        toast.error("File size is too large. Maximum size is 10MB.");
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to add publication. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
