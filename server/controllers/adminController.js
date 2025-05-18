@@ -57,16 +57,14 @@ export const deleteUser = async (req, res) => {
 // Core Team Management
 export const addCoreTeamMember = async (req, res) => {
   try {
-    console.log("adding core team member");
-
     let profilePhotoPath = "";
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "core-team",
+        resource_type: "image",
+      });
       profilePhotoPath = result.secure_url;
     }
-
-    console.log("Photo Uploaded");
-    console.log(req.body);
 
     const { name, position, linkedin, instagram, order } = req.body;
 
@@ -79,11 +77,7 @@ export const addCoreTeamMember = async (req, res) => {
       order: parseInt(order) || 1,
     };
 
-    console.log("Processed Core Team Data:", coreTeamData);
-
     const coreTeam = await CoreTeam.create(coreTeamData);
-
-    console.log("Core team member added:", coreTeam);
 
     res.status(201).json(coreTeam);
   } catch (error) {
@@ -104,8 +98,34 @@ export const getCoreTeamMembers = async (req, res) => {
 export const updateCoreTeamMember = async (req, res) => {
   try {
     let updateData = { ...req.body };
+
+    // Get the existing core team member to get the old photo URL
+    const existingMember = await CoreTeam.findById(req.params.id);
+
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
+      // Delete old photo if it exists
+      if (existingMember.profilePhotoPath) {
+        const imgId = existingMember.profilePhotoPath
+          .split("/upload/")[1]
+          .split("/");
+        const publicId =
+          imgId[1] + "/" + imgId[2] + "/" + imgId[3].split(".")[0];
+        //surround with try catch block
+        try {
+          if (publicId) {
+            const res = await cloudinary.uploader.destroy(publicId);
+            console.log("Image deleted successfully:", res);
+          }
+        } catch (error) {
+          console.error("Error deleting image:", error);
+        }
+      }
+
+      // Upload new photo
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "core-team",
+        resource_type: "image",
+      });
       updateData.profilePhotoPath = result.secure_url;
     }
 
@@ -134,7 +154,10 @@ export const addGalleryPicture = async (req, res) => {
   try {
     let imageUrl = "";
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "gallery",
+        resource_type: "image",
+      });
       imageUrl = result.secure_url;
     }
 
@@ -152,16 +175,6 @@ export const addGalleryPicture = async (req, res) => {
   }
 };
 
-export const getGalleryPicture = async (req, res) => {
-  try {
-    const images = await Gallery.find().sort("-createdAt");
-    res.json(images);
-  } catch (error) {
-    console.error("Error in getGalleryPicture:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
 export const deleteGalleryPicture = async (req, res) => {
   try {
     const image = await Gallery.findById(req.params.id);
@@ -169,10 +182,18 @@ export const deleteGalleryPicture = async (req, res) => {
       return res.status(404).json({ message: "Image not found" });
     }
 
-    // Extract public_id from Cloudinary URL if needed
     if (image.imageUrl) {
-      const publicId = image.imageUrl.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(publicId);
+      const imgId = image.imageUrl.split("/upload/")[1].split("/");
+      const publicId = imgId[1] + "/" + imgId[2] + "/" + imgId[3].split(".")[0];
+
+      try {
+        if (publicId) {
+          const result = await cloudinary.uploader.destroy(publicId);
+          console.log("Image deleted successfully:", result);
+        }
+      } catch (error) {
+        console.error("Error deleting image from Cloudinary:", error);
+      }
     }
 
     await Gallery.findByIdAndDelete(req.params.id);
@@ -183,10 +204,21 @@ export const deleteGalleryPicture = async (req, res) => {
   }
 };
 
+export const getGalleryPicture = async (req, res) => {
+  try {
+    const images = await Gallery.find().sort("-createdAt");
+    res.json(images);
+  } catch (error) {
+    console.error("Error in getGalleryPicture:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Publication Controllers
 export const createPublication = async (req, res) => {
   try {
-    const { title, type, description, publishDate, fileUrl, flipbookUrl } = req.body;
+    const { title, type, description, publishDate, fileUrl, flipbookUrl } =
+      req.body;
 
     // Check for cover image in req.file (multer)
     if (!req.file) {
@@ -227,7 +259,9 @@ export const createPublication = async (req, res) => {
     res.status(201).json(publication);
   } catch (error) {
     console.error("Error creating publication:", error);
-    res.status(500).json({ message: "Error creating publication: " + error.message });
+    res
+      .status(500)
+      .json({ message: "Error creating publication: " + error.message });
   }
 };
 
@@ -250,7 +284,7 @@ export const deletePublication = async (req, res) => {
 
     // Delete files from Cloudinary
     if (publication.coverImage) {
-      const publicId = publication.coverImage.split('/').pop().split('.')[0];
+      const publicId = publication.coverImage.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(publicId);
     }
 
