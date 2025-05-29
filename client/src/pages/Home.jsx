@@ -50,8 +50,11 @@ function Home() {
             </div>
           </div>
         </section>
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ImageSliderWithCurtain />
+        {/* Adjust the ImageSliderWithCurtain section */}
+        <section className="w-full">
+          <div className="max-w-full px-2 sm:px-4">
+            <ImageSliderWithCurtain />
+          </div>
         </section>
 
         {/* Initiatives Section */}
@@ -235,28 +238,27 @@ function Home() {
             </motion.div>
             <div className="text-center mt-8 grid gap-2">
               <div className="text-lg">
-              A famous Spanish writer Miguel de Cervantes once said :-
+                A famous Spanish writer Miguel de Cervantes once said :-
               </div>
               <div className="italic text-[#FF6F00] text-lg">
                 ”Never stand begging for that which you have the power to earn.”
               </div>
               <div className="text-lg font-bold">
-              We envision creating a well-educated and skillful society where no
-              one has to beg to fulfill their bare essentials. 
+                We envision creating a well-educated and skillful society where
+                no one has to beg to fulfill their bare essentials.
               </div>
               <div className="text-lg font-bold">
-              We envision our
-              country as a better place to live in.
+                We envision our country as a better place to live in.
               </div>
             </div>
             <div className="text-center mt-8 w-1/2 mx-auto">
-            <Link
-              to="/publications"
-              className="flex items-center justify-center gap-2 bg-[#FF6F00] text-white px-6 py-3 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
-            >
-              <FaFileAlt className="w-5 h-5" />
-              <span>Explore Our Publications</span>
-            </Link>
+              <Link
+                to="/publications"
+                className="flex items-center justify-center gap-2 bg-[#FF6F00] text-white px-6 py-3 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
+              >
+                <FaFileAlt className="w-5 h-5" />
+                <span>Explore Our Publications</span>
+              </Link>
             </div>
           </div>
         </section>
@@ -266,9 +268,9 @@ function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               {[
-                { number: "14+", label: "Children Sponsored" },
-                { number: "700+", label: "Children Associated" },
-                { number: "8+", label: "Active Sponsors" },
+                { number: "34+", label: "Children Sponsored" },
+                { number: "900+", label: "Children Associated" },
+                { number: "20+", label: "Active Sponsors" },
               ].map((stat, index) => (
                 <motion.div
                   key={index}

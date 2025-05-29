@@ -183,16 +183,18 @@ function Footer() {
         </div>
 
         {/* Footer Bottom Section */}
-        <div className="border-t border-gray-800 mt-4 pt-4 flex justify-between">
-          <p className="text-gray-400">
-            © {new Date().getFullYear()} Drops of Change. All rights reserved.
-          </p>
-          <span className="text-xl font-bold text-[#FF6F00]">
-            Total Visitors: {visitorCount.toLocaleString()}
-          </span>
-          <p className="text-gray-400 flex gap-3">
-            Made with <Heart className="fill-red-500 my-1" /> by Raj Vardhan
-          </p>
+        <div className="border-t border-gray-800 mt-4 pt-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p className="text-gray-400 text-sm sm:text-base text-center sm:text-left">
+              © {new Date().getFullYear()} Drops of Change. All rights reserved.
+            </p>
+            <span className="text-lg sm:text-xl font-bold text-[#FF6F00] order-first sm:order-none">
+              Total Visitors: {visitorCount.toLocaleString()}
+            </span>
+            <p className="text-gray-400 flex gap-2 items-center text-sm sm:text-base">
+              Made with <Heart className="fill-red-500 h-5 w-5" /> by Raj Vardhan
+            </p>
+          </div>
         </div>
       </div>
     </footer>

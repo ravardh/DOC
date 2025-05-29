@@ -12,16 +12,14 @@ import child from "../assets/Child_Act.webp";
 import vol from "../assets/Volunteer_Act.webp";
 import { useNavigate } from "react-router-dom";
 
-
-
 export default function ImageSliderWithCurtain() {
   const textRef = useRef(null);
   const isInView = useInView(textRef, { triggerOnce: true, threshold: 0.2 });
   const navigate = useNavigate();
   return (
-    <div className="flex h-[90vh] w-full py-10 gap-4">
+    <div className="flex flex-col md:flex-row min-h-[90vh] w-full py-3 md:py-10 gap-2 md:gap-4 max-w-7xl mx-auto">
       {/* Left Side: Image Slider */}
-      <div className="w-1/2 h-full">
+      <div className="w-full md:w-1/2 h-[30vh] md:h-[70vh] relative">
         <Swiper
           modules={[EffectFade, Autoplay]}
           effect="fade"
@@ -32,7 +30,7 @@ export default function ImageSliderWithCurtain() {
           <SwiperSlide>
             <img
               src={edu}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-lg"
               alt="Nature"
             />
           </SwiperSlide>
@@ -56,31 +54,28 @@ export default function ImageSliderWithCurtain() {
         </Swiper>
       </div>
 
-      {/* Right Side: Static Text with Entry Animation */}
-      <div className="w-1/2 h-full relative overflow-hidden" ref={textRef}>
-        <motion.div
-          initial={{ x: "100%" }}
-          animate={isInView ? { x: "0%" } : {}}
-          transition={{ duration: 1 }}
-          className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
-        >
-          <div className="p-4">
-            <h2 className="text-6xl font-bold text-[#FF6F00] ">
+      {/* Right Side: Static Text */}
+      <div className="w-full md:w-1/2 py-4 md:py-0" ref={textRef}>
+        <div className="w-full h-full flex items-center">
+          <div className="w-full px-2 md:px-8">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#FF6F00] leading-tight">
               Education to Change The World
             </h2>
-            <p className="mt-8 font-bold text-xl">
+            <p className="mt-3 md:mt-6 font-bold text-sm sm:text-lg md:text-xl">
               One child, one teacher, one pen and one book can change the world.
               Education is the only solution.
             </p>
-            <p className="mt-3 font-bold text-xl rounded-lg  ">
-              <span className="p-1">
+            <p className="mt-2 md:mt-3 font-bold text-sm sm:text-lg md:text-xl">
+              <span className="inline-block">
                 We request all of you to come forward to help them.
               </span>
-              <br />{" "}
-              <span className=" p-1">If not us then who?</span>
+              <br className="hidden sm:block" />{" "}
+              <span className="inline-block mt-1 sm:mt-0">
+                If not us then who?
+              </span>
             </p>
             <motion.button
-              className="bg-[#FF6F00] text-white mt-6 px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#FF8F00] transition duration-300"
+              className="bg-[#FF6F00] text-white mt-4 md:mt-6 px-4 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-lg font-semibold hover:bg-[#FF8F00] transition duration-300 w-full sm:w-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 10 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -89,7 +84,7 @@ export default function ImageSliderWithCurtain() {
               Sponsor A Child
             </motion.button>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
