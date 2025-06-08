@@ -88,6 +88,13 @@ function Campaigns() {
       url: "/campaigns/greenearth",
       color: "from-emerald-500 to-emerald-600",
       icon: (props) => <Leaf {...props} />
+    },
+    {
+      title: "Basta: The Daily Pathshala Campaign",
+      description: "Empowering children with daily education, hope, and a brighter tomorrow.",
+      url: "/campaigns/basta",
+      color: "from-orange-500 to-orange-600",
+      icon: (props) => <GraduationCap {...props} />
     }
   ];
 

@@ -27,6 +27,7 @@ import HRDashboard from "./pages/Dashboards/hrDashboard";
 import ScrollToTop from "./components/common/Scrolltop";
 import StreetAnimalCare from "./pages/campaigns/StreetAnimalCare";
 import GreenEarth from "./pages/campaigns/GreenEarth";
+import Basta from "./pages/campaigns/Basta";
 
 function App() {
   return (
@@ -71,6 +72,10 @@ function App() {
             <Route
               path=" /campaigns/greenearth"
               element={<GreenEarth />}
+            />
+            <Route
+              path="/campaigns/basta"
+              element={<Basta />}
             />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/support" element={<Support />} />

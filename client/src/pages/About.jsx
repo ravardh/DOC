@@ -13,26 +13,152 @@ const aboutContent = {
   sections: [
     {
       heading: "Who We Are",
-      content:
-        "The founder of the organization, Vishal Hindustani has been working in the society since the year 2017 for the education of the children living in slums and settlements, he and his team have been doing social service work since 2017 even in the dreadful situation like Corona.He believes that small efforts can bring big changes in the society which may be the reason why he named the organization “Drops of Change” means, just like few drops of rain become a lake and a pond, similarly big changes can be brought in the society by small efforts. Since January 2022 the NGO has been working towards educating underprivileged children in slums & settlements.",
+      content: (
+        <>
+          <div className="grid gap-3">
+            <p>
+              Drops of Change Welfare Society is a registered NGO with a clear
+              mission. Our team is working together to educate children in slums
+              and settlement areas. We use various campaigns and programmes to
+              ensure a child labor free and poverty free India.
+            </p>
+            <p>
+              We are not committed only to teach children. We also give them all
+              the basic needs for education like books, school bags, uniforms,
+              stationery etc. We want our children to develop in all areas of
+              life. Beyond academics our children learn valuable moral and life
+              lessons. We even make sure they have fun through creative
+              activities, games and sports.
+            </p>
+            <p>
+              As we know, small efforts when done over and over again by many
+              people leads to big changes in society. This idea comes from how a
+              few drops of rain gather over an area over some time to create a
+              pond or a lake.
+            </p>
+            <p>
+              Hence, the creation of the name of our NGO ‘Drops of Change’:
+              because every effort no matter how small counts. The NGO has been
+              active since January, 2022 under the leadership of the founder of
+              the organisation Mr. Vishal Hindustani.
+            </p>
+          </div>
+        </>
+      ),
       image: img1,
     },
     {
       heading: "Our Vision",
-      content:
-        "Through Drops of change, we want to work in the field of education all over the country. We intend to create an equitable society and education has the power to put a dent in this endeavor. The children of slum areas are put to work at young ages and discontinue their education due to financial constraints. Drops of Change aspires to rekindle their desire to start schooling again. An enlightened citizen lays the premise for a developed nation ahead. Kids today are the leaders of tomorrow. We wish to uplift underserved households socially and economically by imparting education to the young ones and making them responsible so that future generations can lead the overall development of their families and, eventually, the country. There is no shortage of talent in India. Handicrafts such as sculpting idols, embroidery, quilt stitching, etc., are integral to our country’s rich heritage. Youngsters interested in this area deserve equal attention, and ‘Drops of change’ is striving hard to encourage them. We aim to eliminate the skill gap and help them become employable.",
+      content: (
+        <>
+          <ul className="list-disc pl-5 space-y-2 mb-4">
+            <li>
+              Poverty free India where slums and slum dwellers live in better
+              communities.
+            </li>
+            <li>
+              When the families are not poor they do not force their children
+              into child labor. Hence, we want a child labor free India.
+            </li>
+            <li>
+              To educate young minds to eradicate unemployment due to persistent
+              illiteracy. Our reach should be all over India.
+            </li>
+          </ul>
+          <div className="grid gap-3">
+            <p>
+              Education is a fundamental right, yet many underprivileged
+              children are trapped in a cycle of poverty and child labor, forced
+              to abandon school early.
+            </p>
+
+            <p>
+              <strong>
+                We all know that India is a land full of talent and untapped
+                potential.
+              </strong>
+            </p>
+            <p>
+              Do you know how beneficial it would be to our nation if all that
+              talent was put to good use?
+            </p>
+            <p>
+              At Drops of Change, we aim to reignite their interest in learning
+              and help break this cycle. India is rich in talent and cultural
+              heritage — from idol sculpting to embroidery.
+            </p>
+            <p>
+              By nurturing these skills, we can empower children with employable
+              talents, preserve traditional crafts, and shape them into future
+              leaders who uplift their communities.
+            </p>
+          </div>
+        </>
+      ),
       image: img2,
     },
     {
       heading: "Aim",
-      content:
-        "We are currently aiming to improve the lives of marginalized societies. A sizable portion of our community lacks the key resources to move ahead and prosper in their lives. In today’s fast-paced life, constant learning and improving oneself are indispensable. We wish to create better possibilities for disadvantaged communities by upskilling and educating their little ones. We aspire to maximize their chances of survival in this rapidly moving world and cope with reality better.",
+      content: (
+        <>
+          <div className="grid gap-3">
+            <p>
+              We live in a very competitive society. To be ahead in the game we
+              need to develop and improve ourselves every day to have a
+              competitive edge over others.
+            </p>
+            <p>
+              But the reality is all this requires lots of resources. People
+              living in slums are surviving on the bare minimum. How can they
+              spare time and money for education?
+            </p>
+            <p>
+              We intend to change that by giving these children better
+              opportunities. By upskilling and educating these children through
+              our own efforts we increase their chances of survival and allow
+              them to express their full potential.
+            </p>
+            <p>
+              In this fast-paced world children from poorer backgrounds need a
+              lot of confidence and support and we aim to give that through our
+              will and efforts.
+            </p>
+          </div>
+        </>
+      ),
       image: img3,
     },
     {
       heading: "Motive",
-      content:
-        "The founder, Mr. Vishal Hindustani, has had his heart set on contributing socially and helping people since childhood. He believes that adding value to others’ life is the only way to justify yours. This mindset elicited the desire to establish his own NGO and bring like-minded people together. He and his team have been working toward the mission since then. He also believes that changing and molding children’s minds is comparatively easy. And if we wish to bring positive societal changes, we must set our sights on the younger crowd. Shaping their character and teaching moral values to them will eventually reflect in the overall society in the longer run. These two combined form the basic why and wherefore of “Drops Of Change.”",
+      content: (
+        <>
+          <div className="grid gap-3">
+            <p>
+              Children are the future of society. They can be easily moulded and
+              taught to be better human beings and leaders. By changing them, we
+              change society and create a better world. Our team has been
+              working with this mission to bring positive societal change by
+              focusing on these young potential talents and ensuring that they
+              give back to the community.
+            </p>
+            <p>
+              At Drops Of Change we believe that only by adding value to the
+              life of others can we justify our own existence.
+            </p>
+            <p>
+              Our founder, Mr. Vishal Hindustani, has been set with the aim to
+              contribute socially and help people since he was a child.
+            </p>
+            <p>
+              With this motivation we intend to teach our children the same
+              moral values by shaping their character which will reflect as they
+              take up important positions in society and give back to the
+              community. This is the main motivation behind the creation of
+              ‘Drops Of Change’.
+            </p>
+          </div>
+        </>
+      ),
       image: img4,
     },
   ],
@@ -82,7 +208,7 @@ function About() {
                   <h2 className="text-3xl font-semibold text-[#FF6F00] mb-4">
                     {section.heading}
                   </h2>
-                  <p className="text-gray-600 text-lg">{section.content}</p>
+                  <p className="text-gray-600 text-[1rem]">{section.content}</p>
                 </div>
                 <div className="md:w-1/2 mt-6 md:mt-0 md:ml-6">
                   <img
