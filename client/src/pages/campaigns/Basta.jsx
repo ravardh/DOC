@@ -1,6 +1,6 @@
 import React from "react";
 import CampaignLayout from "../../components/campaigns/CampaignLayout";
-import basta from "../../assets/basta.jpg"; // Add the image path if available
+import basta from "../../assets/BastaImage.jpg"; // Add the image path if available
 
 function Basta() {
   const campaignData = {
