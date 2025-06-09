@@ -521,7 +521,7 @@ const AdminDashboard = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Image (Max size: 5MB)
+                    Image (Max size: 1MB)
                   </label>
                   <div className="mt-1 flex items-center">
                     <input

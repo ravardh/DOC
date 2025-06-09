@@ -261,19 +261,43 @@ function Internship() {
                 <div className="flex items-start">
                   <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
                   <p className="ml-3 text-gray-600">
-                    Internship is unpaid but provides experience
+                    Minimum three months commitment required
                   </p>
                 </div>
                 <div className="flex items-start">
                   <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
                   <p className="ml-3 text-gray-600">
-                    Interns must complete assigned projects on time
+                    80% involvement is compulsory in all NGO events and campaigns
                   </p>
                 </div>
                 <div className="flex items-start">
                   <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
                   <p className="ml-3 text-gray-600">
-                    Maintain professionalism and confidentiality
+                    Weekly working hours must meet the minimum requirement of 8 hours
+                  </p>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
+                  <p className="ml-3 text-gray-600">
+                    Internship is unpaid but provides valuable experience and a certificate upon successful completion
+                  </p>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
+                  <p className="ml-3 text-gray-600">
+                    Interns must complete assigned projects and tasks on time
+                  </p>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
+                  <p className="ml-3 text-gray-600">
+                    Maintain professionalism, discipline, and confidentiality at all times
+                  </p>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
+                  <p className="ml-3 text-gray-600">
+                    Regular feedback and reporting to the assigned mentor/supervisor is mandatory
                   </p>
                 </div>
               </div>

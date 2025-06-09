@@ -244,6 +244,18 @@ function Volunteer() {
                 <div className="flex items-start">
                   <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
                   <p className="ml-3 text-gray-600">
+                    Minimum 5 hours of volunteering per week is required
+                  </p>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
+                  <p className="ml-3 text-gray-600">
+                    75% participation in all NGO events and campaigns is compulsory
+                  </p>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
+                  <p className="ml-3 text-gray-600">
                     Background check required for working with children
                   </p>
                 </div>
@@ -256,7 +268,13 @@ function Volunteer() {
                 <div className="flex items-start">
                   <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
                   <p className="ml-3 text-gray-600">
-                    Follow organization's code of conduct
+                    Follow organization's code of conduct and maintain professionalism
+                  </p>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
+                  <p className="ml-3 text-gray-600">
+                    Volunteers must complete assigned tasks and report progress regularly
                   </p>
                 </div>
               </div>

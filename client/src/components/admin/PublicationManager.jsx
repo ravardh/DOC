@@ -231,7 +231,7 @@ const PublicationManager = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Cover Image
+                Cover Image (Max Size : 1MB)
               </label>
               <div className="mt-1 flex items-center">
                 <input

@@ -288,7 +288,7 @@ const DonationPage = () => {
 
           <div className="mb-4">
             <label className="block mb-2 font-medium">
-              Upload Screenshot (optional)
+              Upload Screenshot (Max Size : 1MB)
             </label>
             <input
               type="file"

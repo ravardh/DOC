@@ -164,7 +164,7 @@ const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Profile Photo
+                Profile Photo (Max Size : 1MB)
               </label>
               <input
                 type="file"
