@@ -192,7 +192,16 @@ function Footer() {
               Total Visitors: {visitorCount.toLocaleString()}
             </span>
             <p className="text-gray-400 flex gap-2 items-center text-sm sm:text-base">
-              Made with <Heart className="fill-red-500 h-5 w-5" /> by Raj Vardhan
+              Made with{" "}
+              <Heart className="fill-red-500 h-5 w-5" /> by
+              <a
+                href="https://www.linkedin.com/in/ravardh"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#FF6F00] font-bold hover:underline ml-1"
+              >
+                Raj Vardhan
+              </a>
             </p>
           </div>
         </div>

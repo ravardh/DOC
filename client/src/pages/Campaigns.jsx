@@ -12,7 +12,9 @@ import {
   MessageCircle, 
   Dog, 
   Leaf,
-  Stethoscope 
+  Stethoscope,
+  BookOpen,
+  PenTool
 } from "lucide-react";
 
 function Campaigns() {
@@ -20,7 +22,75 @@ function Campaigns() {
 
   const campaigns = [
     {
-      title: "Khush-Hali",
+      title: "Su-Shiksha Pathshala",
+      description: "Providing quality education to underprivileged children for a better future.",
+      url: "/campaigns/susikshapathshala",
+      color: "from-green-500 to-green-600",
+      icon: (props) => (
+        <span className="flex items-center gap-2">
+          <BookOpen {...props} className="w-8 h-8" />
+          <PenTool {...props} className="w-6 h-6" />
+        </span>
+      )
+    },
+    {
+      title: "Nayi Udaan",
+      description: "Empowering youth by supporting their dreams and aspirations for success.",
+      url: "/campaigns/nayiudaan",
+      color: "from-red-500 to-red-600",
+      icon: (props) => <Rocket {...props} />
+    },
+    {
+      title: "Basta The Daily Pathshala",
+      description: "Empowering children with daily education, hope, and a brighter tomorrow.",
+      url: "/campaigns/basta",
+      color: "from-orange-500 to-orange-600",
+      icon: (props) => <GraduationCap {...props} />
+    },
+    {
+      title: "Dharti Ki Muskaan",
+      description: "Creating a greener future through tree planting and conservation.",
+      url: "/campaigns/greenearth",
+      color: "from-emerald-500 to-emerald-600",
+      icon: (props) => <Leaf {...props} />
+    },
+    {
+      title: "Prem Seva (Animal Care)",
+      description: "Nurturing and protecting street animals through feeding programs.",
+      url: "/campaigns/streetanimalcare",
+      color: "from-amber-500 to-amber-600",
+      icon: (props) => <Dog {...props} />
+    },
+    {
+      title: "Jagrukta Abhiyan (Awareness)",
+      description: "Raising awareness and fostering understanding of important social issues.",
+      url: "/campaigns/jagruktaabhiyan",
+      color: "from-indigo-500 to-indigo-600",
+      icon: (props) => <Bell {...props} />
+    },
+    {
+      title: "Aao Baat Karein (Mental Health)",
+      description: "Facilitating conversations to inspire and drive meaningful social change.",
+      url: "/campaigns/aoobatenkarein",
+      color: "from-teal-500 to-teal-600",
+      icon: (props) => <MessageCircle {...props} />
+    },
+    {
+      title: "Mehfil-e-Muskaan (Fund Raising)",
+      description: "Celebrating talent and creativity through inclusive performances.",
+      url: "/campaigns/mehfilemuskaan",
+      color: "from-pink-500 to-pink-600",
+      icon: (props) => <Theater {...props} />
+    },
+    {
+      title: "Nayi Sambhawnayein (Skill Development)",
+      description: "Fostering new opportunities by empowering individuals through skill development.",
+      url: "/campaigns/nayisambhawnayein",
+      color: "from-yellow-500 to-yellow-600",
+      icon: (props) => <Sparkles {...props} />
+    },
+    {
+      title: "Khush-Haali (Medical)",
       description: "Promoting true happiness through healthcare initiatives and wellness education.",
       url: "/campaigns/khushhaali",
       color: "from-blue-500 to-blue-600",
@@ -32,69 +102,6 @@ function Campaigns() {
       url: "/campaigns/narishakti",
       color: "from-purple-500 to-purple-600",
       icon: (props) => <Heart {...props} />
-    },
-    {
-      title: "Su-Siksha Pathshala",
-      description: "Providing quality education to underprivileged children for a better future.",
-      url: "/campaigns/susikshapathshala",
-      color: "from-green-500 to-green-600",
-      icon: (props) => <GraduationCap {...props} />
-    },
-    {
-      title: "Nayi Sambhawnayein",
-      description: "Fostering new opportunities by empowering individuals through skill development.",
-      url: "/campaigns/nayisambhawnayein",
-      color: "from-yellow-500 to-yellow-600",
-      icon: (props) => <Sparkles {...props} />
-    },
-    {
-      title: "Nayi Udaan",
-      description: "Empowering youth by supporting their dreams and aspirations for success.",
-      url: "/campaigns/nayiudaan",
-      color: "from-red-500 to-red-600",
-      icon: (props) => <Rocket {...props} />
-    },
-    {
-      title: "Mehfil-E-Muskaan",
-      description: "Celebrating talent and creativity through inclusive performances.",
-      url: "/campaigns/mehfilemuskaan",
-      color: "from-pink-500 to-pink-600",
-      icon: (props) => <Theater {...props} />
-    },
-    {
-      title: "Jagrukta Abhiyan",
-      description: "Raising awareness and fostering understanding of important social issues.",
-      url: "/campaigns/jagruktaabhiyan",
-      color: "from-indigo-500 to-indigo-600",
-      icon: (props) => <Bell {...props} />
-    },
-    {
-      title: "Aoo Baten Karein",
-      description: "Facilitating conversations to inspire and drive meaningful social change.",
-      url: "/campaigns/aoobatenkarein",
-      color: "from-teal-500 to-teal-600",
-      icon: (props) => <MessageCircle {...props} />
-    },
-    {
-      title: "Paws & Care",
-      description: "Nurturing and protecting street animals through feeding programs.",
-      url: "/campaigns/streetanimalcare",
-      color: "from-amber-500 to-amber-600",
-      icon: (props) => <Dog {...props} />
-    },
-    {
-      title: "Green Earth Initiative",
-      description: "Creating a greener future through tree planting and conservation.",
-      url: "/campaigns/greenearth",
-      color: "from-emerald-500 to-emerald-600",
-      icon: (props) => <Leaf {...props} />
-    },
-    {
-      title: "Basta: The Daily Pathshala Campaign",
-      description: "Empowering children with daily education, hope, and a brighter tomorrow.",
-      url: "/campaigns/basta",
-      color: "from-orange-500 to-orange-600",
-      icon: (props) => <GraduationCap {...props} />
     }
   ];
 
