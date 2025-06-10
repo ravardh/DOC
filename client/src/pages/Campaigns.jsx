@@ -83,7 +83,7 @@ function Campaigns() {
       icon: (props) => <Theater {...props} />
     },
     {
-      title: "Nayi Sambhawnayein (Skill Development)",
+      title: "Nayi Sambhawnayein (Learn & Grow)",
       description: "Fostering new opportunities by empowering individuals through skill development.",
       url: "/campaigns/nayisambhawnayein",
       color: "from-yellow-500 to-yellow-600",
