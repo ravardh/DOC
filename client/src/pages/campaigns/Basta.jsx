@@ -84,21 +84,21 @@ function Basta() {
             </h3>
             <p className="text-gray-600 mb-2">
               At the moment we have three bright and curious students. Anjali,
-              Viruj, and Kailash. They are thriving under Mr. Vishal's guidance.
+              Birju, and Akash. They are thriving under Mr. Vishal's guidance.
               Each has their unique personalities, strengths, and weaknesses.
             </p>
             <ul className="list-disc ml-6 text-gray-600 mb-4">
               <li>
-                <b>Kailash</b> is a budding artist who loves to color. He once
+                <b>Akash</b> is a budding artist who loves to color. He once
                 showcased his vibrant masterpiece to Mr. Vishal, who praised his
-                creativity.
+                creativity. 
               </li>
               <li>
                 <b>Anjali</b> is a fashionista with a flair for dressing up but
                 struggles to find the same enthusiasm for studies.
               </li>
               <li>
-                <b>Viruj</b> is a bright student who excels in school. He faces
+                <b>Birju</b> is a bright student who excels in school. He faces
                 challenges in differentiating between Hindi vowels and
                 consonants.
               </li>
