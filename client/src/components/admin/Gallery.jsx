@@ -79,13 +79,17 @@ const Gallery = () => {
   };
 
   const handleDeleteImage = async (id) => {
-    try {
-      await axios.delete(`/api/admin/image/${id}`);
-      toast.success("Image deleted successfully");
-      fetchGalleryImages();
-    } catch (error) {
-      toast.error("Failed to delete image");
-    }
+    toast.promise(
+      axios.delete(`/api/admin/image/${id}`),
+      {
+        loading: 'Deleting image...',
+        success: () => {
+          fetchGalleryImages();
+          return 'Image deleted successfully';
+        },
+        error: 'Failed to delete image',
+      }
+    );
   };
 
   return (
