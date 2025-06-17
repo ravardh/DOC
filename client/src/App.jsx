@@ -28,13 +28,14 @@ import ScrollToTop from "./components/common/Scrolltop";
 import StreetAnimalCare from "./pages/campaigns/StreetAnimalCare";
 import GreenEarth from "./pages/campaigns/GreenEarth";
 import Basta from "./pages/campaigns/Basta";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ScrollToTop />
       <div className="flex flex-col min-h-screen">
-        
+        <Toaster />
         <Navbar />
         <main className="flex-grow">
           <Routes>

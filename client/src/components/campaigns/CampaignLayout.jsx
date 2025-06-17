@@ -27,11 +27,14 @@ const CampaignLayout = ({
       } catch (err) {
         console.error("Error sharing:", err);
       }
-    } else if (navigator.clipboard && navigator.clipboard.writeText) {
-      // Fallback to copying to clipboard if available
-      navigator.clipboard.writeText(`${shareTitle}\n${shareUrl}`);
+    } else if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      try {
+        await navigator.clipboard.writeText(`${shareTitle}\n${shareUrl}`);
+        alert("Link copied to clipboard!");
+      } catch (err) {
+        window.prompt("Copy this link to share:", `${shareTitle}\n${shareUrl}`);
+      }
     } else {
-      // Fallback: prompt user to copy manually
       window.prompt("Copy this link to share:", `${shareTitle}\n${shareUrl}`);
     }
   };
