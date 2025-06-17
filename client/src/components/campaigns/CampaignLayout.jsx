@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Share2 } from "lucide-react";
+import Modal from "../common/Modal";
 
 const CampaignLayout = ({
   title,
@@ -13,6 +14,8 @@ const CampaignLayout = ({
   callToAction = "Support This Campaign",
 }) => {
   const navigate = useNavigate();
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [copySuccess, setCopySuccess] = useState("");
 
   const shareUrl = window.location.href;
   const shareTitle = `Check out ${title} - Drops of Change NGO`;
@@ -27,15 +30,19 @@ const CampaignLayout = ({
       } catch (err) {
         console.error("Error sharing:", err);
       }
-    } else if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-      try {
-        await navigator.clipboard.writeText(`${shareTitle}\n${shareUrl}`);
-        alert("Link copied to clipboard!");
-      } catch (err) {
-        window.prompt("Copy this link to share:", `${shareTitle}\n${shareUrl}`);
-      }
     } else {
-      window.prompt("Copy this link to share:", `${shareTitle}\n${shareUrl}`);
+      setShareModalOpen(true);
+    }
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(`${shareTitle}\n${shareUrl}`);
+      setCopySuccess("Copied!");
+      setTimeout(() => setCopySuccess(""), 1500);
+    } catch (err) {
+      setCopySuccess("Failed to copy");
+      setTimeout(() => setCopySuccess(""), 1500);
     }
   };
 
@@ -165,6 +172,23 @@ const CampaignLayout = ({
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      <Modal isOpen={shareModalOpen} onClose={() => setShareModalOpen(false)} title="Share this Campaign">
+        <div className="mb-4">
+          <div className="font-semibold text-gray-700 mb-2">Share Title</div>
+          <div className="bg-gray-100 rounded px-3 py-2 text-sm break-words mb-4">{shareTitle}</div>
+          <div className="font-semibold text-gray-700 mb-2">Share URL</div>
+          <div className="bg-gray-100 rounded px-3 py-2 text-sm break-all mb-4">{shareUrl}</div>
+          <button
+            onClick={handleCopy}
+            className="bg-[#FF6F00] text-white px-4 py-2 rounded hover:bg-[#FF8F00] transition-colors"
+          >
+            Copy
+          </button>
+          {copySuccess && <span className="ml-3 text-green-600 font-medium">{copySuccess}</span>}
+        </div>
+      </Modal>
     </div>
   );
 };
