@@ -58,7 +58,7 @@ function Gallery() {
 
   // Ensure images is always an array before filtering
   const safeImages = Array.isArray(images) ? images : [];
-  const filteredImages = selectedCategory === "All"
+  const filteredImages = selectedCategory === "Events"
     ? safeImages
     : safeImages.filter(image => image.category === selectedCategory);
 
