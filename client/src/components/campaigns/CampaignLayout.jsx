@@ -27,9 +27,12 @@ const CampaignLayout = ({
       } catch (err) {
         console.error("Error sharing:", err);
       }
-    } else {
-      // Fallback to copying to clipboard
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      // Fallback to copying to clipboard if available
       navigator.clipboard.writeText(`${shareTitle}\n${shareUrl}`);
+    } else {
+      // Fallback: prompt user to copy manually
+      window.prompt("Copy this link to share:", `${shareTitle}\n${shareUrl}`);
     }
   };
 
@@ -163,4 +166,4 @@ const CampaignLayout = ({
   );
 };
 
-export default CampaignLayout; 
+export default CampaignLayout;

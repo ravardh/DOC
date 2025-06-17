@@ -181,9 +181,10 @@ export const deleteGalleryPicture = async (req, res) => {
     if (!image) {
       return res.status(404).json({ message: "Image not found" });
     }
-
+    console.log("Image to delete:", image);
     if (image.imageUrl) {
       const imgId = image.imageUrl.split("/upload/")[1].split("/");
+      console.log("Image ID parts:", imgId);
       const publicId = imgId[1] + "/" + imgId[2] + "/" + imgId[3].split(".")[0];
 
       try {
