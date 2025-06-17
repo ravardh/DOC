@@ -37,8 +37,27 @@ const CampaignLayout = ({
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(`${shareTitle}\n${shareUrl}`);
-      setCopySuccess("Copied!");
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(`${shareTitle}\n${shareUrl}`);
+        setCopySuccess("Copied!");
+      } else {
+        // fallback for insecure context or older browsers
+        const text = `${shareTitle}\n${shareUrl}`;
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand("copy");
+          setCopySuccess("Copied!");
+        } catch (err) {
+          setCopySuccess("Failed to copy");
+        }
+        document.body.removeChild(textarea);
+      }
       setTimeout(() => setCopySuccess(""), 1500);
     } catch (err) {
       setCopySuccess("Failed to copy");
