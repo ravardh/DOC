@@ -5,7 +5,7 @@ import { Calendar, Tag } from "lucide-react";
 
 function Gallery() {
   const [images, setImages] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("Events");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -58,7 +58,7 @@ function Gallery() {
 
   // Ensure images is always an array before filtering
   const safeImages = Array.isArray(images) ? images : [];
-  const filteredImages = selectedCategory === "Events"
+  const filteredImages = selectedCategory === "All"
     ? safeImages
     : safeImages.filter(image => image.category === selectedCategory);
 
