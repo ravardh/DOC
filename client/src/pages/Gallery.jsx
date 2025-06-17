@@ -9,7 +9,7 @@ function Gallery() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const categories = ["All", "Events", "Campaigns", "Celebrations", "Workshops", "Community", "Others"];
+  const categories = ["Events", "Campaigns", "Celebrations", "Workshops", "Community", "Others"];
 
   useEffect(() => {
     // Clear existing gallery data from localStorage
