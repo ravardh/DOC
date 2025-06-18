@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "../config/api";
 import { motion } from "framer-motion";
 import { Calendar, Tag } from "lucide-react";
+import Modal from "../components/common/Modal";
 
 function Gallery() {
   const [images, setImages] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Events");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   const categories = ["Events", "Campaigns", "Celebrations", "Workshops", "Community", "Others"];
 
@@ -131,13 +134,14 @@ function Gallery() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-96"
             >
-              <div className="relative">
+              <div className="relative flex-1" style={{ flexBasis: '75%' }}>
                 <img
                   src={image.imageUrl}
                   alt={image.title}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-full object-cover"
+                  style={{ height: '75%' }}
                 />
                 <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full flex items-center space-x-1">
                   <Tag className="w-4 h-4 text-[#FF6F00]" />
@@ -146,19 +150,17 @@ function Gallery() {
                   </span>
                 </div>
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {image.title}
-                </h3>
-                <p className="text-gray-600 mb-4">{image.description}</p>
-                {/* <div className="flex items-center text-sm text-gray-500">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  {new Date(image.date || Date.now()).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </div> */}
+              <div className="p-4 flex flex-col justify-between" style={{ flexBasis: '25%', minHeight: '25%' }}>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">{image.title}</h3>
+                  <p className="text-gray-600 text-sm line-clamp-2 mb-2">{image.description}</p>
+                </div>
+                <button
+                  className="mt-auto bg-[#FF6F00] text-white px-3 py-1 rounded hover:bg-[#FF8F00] transition-colors text-sm"
+                  onClick={() => { setModalImage(image); setModalOpen(true); }}
+                >
+                  Read More
+                </button>
               </div>
             </motion.div>
           ))}
@@ -177,6 +179,32 @@ function Gallery() {
           </motion.div>
         )}
       </div>
+      {/* Modal for full image and description */}
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={modalImage?.title || "Image"}>
+        {modalImage && (
+          <div className="flex flex-col items-center">
+            <img
+              src={modalImage.imageUrl}
+              alt={modalImage.title}
+              className="max-h-[60vh] w-auto rounded mb-4"
+              style={{ objectFit: 'contain' }}
+            />
+            <div className="text-gray-700 text-base text-center mb-2">
+              {modalImage.description}
+            </div>
+            <div className="flex items-center text-gray-500 text-sm mb-2">
+              <Tag className="w-4 h-4 mr-1 text-[#FF6F00]" />
+              {modalImage.category}
+            </div>
+            {modalImage.date && (
+              <div className="flex items-center text-gray-400 text-xs">
+                <Calendar className="w-4 h-4 mr-1" />
+                {new Date(modalImage.date).toLocaleDateString()}
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
