@@ -136,12 +136,12 @@ function Gallery() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-96"
             >
-              <div className="relative flex-1" style={{ flexBasis: '75%' }}>
+              <div className="relative" style={{ height: '75%' }}>
                 <img
                   src={image.imageUrl}
                   alt={image.title}
                   className="w-full h-full object-cover"
-                  style={{ height: '75%' }}
+                  style={{ height: '100%' }}
                 />
                 <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full flex items-center space-x-1">
                   <Tag className="w-4 h-4 text-[#FF6F00]" />
@@ -150,11 +150,9 @@ function Gallery() {
                   </span>
                 </div>
               </div>
-              <div className="p-4 flex flex-col justify-between" style={{ flexBasis: '25%', minHeight: '25%' }}>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">{image.title}</h3>
-                  <p className="text-gray-600 text-sm line-clamp-2 mb-2">{image.description}</p>
-                </div>
+              <div className="p-4 flex flex-col justify-between" style={{ height: '25%' }}>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">{image.title}</h3>
+                <p className="text-gray-600 text-sm line-clamp-2 mb-2" style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{image.description}</p>
                 <button
                   className="mt-auto bg-[#FF6F00] text-white px-3 py-1 rounded hover:bg-[#FF8F00] transition-colors text-sm"
                   onClick={() => { setModalImage(image); setModalOpen(true); }}
