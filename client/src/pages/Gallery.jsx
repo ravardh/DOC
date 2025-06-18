@@ -180,7 +180,7 @@ function Gallery() {
       {/* Modal for full image and description */}
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={modalImage?.title || "Image"}>
         {modalImage && (
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+          <div className="flex flex-col md:flex-row items-center justify-center md:items-start gap-6">
             <img
               src={modalImage.imageUrl}
               alt={modalImage.title}
