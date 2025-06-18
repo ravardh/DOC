@@ -136,7 +136,7 @@ function Gallery() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-96"
             >
-              <div className="relative" style={{ height: '75%' }}>
+              <div className="relative" style={{ height: '60%' }}>
                 <img
                   src={image.imageUrl}
                   alt={image.title}
@@ -150,7 +150,7 @@ function Gallery() {
                   </span>
                 </div>
               </div>
-              <div className="p-4 flex flex-col justify-between" style={{ height: '25%' }}>
+              <div className="p-4 flex flex-col justify-between" style={{ height: '40%' }}>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">{image.title}</h3>
                 <p className="text-gray-600 text-sm line-clamp-2 mb-2" style={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{image.description}</p>
                 <button
@@ -180,26 +180,21 @@ function Gallery() {
       {/* Modal for full image and description */}
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={modalImage?.title || "Image"}>
         {modalImage && (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
             <img
               src={modalImage.imageUrl}
               alt={modalImage.title}
-              className="max-h-[60vh] w-auto rounded mb-4"
+              className="max-h-[60vh] w-full md:w-1/2 rounded mb-4 md:mb-0 object-contain"
               style={{ objectFit: 'contain' }}
             />
-            <div className="text-gray-700 text-base text-center mb-2">
-              {modalImage.description}
-            </div>
-            <div className="flex items-center text-gray-500 text-sm mb-2">
-              <Tag className="w-4 h-4 mr-1 text-[#FF6F00]" />
-              {modalImage.category}
-            </div>
-            {modalImage.date && (
-              <div className="flex items-center text-gray-400 text-xs">
-                <Calendar className="w-4 h-4 mr-1" />
-                {new Date(modalImage.date).toLocaleDateString()}
+            <div className="flex-1 flex flex-col justify-center items-center md:items-start text-center md:text-left">
+              <h2 className="text-2xl font-bold mb-2">{modalImage.title}</h2>
+              <div className="text-gray-700 text-base mb-4 whitespace-pre-line">{modalImage.description}</div>
+              <div className="flex items-center text-gray-500 text-sm mb-2">
+                <Tag className="w-4 h-4 mr-1 text-[#FF6F00]" />
+                {modalImage.category}
               </div>
-            )}
+            </div>
           </div>
         )}
       </Modal>
