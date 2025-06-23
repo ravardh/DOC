@@ -108,7 +108,7 @@ const Gallery = () => {
                 type="text"
                 value={newImage.title}
                 onChange={(e) => setNewImage({ ...newImage, title: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#FF6F00] focus:ring-[#FF6F00]"
+                className="mt-1 block w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-[#FF6F00] focus:ring-[#FF6F00]"
                 required
               />
             </div>
@@ -117,7 +117,7 @@ const Gallery = () => {
               <select
                 value={newImage.category}
                 onChange={(e) => setNewImage({ ...newImage, category: e.target.value })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#FF6F00] focus:ring-[#FF6F00]"
+                className="mt-1 block w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-[#FF6F00] focus:ring-[#FF6F00]"
                 required
               >
                 <option value="">Select Category</option>
@@ -133,7 +133,7 @@ const Gallery = () => {
               value={newImage.description}
               onChange={(e) => setNewImage({ ...newImage, description: e.target.value })}
               rows={3}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#FF6F00] focus:ring-[#FF6F00]"
+              className="mt-1 block w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-[#FF6F00] focus:ring-[#FF6F00]"
               required
             />
           </div>

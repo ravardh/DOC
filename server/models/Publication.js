@@ -21,7 +21,7 @@ const publicationSchema = new mongoose.Schema(
     },
     flipbookUrl: {
       type: String,
-      required: true,
+      default: ""
     },
     coverImage: {
       type: String,

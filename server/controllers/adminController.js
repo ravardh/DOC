@@ -230,9 +230,6 @@ export const createPublication = async (req, res) => {
       return res.status(400).json({ message: "File URL is required" });
     }
 
-    if (!flipbookUrl) {
-      return res.status(400).json({ message: "Flipbook URL is required" });
-    }
 
     console.log("Received file:", req.file);
     console.log("Request body:", req.body);
@@ -252,7 +249,7 @@ export const createPublication = async (req, res) => {
       description,
       publishDate,
       fileUrl,
-      flipbookUrl,
+      flipbookUrl:flipbookUrl || "",
       coverImage: coverImageResult.secure_url,
       isActive: true,
     });

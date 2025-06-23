@@ -17,7 +17,7 @@ function Publications() {
     try {
       const response = await axios.get("/api/public/publications");
       setPublications(response.data);
-      // console.log(response.data)
+      //console.log(response.data)
     } catch (error) {
       console.error("Error fetching publications:", error);
     } finally {
@@ -77,22 +77,20 @@ function Publications() {
             <button
               type="button"
               onClick={() => setActiveTab("annual_reports")}
-              className={`px-6 py-3 text-sm font-medium rounded-l-lg ${
-                activeTab === "annual_reports"
+              className={`px-6 py-3 text-sm font-medium rounded-l-lg ${activeTab === "annual_reports"
                   ? "bg-[#FF6F00] text-white"
                   : "bg-white text-gray-700 hover:bg-gray-100"
-              }`}
+                }`}
             >
               Annual Reports
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("newsletters")}
-              className={`px-6 py-3 text-sm font-medium rounded-r-lg ${
-                activeTab === "newsletters"
+              className={`px-6 py-3 text-sm font-medium rounded-r-lg ${activeTab === "newsletters"
                   ? "bg-[#FF6F00] text-white"
                   : "bg-white text-gray-700 hover:bg-gray-100"
-              }`}
+                }`}
             >
               Newsletters
             </button>
@@ -104,12 +102,12 @@ function Publications() {
           {activeTab === "annual_reports" ? (
             annualReports.length > 0 ? (
               annualReports.map((pub, index) => (
-                <PublicationCard 
-                  key={pub._id} 
-                  publication={pub} 
-                  index={index} 
-                  onRead={handlePublicationClick} 
-                  onDownload={handleDownload} 
+                <PublicationCard
+                  key={pub._id}
+                  publication={pub}
+                  index={index}
+                  onRead={handlePublicationClick}
+                  onDownload={handleDownload}
                 />
               ))
             ) : (
@@ -122,12 +120,12 @@ function Publications() {
           ) : (
             newsletters.length > 0 ? (
               newsletters.map((pub, index) => (
-                <PublicationCard 
-                  key={pub._id} 
-                  publication={pub} 
-                  index={index} 
-                  onRead={handlePublicationClick} 
-                  onDownload={handleDownload} 
+                <PublicationCard
+                  key={pub._id}
+                  publication={pub}
+                  index={index}
+                  onRead={handlePublicationClick}
+                  onDownload={handleDownload}
                 />
               ))
             ) : (
@@ -220,12 +218,14 @@ const PublicationCard = ({ publication, index, onRead, onDownload }) => {
             </span>
           </div>
           <div className="flex space-x-2">
-            <button
-              onClick={() => onRead(publication)}
-              className="bg-[#FF6F00] text-white px-4 py-2 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
-            >
-              Read
-            </button>
+            {publication.flipbookUrl && (
+              <button
+                onClick={() => onRead(publication)}
+                className="bg-[#FF6F00] text-white px-4 py-2 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
+              >
+                Read
+              </button>
+            )}
             <button
               onClick={() => onDownload(publication.fileUrl)}
               className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center"
