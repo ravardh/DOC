@@ -25,12 +25,12 @@ const connectDB = async () => {
 const clearData = async () => {
   try {
     await User.deleteMany({});
-    await Applicant.deleteMany({});
-    await Contact.deleteMany({});
-    await Student.deleteMany({});
-    await CoreTeam.deleteMany({});
-    await Donation.deleteMany({});
-    await Announcement.deleteMany({});
+    // await Applicant.deleteMany({});
+    // await Contact.deleteMany({});
+    // await Student.deleteMany({});
+    // await CoreTeam.deleteMany({});
+    // await Donation.deleteMany({});
+    // await Announcement.deleteMany({});
     console.log("Cleared existing data");
   } catch (error) {
     console.error("Error clearing data:", error);
@@ -89,7 +89,7 @@ const seedUsers = async () => {
       },
       {
         email: "hr@dropsofchange.in",
-        password: await bcrypt.hash("Hr.Sanchit@2025", 10),
+        password: await bcrypt.hash("Hr.Yogita@2025", 10),
         role: "hr",
       },
       // {
@@ -426,12 +426,12 @@ const seedDatabase = async () => {
     await connectDB();
     await clearData();
     await seedUsers();
-    await seedApplicants();
-    await seedContacts();
-    await seedStudents();
-    await seedCoreTeam();
-    await seedDonations();
-    await seedAnnouncements();
+    // await seedApplicants();
+    // await seedContacts();
+    // await seedStudents();
+    // await seedCoreTeam();
+    // await seedDonations();
+    // await seedAnnouncements();
     console.log("Database seeded successfully");
     process.exit(0);
   } catch (error) {

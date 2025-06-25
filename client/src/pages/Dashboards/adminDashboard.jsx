@@ -168,7 +168,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex space-x-4 mb-6">
+      <div className="grid grid-cols-2 gap-4 md:flex lg:flex mb-4">
         <button
           onClick={() => setActiveTab("users")}
           className={`px-4 py-2 rounded-lg ${

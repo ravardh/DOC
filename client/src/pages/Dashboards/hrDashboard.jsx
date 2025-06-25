@@ -397,7 +397,7 @@ const HRDashboard = () => {
             </div>
 
       {/* Tabs */}
-      <div className="flex space-x-4 mb-6">
+      <div className="grid grid-cols-2 gap-4 md:flex lg:flex mb-4">
         <button
           onClick={() => setActiveTab("volunteers")}
           className={`px-4 py-2 rounded-md flex items-center ${
