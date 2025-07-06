@@ -5,7 +5,7 @@ dotenv.config();
 
 // Create transporter using Gmail SMTP
 const createTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
@@ -264,7 +264,7 @@ export const sendNotificationEmail = async (type, data) => {
     }
 
     const emailContent = template(data);
-    const recipients = ['hr.dropsofchange@gmail.com', 'Dropsofchange4@gmail.com'];
+    const recipients = ['hr.dropsofchange@gmail.com', 'dropsofchange4@gmail.com'];
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
