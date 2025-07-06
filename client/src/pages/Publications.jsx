@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../config/api";
 import { motion } from "framer-motion";
-import { Book, FileText, Calendar, Download, X, Settings } from "lucide-react";
-import CustomPDFViewer from "../components/CustomPDFViewer";
+import { Book, FileText, Calendar, Download, X } from "lucide-react";
 
 function Publications() {
   const [publications, setPublications] = useState([]);
@@ -10,8 +9,6 @@ function Publications() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("annual_reports"); // Default to annual reports tab
   const [selectedYear, setSelectedYear] = useState("all"); // For newsletter year filtering
-  const [useCustomPDFViewer, setUseCustomPDFViewer] = useState(true); // Toggle between PDF viewers
-  const [showViewerSettings, setShowViewerSettings] = useState(false); // Show viewer settings
 
   useEffect(() => {
     fetchPublications();
@@ -207,94 +204,35 @@ function Publications() {
             <div className="bg-white rounded-xl w-full max-w-6xl h-[90vh] flex flex-col">
               <div className="p-4 border-b flex justify-between items-center">
                 <h2 className="text-xl font-semibold">{selectedPublication.title}</h2>
-                <div className="flex items-center space-x-2">
-                  {/* Viewer Settings Button */}
-                  <button
-                    onClick={() => setShowViewerSettings(!showViewerSettings)}
-                    className="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100"
-                    title="Viewer Settings"
-                  >
-                    <Settings className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={handleCloseViewer}
-                    className="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </div>
+                <button
+                  onClick={handleCloseViewer}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
-
-              {/* Viewer Settings Panel */}
-              {showViewerSettings && (
-                <div className="p-4 border-b bg-gray-50">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-gray-700">PDF Viewer Options</h3>
-                    <div className="flex items-center space-x-4">
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="pdfViewer"
-                          checked={useCustomPDFViewer}
-                          onChange={() => setUseCustomPDFViewer(true)}
-                          className="form-radio text-[#FF6F00]"
-                        />
-                        <span className="text-sm text-gray-700">Custom PDF Viewer (Ad-free)</span>
-                      </label>
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="pdfViewer"
-                          checked={!useCustomPDFViewer}
-                          onChange={() => setUseCustomPDFViewer(false)}
-                          className="form-radio text-[#FF6F00]"
-                        />
-                        <span className="text-sm text-gray-700">Flipbook Viewer</span>
-                      </label>
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    {useCustomPDFViewer 
-                      ? "Using custom PDF viewer - no ads, with zoom and navigation controls"
-                      : "Using flipbook viewer - may contain ads but has page-turning effects"
-                    }
-                  </p>
-                </div>
-              )}
-              <div className="flex-1">
-                {useCustomPDFViewer ? (
-                  <CustomPDFViewer
-                    fileUrl={selectedPublication.fileUrl}
-                    title={selectedPublication.title}
-                    onClose={handleCloseViewer}
-                  />
-                ) : (
-                  <>
-                    <div className="flex-1 p-4">
-                      <iframe
-                        src={selectedPublication.flipbookUrl || selectedPublication.fileUrl}
-                        className="w-full h-full rounded-lg border-0"
-                        title="Flipbook Viewer"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    </div>
-                    <div className="p-4 border-t flex justify-between items-center">
-                      <p className="text-sm text-gray-500">
-                        If the PDF doesn't load properly, you can open it in a new tab.
-                      </p>
-                      <a
-                        href={selectedPublication.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#FF6F00] hover:text-[#FF8F00] flex items-center"
-                      >
-                        <Download className="w-4 h-4 mr-1" />
-                        Open in new tab
-                      </a>
-                    </div>
-                  </>
-                )}
+              <div className="flex-1 p-4">
+                <iframe
+                  src={selectedPublication.flipbookUrl}
+                  className="w-full h-full rounded-lg border-0"
+                  title="Flipbook Viewer"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="p-4 border-t flex justify-between items-center">
+                <p className="text-sm text-gray-500">
+                  If the PDF doesn't load properly, you can open it in a new tab.
+                </p>
+                <a
+                  href={selectedPublication.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#FF6F00] hover:text-[#FF8F00] flex items-center"
+                >
+                  <Download className="w-4 h-4 mr-1" />
+                  Open in new tab
+                </a>
               </div>
             </div>
           </div>
@@ -340,13 +278,14 @@ const PublicationCard = ({ publication, index, onRead, onDownload }) => {
             </span>
           </div>
           <div className="flex space-x-2">
-            {/* Show Read button for all publications since we have custom PDF viewer */}
-            <button
-              onClick={() => onRead(publication)}
-              className="bg-[#FF6F00] text-white px-4 py-2 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
-            >
-              Read
-            </button>
+            {publication.flipbookUrl && publication.type !== "newsletter" && (
+              <button
+                onClick={() => onRead(publication)}
+                className="bg-[#FF6F00] text-white px-4 py-2 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
+              >
+                Read
+              </button>
+            )}
             <button
               onClick={() => onDownload(publication.fileUrl)}
               className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center"
@@ -361,4 +300,4 @@ const PublicationCard = ({ publication, index, onRead, onDownload }) => {
   );
 };
 
-export default Publications;
+export default Publications; 
