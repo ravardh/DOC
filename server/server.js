@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-import morgan from "morgan"
+import morgan from "morgan";
 // Import routes
 import authRoutes from "./routes/auth.js";
 import hrRoutes from "./routes/hr.js";
@@ -18,7 +18,17 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors({origin: ["http://dropsofchange.in", "http://www.dropsofchange.in"], credentials: true}));
+app.use(
+  cors({
+    origin: [
+      "http://dropsofchange.in",
+      "http://www.dropsofchange.in",
+      "https://dropsofchange.in",
+      "https://www.dropsofchange.in",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(morgan("dev"));
@@ -36,14 +46,16 @@ app.get("/", (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  
+
   if (err.code === "LIMIT_FILE_SIZE") {
     return res.status(413).json({
       message: "File size is too large. Maximum size is 10MB.",
     });
   }
-  
-  if (err.message === "Invalid file type. Only JPEG, PNG, and WebP are allowed.") {
+
+  if (
+    err.message === "Invalid file type. Only JPEG, PNG, and WebP are allowed."
+  ) {
     return res.status(400).json({
       message: err.message,
     });
