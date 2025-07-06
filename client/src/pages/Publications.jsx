@@ -278,7 +278,7 @@ const PublicationCard = ({ publication, index, onRead, onDownload }) => {
             </span>
           </div>
           <div className="flex space-x-2">
-            {publication.flipbookUrl && (
+            {publication.flipbookUrl && publication.type !== "newsletter" && (
               <button
                 onClick={() => onRead(publication)}
                 className="bg-[#FF6F00] text-white px-4 py-2 rounded-lg hover:bg-[#FF8F00] transition-colors duration-300"
