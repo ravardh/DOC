@@ -6,7 +6,7 @@ const UserForm = ({ user, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "user",
+    role: "team",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ const UserForm = ({ user, onSuccess, onCancel }) => {
       setFormData({
         email: user.email || "",
         password: "",
-        role: user.role || "user",
+        role: user.role || "team",
       });
     }
   }, [user]);
@@ -115,7 +115,7 @@ const UserForm = ({ user, onSuccess, onCancel }) => {
               >
                 <option value="admin">Admin</option>
                 <option value="hr">HR</option>
-                <option value="user">User</option>
+                <option value="team">Team</option>
               </select>
             </div>
           </div>

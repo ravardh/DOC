@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../config/api';
-import { FaUserPlus, FaUserEdit, FaTimes } from 'react-icons/fa';
+import { FaUserPlus, FaTimes } from 'react-icons/fa';
 
 const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
