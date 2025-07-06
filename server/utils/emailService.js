@@ -222,10 +222,6 @@ const emailTemplates = {
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Email:</td>
             <td style="padding: 10px; border: 1px solid #ddd;">${data.email}</td>
           </tr>
-          <tr style="background-color: #f8f9fa;">
-            <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Phone:</td>
-            <td style="padding: 10px; border: 1px solid #ddd;">${data.phone || 'Not provided'}</td>
-          </tr>
           <tr>
             <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Subject:</td>
             <td style="padding: 10px; border: 1px solid #ddd;">${data.subject || 'General Inquiry'}</td>

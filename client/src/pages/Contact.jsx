@@ -4,6 +4,7 @@ import { MapPin, Mail, Phone, Clock } from "lucide-react";
 import axios from "../config/api";
 import { Link } from "react-router-dom";
 import { FaFileAlt, FaHeart } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -16,11 +17,11 @@ const Contact = () => {
     e.preventDefault();
     try {
       await axios.post("/api/public/contact", formData);
-      alert("Message sent successfully!");
+      toast.success("Message sent successfully! We'll get back to you soon.");
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Error sending message:", error);
-      alert("Failed to send message. Please try again.");
+      toast.error("Failed to send message. Please try again.");
     }
   };
 

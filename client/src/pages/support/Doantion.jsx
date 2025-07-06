@@ -3,6 +3,7 @@ import QR from "../../assets/DOCQRCODE.png";
 import axios from "../../config/api";
 import { motion } from "framer-motion";
 import { Building2, Receipt, FileCheck, Landmark } from "lucide-react";
+import toast from "react-hot-toast";
 
 const DonationPage = () => {
   const [name, setName] = useState("");
@@ -12,7 +13,6 @@ const DonationPage = () => {
   const [utr, setUtr] = useState("");
   const [screenshot, setScreenshot] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ text: "", type: "" });
 
   const handleScreenshotChange = (e) => {
     setScreenshot(e.target.files[0]);
@@ -21,13 +21,9 @@ const DonationPage = () => {
   const handleReceiptRequest = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage({ text: "", type: "" });
 
     if (!name || !email || !amount || !utr) {
-      setMessage({
-        text: "Please fill all required fields.",
-        type: "error",
-      });
+      toast.error("Please fill all required fields.");
       setLoading(false);
       return;
     }
@@ -47,10 +43,7 @@ const DonationPage = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setMessage({
-        text: `Receipt request submitted for INR ${amount}. Receipt will be sent to ${email}.`,
-        type: "success",
-      });
+      toast.success(`Receipt request submitted for INR ${amount}. Receipt will be sent to ${email}.`);
 
       setName("");
       setEmail("");
@@ -60,10 +53,7 @@ const DonationPage = () => {
       setScreenshot(null);
     } catch (error) {
       console.error("Error submitting donation:", error);
-      setMessage({
-        text: "Failed to submit donation. Please try again.",
-        type: "error",
-      });
+      toast.error("Failed to submit donation. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -305,15 +295,6 @@ const DonationPage = () => {
             {loading ? "Submitting..." : "Request Receipt 📄"}
           </button>
         </form>
-        {message.text && (
-          <p
-            className={`mt-4 text-center ${
-              message.type === "success" ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {message.text}
-          </p>
-        )}
       </div>
     </div>
   );

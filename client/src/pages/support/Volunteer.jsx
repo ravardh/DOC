@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 import axios from "../../config/api";
+import toast from "react-hot-toast";
 
 function Volunteer() {
   const [formData, setFormData] = useState({
@@ -18,18 +19,13 @@ function Volunteer() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ text: "", type: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage({ text: "", type: "" });
 
     if (!formData.agreeToTerms) {
-      setMessage({
-        text: "Please accept the terms and conditions.",
-        type: "error",
-      });
+      toast.error("Please accept the terms and conditions.");
       setLoading(false);
       return;
     }
@@ -39,10 +35,7 @@ function Volunteer() {
         "/api/hr/applicants/volunteer",
         formData
       );
-      setMessage({
-        text: "Application submitted successfully!",
-        type: "success",
-      });
+      toast.success("Application submitted successfully! We'll contact you soon.");
       setFormData({
         name: "",
         email: "",
@@ -56,7 +49,7 @@ function Volunteer() {
         agreeToTerms: false,
       });
     } catch (error) {
-      setMessage({ text: error.message, type: "error" });
+      toast.error(error.response?.data?.message || "Failed to submit application. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -212,17 +205,6 @@ function Volunteer() {
                   {loading ? "Submitting..." : "Submit Application"}
                 </button>
               </form>
-              {message.text && (
-                <p
-                  className={`mt-4 text-center ${
-                    message.type === "success"
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  {message.text}
-                </p>
-              )}
             </div>
             <div className="bg-white rounded-lg shadow-md p-8">
               <h2 className="text-2xl font-semibold mb-6">
