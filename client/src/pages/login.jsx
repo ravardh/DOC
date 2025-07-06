@@ -30,7 +30,7 @@ function Login() {
       switch (data.role) {
         case 'admin': navigate('/admin-dashboard'); break;
         case 'hr': navigate('/hr-dashboard'); break;
-        case 'team': navigate('/team-dashboard'); break;
+        case 'team': navigate('/member-dashboard'); break;
         default:
           setError('Unauthorized role');
           navigate('/'); // Redirect unauthorized users

@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.js";
 import hrRoutes from "./routes/hr.js";
 import adminRoutes from "./routes/admin.js";
 import publicRoutes from "./routes/public.js";
+import teamRoutes from "./routes/team.js";
 
 // Load environment variables
 dotenv.config();
@@ -38,6 +39,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/hr", hrRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/public", publicRoutes);
+app.use("/api/team", teamRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server Connected" });

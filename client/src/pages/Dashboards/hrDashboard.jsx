@@ -14,13 +14,11 @@ import {
 } from "react-icons/fa";
 import VolunteersSection from "../../components/hr/VolunteersSection";
 import InternsSection from "../../components/hr/InternsSection";
-import StudentsSection from "../../components/hr/StudentsSection";
 import Contacts from '../../components/admin/Contacts';
 
 const HRDashboard = () => {
   const [activeTab, setActiveTab] = useState("volunteers");
   const [applicants, setApplicants] = useState([]);
-  const [students, setStudents] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,24 +32,6 @@ const HRDashboard = () => {
     interviewDate: "",
     doj: "",
     dol: "",
-  });
-  const [showAddStudentModal, setShowAddStudentModal] = useState(false);
-  const [newStudent, setNewStudent] = useState({
-    name: "",
-    gender: "male",
-    fatherName: "",
-    motherName: "",
-    dob: "",
-    admissionDate: new Date().toISOString().split('T')[0],
-    age: "",
-    address: "",
-    area: "",
-    contactNumber: "",
-    admittedInSchool: false,
-    schoolName: "",
-    classStudying: "",
-    aadharCard: "",
-    endDate: "",
   });
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -88,15 +68,13 @@ const HRDashboard = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [applicantsRes, studentsRes, contactsRes, announcementsRes] = await Promise.all([
+      const [applicantsRes, contactsRes, announcementsRes] = await Promise.all([
         axios.get("/api/hr/applicants"),
-        axios.get("/api/hr/students"),
         axios.get("/api/hr/contact"),
         axios.get("/api/public/Announcement"),
       ]);
 
       setApplicants(applicantsRes.data);
-      setStudents(studentsRes.data);
       setContacts(contactsRes.data);
       setAnnouncements(announcementsRes.data);
       setError(null);
@@ -191,34 +169,6 @@ const HRDashboard = () => {
     }
   };
 
-  const handleAddStudent = async () => {
-    try {
-      await axios.post("/api/hr/students", newStudent);
-      setShowAddStudentModal(false);
-      setNewStudent({
-        name: "",
-        gender: "male",
-        fatherName: "",
-        motherName: "",
-        dob: "",
-        admissionDate: new Date().toISOString().split('T')[0],
-        age: "",
-        address: "",
-        area: "",
-        contactNumber: "",
-        admittedInSchool: false,
-        schoolName: "",
-        classStudying: "",
-        aadharCard: "",
-        endDate: "",
-      });
-      fetchData();
-    } catch (error) {
-      setError("Error adding student");
-      console.error("Error adding student:", error);
-    }
-  };
-
   const getFieldLabel = (key) => {
     const labelMap = {
       dob: 'DATE OF BIRTH',
@@ -252,7 +202,6 @@ const HRDashboard = () => {
     setShowDetailsModal(false);
     setShowEditModal(false);
     setShowOnboardingModal(false);
-    setShowAddStudentModal(false);
     setSelectedItem(null);
     setEditFormData(null);
   };
@@ -421,17 +370,6 @@ const HRDashboard = () => {
           Interns ({interns.length})
         </button>
         <button
-          onClick={() => setActiveTab("students")}
-          className={`px-4 py-2 rounded-md flex items-center ${
-            activeTab === "students"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
-        >
-          <FaUserTie className="mr-2" />
-          Students ({students.length})
-        </button>
-        <button
           onClick={() => setActiveTab("contacts")}
           className={`px-4 py-2 rounded-md flex items-center ${
             activeTab === "contacts"
@@ -474,14 +412,6 @@ const HRDashboard = () => {
                             setSelectedApplicant(intern);
               setShowOnboardingModal(true);
             }}
-            onViewDetails={handleViewDetails}
-          />
-        )}
-        {activeTab === "students" && (
-          <StudentsSection
-            students={students}
-            onEdit={handleEdit}
-            onAdd={() => setShowAddStudentModal(true)}
             onViewDetails={handleViewDetails}
           />
         )}
@@ -762,79 +692,6 @@ const HRDashboard = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Add Student Modal */}
-      {showAddStudentModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col">
-            <div className="sticky top-0 bg-white p-6 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Add New Student</h2>
-                <button
-                  onClick={() => setShowAddStudentModal(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="p-6 overflow-y-auto flex-1">
-              <div className="grid grid-cols-2 gap-6">
-                {Object.entries(newStudent).map(([key, value]) => (
-                  <div key={key} className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
-                    </label>
-                    {key === 'admittedInSchool' ? (
-                      <select
-                        value={value}
-                        onChange={(e) => setNewStudent({ ...newStudent, [key]: e.target.value === 'true' })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      >
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                      </select>
-                    ) : key === 'gender' ? (
-                      <select
-                        value={value}
-                        onChange={(e) => setNewStudent({ ...newStudent, [key]: e.target.value })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                      </select>
-                    ) : (
-                      <input
-                        type={key === 'dob' || key === 'admissionDate' || key === 'endDate' ? 'date' : 'text'}
-                        value={key === 'dob' || key === 'admissionDate' || key === 'endDate' ? formatDateForInput(value) : value}
-                        onChange={(e) => setNewStudent({ ...newStudent, [key]: e.target.value })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    )}
-                      </div>
-                ))}
-                      </div>
-                  </div>
-            <div className="sticky bottom-0 bg-white p-6 border-t">
-              <div className="flex justify-end space-x-3">
-                <button
-                  onClick={() => setShowAddStudentModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAddStudent}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                >
-                  Add Student
-                </button>
-              </div>
-            </div>
-                </div>
         </div>
       )}
 

@@ -36,4 +36,12 @@ export const hr = (req, res, next) => {
   } else {
     res.status(401).json({ message: 'Not authorized as HR' });
   }
+};
+
+export const team = (req, res, next) => {
+  if (req.user && (req.user.role === 'team' || req.user.role === 'hr' || req.user.role === 'admin')) {
+    next();
+  } else {
+    res.status(401).json({ message: 'Not authorized as team member' });
+  }
 }; 

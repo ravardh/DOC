@@ -24,6 +24,7 @@ import NayiSambhawnayein from "./pages/campaigns/nayisambhawnayein";
 import AdminDashboard from "./pages/Dashboards/adminDashboard";
 import Login from "./pages/login";
 import HRDashboard from "./pages/Dashboards/hrDashboard";
+import MemberDashboard from "./pages/Dashboards/memberDashboard";
 import ScrollToTop from "./components/common/Scrolltop";
 import StreetAnimalCare from "./pages/campaigns/StreetAnimalCare";
 import GreenEarth from "./pages/campaigns/GreenEarth";
@@ -87,6 +88,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/hr-dashboard" element={<HRDashboard />} />
+            <Route path="/member-dashboard" element={<MemberDashboard />} />
             <Route path="/campaigns/streetanimalcare" element={<StreetAnimalCare />} />
             <Route path="/campaigns/greenearth" element={<GreenEarth />} />
             <Route path="*" element={<NotFound />} />
