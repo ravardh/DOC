@@ -92,6 +92,11 @@ const seedUsers = async () => {
         password: await bcrypt.hash("Hr.Yogita@2025", 10),
         role: "hr",
       },
+      {
+        email: "teacher@dropsofchange.in",
+        password: await bcrypt.hash("Teacher@2025", 10),
+        role: "team",
+      },
       // {
       //   email: "teamMember1@ngo.com",
       //   password: await bcrypt.hash("team123", 10),
