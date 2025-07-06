@@ -7,6 +7,10 @@ import TopHeader from "./TopHeader";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleLinkClick = () => {
+    setIsOpen(false);
+  };
+
   return (
     <nav className="bg-white  border-b-2 border-[#FF6F00] shadow-md sticky top-0 z-50">
       <TopHeader />
@@ -65,27 +69,59 @@ function Navbar() {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/" className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2">
+              <Link 
+                to="/" 
+                className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2"
+                onClick={handleLinkClick}
+              >
                 Home
               </Link>
-              <Link to="/campaigns" className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2">
+              <Link 
+                to="/campaigns" 
+                className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2"
+                onClick={handleLinkClick}
+              >
                 Our Campaigns
               </Link>
-              <Link to="/gallery" className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2">
+              <Link 
+                to="/gallery" 
+                className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2"
+                onClick={handleLinkClick}
+              >
                 Gallery
               </Link>
-              <Link to="/support" className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2">
+              <Link 
+                to="/support" 
+                className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2"
+                onClick={handleLinkClick}
+              >
                 Support Us
               </Link>
-              <Link to="/about" className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2">
+              <Link 
+                to="/about" 
+                className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2"
+                onClick={handleLinkClick}
+              >
                 About Us
               </Link>
-              <Link to="/contact" className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2">
+              <Link 
+                to="/publications" 
+                className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2"
+                onClick={handleLinkClick}
+              >
+                Publications
+              </Link>
+              <Link 
+                to="/contact" 
+                className="block text-gray-700 hover:text-[#FF6F00] px-3 py-2"
+                onClick={handleLinkClick}
+              >
                 Contact
               </Link>
               <Link
                 to="/support/donate"
                 className="block bg-[#FF6F00] text-white px-4 py-2 rounded-md hover:bg-[#FF8F00] text-center"
+                onClick={handleLinkClick}
               >
                 Donate
               </Link>

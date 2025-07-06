@@ -4,11 +4,16 @@ import cloudinary from "../config/cloudinary.js";
 import AnnouncementModel from "../models/announcement.js";
 import mongoose from "mongoose";
 import Publication from "../models/Publication.js";
+import { sendNotificationEmail } from "../utils/emailService.js";
 
 // Contact Form
 export const submitContact = async (req, res) => {
   try {
     const contact = await Contact.create(req.body);
+    
+    // Send email notification
+    await sendNotificationEmail('contact', req.body);
+    
     res.status(201).json(contact);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -37,11 +42,17 @@ export const submitDonation = async (req, res) => {
       screenshotPath = result.secure_url;
     }
 
-    const donation = await Donation.create({
+    const donationData = {
       ...req.body,
       screenshotPath,
       date: new Date(),
-    });
+    };
+
+    const donation = await Donation.create(donationData);
+    
+    // Send email notification
+    await sendNotificationEmail('donation', donationData);
+    
     res.status(201).json(donation);
   } catch (error) {
     res.status(500).json({ message: error.message });

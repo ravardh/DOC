@@ -1,6 +1,7 @@
 import Applicant from "../models/Applicant.js";
 import Contact from "../models/Contact.js";
 import Student from "../models/Student.js";
+import { sendNotificationEmail } from "../utils/emailService.js";
 
 // Applicant Controllers
 export const submitVolunteerApplication = async (req, res) => {
@@ -47,6 +48,19 @@ export const submitVolunteerApplication = async (req, res) => {
     // **Create Applicant in DB**
     const applicant = await Applicant.create({
       type: "volunteer",
+      name,
+      email,
+      phone,
+      gender,
+      dob,
+      interests,
+      availability,
+      reference,
+      experience,
+    });
+
+    // Send email notification
+    await sendNotificationEmail('volunteer', {
       name,
       email,
       phone,
@@ -126,6 +140,21 @@ export const submitInternApplication = async (req, res) => {
       type: "intern",
       name,
       email: email.toLowerCase(),
+      phone,
+      gender,
+      dob,
+      interests,
+      availability,
+      reference,
+      course,
+      college,
+      duration,
+    });
+
+    // Send email notification
+    await sendNotificationEmail('intern', {
+      name,
+      email,
       phone,
       gender,
       dob,
