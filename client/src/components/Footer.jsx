@@ -31,7 +31,7 @@ function Footer() {
   const handleWhatsAppClick = () => {
     const phoneNumber = "919138322232";
     const message = encodeURIComponent(
-      "Hello Drops of Change! 🌟\n\nI'm interested in learning more about your wonderful initiatives and how I can contribute to making a positive impact in children's lives. Could you please share more information about your programs?\n\nThank you for the amazing work you do! 💙"
+      "Hello Drops of Change!\nI'm interested in learning more about your wonderful initiatives and how I can contribute to making a positive impact in children's lives. Could you please share more information about your programs?\nThank you for the amazing work you do! ❤️"
     );
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappUrl, "_blank");
