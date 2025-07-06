@@ -126,23 +126,15 @@ function Publications() {
         {activeTab === "newsletters" && newsletterYears.length > 0 && (
           <div className="flex justify-center mb-8">
             <div className="inline-flex rounded-md shadow-sm" role="group">
-              <button
-                type="button"
-                onClick={() => setSelectedYear("all")}
-                className={`px-4 py-2 text-sm font-medium rounded-l-lg border ${selectedYear === "all"
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                  }`}
-              >
-                All Years
-              </button>
               {newsletterYears.map((year, index) => (
                 <button
                   key={year}
                   type="button"
                   onClick={() => setSelectedYear(year.toString())}
-                  className={`px-4 py-2 text-sm font-medium border-t border-b ${
-                    index === newsletterYears.length - 1 ? "rounded-r-lg border-r" : "border-r"
+                  className={`px-4 py-2 text-sm font-medium border ${
+                    index === 0 ? "rounded-l-lg" : ""
+                  } ${
+                    index === newsletterYears.length - 1 ? "rounded-r-lg" : ""
                   } ${selectedYear === year.toString()
                       ? "bg-blue-500 text-white border-blue-500"
                       : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
