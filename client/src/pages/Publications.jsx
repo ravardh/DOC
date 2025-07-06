@@ -8,6 +8,7 @@ function Publications() {
   const [selectedPublication, setSelectedPublication] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("annual_reports"); // Default to annual reports tab
+  const [selectedYear, setSelectedYear] = useState("all"); // For newsletter year filtering
 
   useEffect(() => {
     fetchPublications();
@@ -40,6 +41,27 @@ function Publications() {
   // Filter publications by type
   const newsletters = publications.filter(pub => pub.type === "newsletter");
   const annualReports = publications.filter(pub => pub.type === "annual_report");
+
+  // Get unique years from newsletters for filtering
+  const newsletterYears = newsletters.reduce((years, pub) => {
+    const year = new Date(pub.publishDate).getFullYear();
+    if (!years.includes(year)) {
+      years.push(year);
+    }
+    return years;
+  }, []).sort((a, b) => b - a); // Sort in descending order (newest first)
+
+  // Set default year to first year when data loads
+  useEffect(() => {
+    if (newsletterYears.length > 0 && selectedYear === "all") {
+      setSelectedYear(newsletterYears[0].toString());
+    }
+  }, [newsletterYears, selectedYear]);
+
+  // Filter newsletters by selected year
+  const filteredNewsletters = selectedYear === "all" 
+    ? newsletters 
+    : newsletters.filter(pub => new Date(pub.publishDate).getFullYear() === parseInt(selectedYear));
 
   if (loading) {
     return (
@@ -86,7 +108,10 @@ function Publications() {
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("newsletters")}
+              onClick={() => {
+                setActiveTab("newsletters");
+                setSelectedYear("all"); // Reset year filter when switching to newsletters
+              }}
               className={`px-6 py-3 text-sm font-medium rounded-r-lg ${activeTab === "newsletters"
                   ? "bg-[#FF6F00] text-white"
                   : "bg-white text-gray-700 hover:bg-gray-100"
@@ -96,6 +121,39 @@ function Publications() {
             </button>
           </div>
         </div>
+
+        {/* Year Filter for Newsletters */}
+        {activeTab === "newsletters" && newsletterYears.length > 0 && (
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex rounded-md shadow-sm" role="group">
+              <button
+                type="button"
+                onClick={() => setSelectedYear("all")}
+                className={`px-4 py-2 text-sm font-medium rounded-l-lg border ${selectedYear === "all"
+                    ? "bg-blue-500 text-white border-blue-500"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                  }`}
+              >
+                All Years
+              </button>
+              {newsletterYears.map((year, index) => (
+                <button
+                  key={year}
+                  type="button"
+                  onClick={() => setSelectedYear(year.toString())}
+                  className={`px-4 py-2 text-sm font-medium border-t border-b ${
+                    index === newsletterYears.length - 1 ? "rounded-r-lg border-r" : "border-r"
+                  } ${selectedYear === year.toString()
+                      ? "bg-blue-500 text-white border-blue-500"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                    }`}
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Publications Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -118,8 +176,8 @@ function Publications() {
               </div>
             )
           ) : (
-            newsletters.length > 0 ? (
-              newsletters.map((pub, index) => (
+            filteredNewsletters.length > 0 ? (
+              filteredNewsletters.map((pub, index) => (
                 <PublicationCard
                   key={pub._id}
                   publication={pub}
@@ -131,8 +189,18 @@ function Publications() {
             ) : (
               <div className="col-span-full text-center py-12">
                 <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-900 mb-2">No newsletters available</h3>
-                <p className="text-gray-500">Check back later for new newsletters.</p>
+                <h3 className="text-xl font-medium text-gray-900 mb-2">
+                  {selectedYear === "all" 
+                    ? "No newsletters available" 
+                    : `No newsletters available for ${selectedYear}`
+                  }
+                </h3>
+                <p className="text-gray-500">
+                  {selectedYear === "all" 
+                    ? "Check back later for new newsletters."
+                    : `Try selecting a different year or check back later for ${selectedYear} newsletters.`
+                  }
+                </p>
               </div>
             )
           )}
