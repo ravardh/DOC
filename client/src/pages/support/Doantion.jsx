@@ -53,7 +53,10 @@ const DonationPage = () => {
       setScreenshot(null);
     } catch (error) {
       console.error("Error submitting donation:", error);
-      toast.error("Failed to submit donation. Please try again.");
+      toast.error(
+        `Error ${error?.response?.status || "503"} : ${
+          error?.response?.data?.message || "Service Unavailable"
+        }`);
     } finally {
       setLoading(false);
     }

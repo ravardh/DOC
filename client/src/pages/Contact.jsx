@@ -21,7 +21,10 @@ const Contact = () => {
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Error sending message:", error);
-      toast.error("Failed to send message. Please try again.");
+      toast.error(
+        `Error ${error?.response?.status || "503"} : ${
+          error?.response?.data?.message || "Service Unavailable"
+        }`);
     }
   };
 

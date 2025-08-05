@@ -51,7 +51,10 @@ function Internship() {
         agreeToTerms: false,
       });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to submit application. Please try again.");
+      toast.error(
+        `Error ${error?.response?.status || "503"} : ${
+          error?.response?.data?.message || "Service Unavailable"
+        }`);
     } finally {
       setLoading(false);
     }

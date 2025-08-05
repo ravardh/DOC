@@ -28,7 +28,10 @@ const PublicationManager = () => {
       const response = await axios.get("/api/admin/publications");
       setPublications(response.data);
     } catch (error) {
-      toast.error("Failed to fetch publications");
+     toast.error(
+             `Error ${error?.response?.status || "503"} : ${
+               error?.response?.data?.message || "Service Unavailable"
+             }`);
       console.error("Error fetching publications:", error);
     } finally {
       setLoading(false);

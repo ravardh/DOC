@@ -175,7 +175,7 @@ const HRDashboard = () => {
       doj: 'DATE OF JOINING',
       dol: 'DATE OF LEAVING',
       admittedInSchool: 'ADMITTED IN SCHOOL',
-      createdAt: 'CREATED AT',
+      createdAt: 'APPLIED ON',
       updatedAt: 'UPDATED AT',
       __v: 'VERSION',
       _id: 'ID'
@@ -184,7 +184,7 @@ const HRDashboard = () => {
   };
 
   const shouldShowField = (key) => {
-    return !['createdAt', 'updatedAt', '__v', '_id'].includes(key);
+    return !['updatedAt', '__v', '_id'].includes(key);
   };
 
   const handleViewDetails = (item) => {
@@ -918,6 +918,7 @@ const HRDashboard = () => {
         </div>
       )}
     </div>
+    
   );
 };
 

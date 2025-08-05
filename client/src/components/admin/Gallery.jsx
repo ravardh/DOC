@@ -25,7 +25,10 @@ const Gallery = () => {
       setGalleryImages(response.data);
       localStorage.setItem("galleryImages", JSON.stringify(response.data));
     } catch (error) {
-      toast.error("Failed to fetch gallery images");
+       toast.error(
+        `Error ${error?.response?.status || "503"} : ${
+          error?.response?.data?.message || "Service Unavailable"
+        }`);
     }
   };
 
@@ -54,7 +57,10 @@ const Gallery = () => {
       }
     } catch (error) {
       console.error("Error adding image:", error);
-      toast.error(error.response?.data?.message || "Failed to add image");
+      toast.error(
+        `Error ${error?.response?.status || "503"} : ${
+          error?.response?.data?.message || "Service Unavailable"
+        }`);
     } finally {
       setAddImageLoading(false);
     }
