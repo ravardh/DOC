@@ -215,17 +215,37 @@ const HRDashboard = () => {
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    
+    // Get day of week
+    const weekday = date.toLocaleString('en-IN', { weekday: 'long' });
+    
+    // Get day with leading zero
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    // Get month abbreviation
+    const month = date.toLocaleString('en-IN', { month: 'short' });
+    
+    // Get year
+    const year = date.getFullYear();
+    
+    // Get hours in 12-hour format
+    let hours = date.getHours();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    const formattedHours = String(hours).padStart(2, '0');
+    
+    // Get minutes with leading zero
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    // Format: Friday, 01 Aug 2025, 06:15 PM
+    return `${weekday}, ${day} ${month} ${year}, ${formattedHours}:${minutes} ${ampm}`;
   };
 
   const formatDateForInput = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
+    return date.toISOString();
   };
 
   const handleAnnouncementSubmit = async () => {
