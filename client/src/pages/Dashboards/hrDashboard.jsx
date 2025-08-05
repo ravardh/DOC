@@ -521,7 +521,7 @@ const HRDashboard = () => {
             <div className="p-6 overflow-y-auto flex-1">
               <div className="grid grid-cols-2 gap-6">
                 {Object.entries(selectedItem).map(([key, value]) => {
-                  if (!shouldShowField(key)) return null;
+                  if (!shouldShowField(key) || (key === 'interests' && selectedItem.type === 'volunteer')) return null;
                   
                   let displayValue = value;
                   // Format date fields
