@@ -228,18 +228,8 @@ const HRDashboard = () => {
     // Get year
     const year = date.getFullYear();
     
-    // Get hours in 12-hour format
-    let hours = date.getHours();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    const formattedHours = String(hours).padStart(2, '0');
-    
-    // Get minutes with leading zero
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    
-    // Format: Friday, 01 Aug 2025, 06:15 PM
-    return `${weekday}, ${day} ${month} ${year}, ${formattedHours}:${minutes} ${ampm}`;
+    // Format: Friday, 01 Aug 2025
+    return `${weekday}, ${day} ${month} ${year}`;
   };
 
   const formatDateForInput = (dateString) => {
@@ -535,7 +525,7 @@ const HRDashboard = () => {
                   
                   let displayValue = value;
                   // Format date fields
-                  if (key.toLowerCase().includes('date') || key === 'doj' || key === 'dol' || key === 'dob') {
+                  if (key.toLowerCase().includes('date') || key === 'doj' || key === 'dol' || key === 'dob' || key === 'createdAt') {
                     displayValue = formatDate(value);
                   }
 
