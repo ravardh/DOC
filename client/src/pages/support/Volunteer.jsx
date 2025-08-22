@@ -164,7 +164,7 @@ function Volunteer() {
                   name="availability"
                   value={formData.availability}
                   onChange={handleChange}
-                  max={10}
+                  max={72}
                   min={5}
                   required
                   placeholder="Your Avaibility in Hours per Week (min 5 hours)"
