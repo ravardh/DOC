@@ -2,10 +2,10 @@ import React from 'react';
 import { FaEye, FaEdit } from 'react-icons/fa';
 
 const OngoingSection = ({ applicants, onStatusChange, onEdit, onViewDetails }) => {
-  // Sort applicants by application date (createdAt) in descending order (newest first)
-  const sortedApplicants = [...applicants].sort((a, b) => {
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
+  // Filter out Active and Inactive applicants, then sort by date
+  const sortedApplicants = [...applicants]
+    .filter(applicant => applicant.status !== "active" && applicant.status !== "inactive")
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   const getStatusColor = (status) => {
     switch (status) {

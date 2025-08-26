@@ -3,17 +3,20 @@ import { FaEnvelope } from 'react-icons/fa';
 import axios from '../../config/api';
 
 const BirthdayListSection = ({ applicants }) => {
+  const monthsList = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  
+  const currentMonth = new Date().getMonth();
+  const [selectedMonth, setSelectedMonth] = useState(monthsList[currentMonth]);
   const [sending, setSending] = useState(false);
   const [sentTo, setSentTo] = useState([]);
   const [error, setError] = useState(null);
 
   // Helper function to get month name
   const getMonthName = (monthIndex) => {
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    return months[monthIndex];
+    return monthsList[monthIndex];
   };
 
   // Format date for display
@@ -23,41 +26,40 @@ const BirthdayListSection = ({ applicants }) => {
     return `${date.getDate()} ${getMonthName(date.getMonth())}`;
   };
 
-  // Group applicants by birth month
-  const groupByMonth = () => {
-    const grouped = {};
-    
+  // Filter and group applicants by birth month
+  const getFilteredBirthdays = () => {
     // Filter applicants with valid DOB
     const validApplicants = applicants.filter(app => app.dob);
     
-    // Sort by month and then by date
-    validApplicants.sort((a, b) => {
+    // Sort by date
+    const sortedApplicants = validApplicants.sort((a, b) => {
       const dateA = new Date(a.dob);
       const dateB = new Date(b.dob);
-      
-      // First compare months
-      if (dateA.getMonth() !== dateB.getMonth()) {
-        return dateA.getMonth() - dateB.getMonth();
-      }
-      
-      // If months are the same, compare days
       return dateA.getDate() - dateB.getDate();
     });
     
-    // Group by month
-    validApplicants.forEach(applicant => {
-      const date = new Date(applicant.dob);
-      const month = date.getMonth();
-      const monthName = getMonthName(month);
-      
-      if (!grouped[monthName]) {
-        grouped[monthName] = [];
-      }
-      
-      grouped[monthName].push(applicant);
-    });
-    
-    return grouped;
+    // If "All" is selected, group by month
+    if (selectedMonth === "All") {
+      const grouped = {};
+      sortedApplicants.forEach(applicant => {
+        const date = new Date(applicant.dob);
+        const monthName = getMonthName(date.getMonth());
+        
+        if (!grouped[monthName]) {
+          grouped[monthName] = [];
+        }
+        grouped[monthName].push(applicant);
+      });
+      return grouped;
+    } 
+    // Otherwise, filter by selected month
+    else {
+      const filtered = sortedApplicants.filter(applicant => {
+        const date = new Date(applicant.dob);
+        return getMonthName(date.getMonth()) === selectedMonth;
+      });
+      return filtered.length ? { [selectedMonth]: filtered } : {};
+    }
   };
 
   // Send birthday wish email
@@ -82,12 +84,32 @@ const BirthdayListSection = ({ applicants }) => {
     }
   };
 
-  const groupedByMonth = groupByMonth();
-  const months = Object.keys(groupedByMonth);
+  const groupedBirthdays = getFilteredBirthdays();
+  const displayMonths = Object.keys(groupedBirthdays);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-semibold mb-4">Birthday List</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-semibold">Birthday List</h2>
+        <div className="flex items-center space-x-2">
+          <label htmlFor="monthFilter" className="text-sm font-medium text-gray-600">
+            Filter by Month:
+          </label>
+          <select
+            id="monthFilter"
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+          >
+            <option value="All">All Months</option>
+            {monthsList.map((month) => (
+              <option key={month} value={month}>
+                {month}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
@@ -95,15 +117,17 @@ const BirthdayListSection = ({ applicants }) => {
         </div>
       )}
       
-      {months.length === 0 ? (
+      {displayMonths.length === 0 ? (
         <div className="text-gray-500 text-center py-8">
-          No birthday information available.
+          No birthdays {selectedMonth === "All" ? "found" : `in ${selectedMonth}`}.
         </div>
       ) : (
         <div className="space-y-6">
-          {months.map(month => (
+          {displayMonths.map(month => (
             <div key={month} className="border-b pb-4 last:border-b-0">
-              <h3 className="text-lg font-medium text-blue-600 mb-3">{month}</h3>
+              <h3 className="text-lg font-medium text-blue-600 mb-3">
+                {selectedMonth === "All" ? month : `${month} Birthdays`}
+              </h3>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
@@ -115,7 +139,7 @@ const BirthdayListSection = ({ applicants }) => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {groupedByMonth[month].map(applicant => (
+                    {groupedBirthdays[month].map(applicant => (
                       <tr key={applicant._id}>
                         <td className="px-6 py-4 whitespace-nowrap">{applicant.name}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{applicant.email}</td>
