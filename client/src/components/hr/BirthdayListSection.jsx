@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaEnvelope } from 'react-icons/fa';
+import { FaEnvelope, FaFilter } from 'react-icons/fa';
 import axios from '../../config/api';
 
 const BirthdayListSection = ({ applicants }) => {
@@ -31,25 +31,43 @@ const BirthdayListSection = ({ applicants }) => {
     // Filter applicants with valid DOB
     const validApplicants = applicants.filter(app => app.dob);
     
-    // Sort by date
+    // Sort by month and then by date
     const sortedApplicants = validApplicants.sort((a, b) => {
       const dateA = new Date(a.dob);
       const dateB = new Date(b.dob);
+      
+      // If showing all months, sort by month first
+      if (selectedMonth === "All") {
+        if (dateA.getMonth() !== dateB.getMonth()) {
+          return dateA.getMonth() - dateB.getMonth();
+        }
+      }
+      
+      // Then sort by date within month
       return dateA.getDate() - dateB.getDate();
     });
     
     // If "All" is selected, group by month
     if (selectedMonth === "All") {
       const grouped = {};
+      // Initialize all months to ensure proper order
+      monthsList.forEach(month => {
+        grouped[month] = [];
+      });
+      
       sortedApplicants.forEach(applicant => {
         const date = new Date(applicant.dob);
         const monthName = getMonthName(date.getMonth());
-        
-        if (!grouped[monthName]) {
-          grouped[monthName] = [];
-        }
         grouped[monthName].push(applicant);
       });
+      
+      // Remove empty months
+      Object.keys(grouped).forEach(month => {
+        if (grouped[month].length === 0) {
+          delete grouped[month];
+        }
+      });
+      
       return grouped;
     } 
     // Otherwise, filter by selected month
@@ -91,15 +109,16 @@ const BirthdayListSection = ({ applicants }) => {
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Birthday List</h2>
-        <div className="flex items-center space-x-2">
-          <label htmlFor="monthFilter" className="text-sm font-medium text-gray-600">
+        <div className="flex items-center space-x-3 bg-blue-50 p-3 rounded-lg">
+          <FaFilter className="text-blue-500" />
+          <label htmlFor="monthFilter" className="text-sm font-medium text-blue-700">
             Filter by Month:
           </label>
           <select
             id="monthFilter"
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="form-select rounded-md border-2 border-blue-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white font-medium text-blue-800"
           >
             <option value="All">All Months</option>
             {monthsList.map((month) => (
@@ -125,7 +144,7 @@ const BirthdayListSection = ({ applicants }) => {
         <div className="space-y-6">
           {displayMonths.map(month => (
             <div key={month} className="border-b pb-4 last:border-b-0">
-              <h3 className="text-lg font-medium text-blue-600 mb-3">
+              <h3 className="text-lg font-medium text-blue-600 mb-3 bg-blue-50 p-2 rounded-md inline-block">
                 {selectedMonth === "All" ? month : `${month} Birthdays`}
               </h3>
               <div className="overflow-x-auto">
