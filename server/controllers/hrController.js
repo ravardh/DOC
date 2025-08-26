@@ -249,3 +249,24 @@ export const updateStudent = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Birthday Wish Controller
+export const sendBirthdayWish = async (req, res) => {
+  try {
+    const { email, name } = req.body;
+
+    if (!email || !name) {
+      return res.status(400).json({ message: "Email and name are required" });
+    }
+
+    // Send birthday wish email
+    await sendNotificationEmail('birthday-wish', { name, email });
+
+    return res.status(200).json({ message: "Birthday wish sent successfully" });
+  } catch (error) {
+    console.error("Error in sendBirthdayWish:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+};

@@ -8,6 +8,7 @@ import {
   getStudents,
   addStudent,
   updateStudent,
+  sendBirthdayWish,
 } from '../controllers/hrController.js';
 import { protect, hr } from '../middleware/auth.js';
 
@@ -27,4 +28,7 @@ router.get('/students', protect, hr, getStudents);
 router.post('/students', protect, hr, addStudent);
 router.put('/students/:id', protect, hr, updateStudent);
 
-export default router; 
+// Birthday wish route
+router.post('/send-birthday-wish', protect, hr, sendBirthdayWish);
+
+export default router;

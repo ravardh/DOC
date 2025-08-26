@@ -10,14 +10,18 @@ import {
   FaTimes,
   FaBullhorn,
   FaTrash,
-  FaEdit as FaEditIcon
+  FaEdit as FaEditIcon,
+  FaCalendarAlt,
+  FaListAlt
 } from "react-icons/fa";
 import VolunteersSection from "../../components/hr/VolunteersSection";
 import InternsSection from "../../components/hr/InternsSection";
+import OngoingSection from "../../components/hr/OngoingSection";
+import BirthdayListSection from "../../components/hr/BirthdayListSection";
 import Contacts from '../../components/admin/Contacts';
 
 const HRDashboard = () => {
-  const [activeTab, setActiveTab] = useState("volunteers");
+  const [activeTab, setActiveTab] = useState("ongoing");
   const [applicants, setApplicants] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -356,7 +360,18 @@ const HRDashboard = () => {
             </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-2 gap-4 md:flex lg:flex mb-4">
+      <div className="grid grid-cols-2 gap-4 md:flex lg:flex mb-4 flex-wrap">
+        <button
+          onClick={() => setActiveTab("ongoing")}
+          className={`px-4 py-2 rounded-md flex items-center ${
+            activeTab === "ongoing"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+        >
+          <FaListAlt className="mr-2" />
+          Ongoing ({applicants.length})
+        </button>
         <button
           onClick={() => setActiveTab("volunteers")}
           className={`px-4 py-2 rounded-md flex items-center ${
@@ -380,6 +395,17 @@ const HRDashboard = () => {
           Interns ({interns.length})
         </button>
         <button
+          onClick={() => setActiveTab("birthday")}
+          className={`px-4 py-2 rounded-md flex items-center ${
+            activeTab === "birthday"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+        >
+          <FaCalendarAlt className="mr-2" />
+          Birthday List
+        </button>
+        <button
           onClick={() => setActiveTab("contacts")}
           className={`px-4 py-2 rounded-md flex items-center ${
             activeTab === "contacts"
@@ -390,7 +416,7 @@ const HRDashboard = () => {
           <FaEnvelope className="mr-2" />
           Contacts ({contacts.length})
         </button>
-                        <button
+        <button
           onClick={() => setActiveTab("announcements")}
           className={`px-4 py-2 rounded-md flex items-center ${
             activeTab === "announcements"
@@ -400,11 +426,19 @@ const HRDashboard = () => {
         >
           <FaBullhorn className="mr-2" />
           Announcements ({announcements.length})
-                        </button>
-            </div>
+        </button>
+      </div>
 
       {/* Content */}
       <div className="mt-6">
+        {activeTab === "ongoing" && (
+          <OngoingSection
+            applicants={applicants}
+            onStatusChange={handleApplicantStatusChange}
+            onEdit={handleEdit}
+            onViewDetails={handleViewDetails}
+          />
+        )}
         {activeTab === "volunteers" && (
           <VolunteersSection
             volunteers={volunteers}
@@ -419,10 +453,15 @@ const HRDashboard = () => {
             onStatusChange={handleApplicantStatusChange}
             onEdit={handleEdit}
             onOnboard={(intern) => {
-                            setSelectedApplicant(intern);
+              setSelectedApplicant(intern);
               setShowOnboardingModal(true);
             }}
             onViewDetails={handleViewDetails}
+          />
+        )}
+        {activeTab === "birthday" && (
+          <BirthdayListSection
+            applicants={applicants}
           />
         )}
         {activeTab === "contacts" && (
