@@ -13,6 +13,8 @@ const InternsSection = ({ interns, onStatusChange, onEdit, onViewDetails }) => {
       case "active":
         return "bg-green-100 text-green-800";
       case "inactive":
+        return "bg-gray-100 text-gray-800";
+      case "rejected":
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -55,22 +57,30 @@ const InternsSection = ({ interns, onStatusChange, onEdit, onViewDetails }) => {
                     <option value="onboarded">Onboarded</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
+                    <option value="rejected">Rejected</option>
                   </select>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                   <button
                     onClick={() => onViewDetails(intern)}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
+                    className="text-blue-600 hover:text-blue-900 p-2"
+                    title="View Details"
                   >
-                    <FaEye className="inline-block mr-1" />
-                    View
+                    <FaEye />
                   </button>
                   <button
                     onClick={() => onEdit(intern)}
-                    className="text-indigo-600 hover:text-indigo-900"
+                    className="text-indigo-600 hover:text-indigo-900 p-2"
+                    title="Edit"
                   >
-                    <FaEdit className="inline-block mr-1" />
-                    Edit
+                    <FaEdit />
+                  </button>
+                  <button
+                    onClick={() => onViewDetails(intern)}
+                    className="text-green-600 hover:text-green-900"
+                    title="View Remarks"
+                  >
+                    View Remarks
                   </button>
                 </td>
               </tr>

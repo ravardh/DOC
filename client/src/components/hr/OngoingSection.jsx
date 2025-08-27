@@ -135,16 +135,11 @@ const OngoingSection = ({
                       <FaEdit className="inline-block" />
                     </button>
                     <button
-                      onClick={() => onAddRemark(applicant)}
+                      onClick={() => onViewDetails(applicant)}
                       className="text-green-600 hover:text-green-900"
-                      title="Add Remark"
+                      title="View Remarks"
                     >
-                      <FaCommentAlt className="inline-block" />
-                      {applicant.remarks?.length > 0 && (
-                        <span className="ml-1 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                          {applicant.remarks.length}
-                        </span>
-                      )}
+                      View Remarks
                     </button>
                   </div>
                 </td>

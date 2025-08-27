@@ -659,15 +659,31 @@ const HRDashboard = () => {
                     {selectedItem.remarks && selectedItem.remarks.length > 0 && (
                       <div className="col-span-2 mt-4">
                         <h3 className="text-lg font-medium text-gray-900 mb-3">Remarks History</h3>
-                        <div className="space-y-3">
-                          {selectedItem.remarks.map((remark, index) => (
-                            <div key={index} className="bg-gray-50 p-3 rounded-md">
-                              <p className="text-gray-700">{remark.text}</p>
-                              <div className="text-sm text-gray-500 mt-1">
-                                By {remark.author} on {formatDate(remark.date)}
-                              </div>
-                            </div>
-                          ))}
+                        <div className="bg-white rounded-lg shadow overflow-hidden">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Remark</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added By</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {selectedItem.remarks.map((remark, index) => (
+                                <tr key={index}>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {formatDate(remark.date)}
+                                  </td>
+                                  <td className="px-6 py-4 text-sm text-gray-900">
+                                    {remark.text}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {remark.author}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     )}
@@ -802,7 +818,7 @@ const HRDashboard = () => {
                         type={inputType}
                         value={inputValue || ""}
                         onChange={(e) => setEditFormData({ ...editFormData, [key]: e.target.value })}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                     />
                   </div>
                   );
@@ -854,7 +870,7 @@ const HRDashboard = () => {
                     type="text"
                     value={onboardingData.assignedPosition}
                     onChange={(e) => setOnboardingData({ ...onboardingData, assignedPosition: e.target.value })}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                   />
                 </div>
                 <div className="col-span-2">
@@ -981,7 +997,7 @@ const HRDashboard = () => {
                         order: Math.max(1, numValue || 1)
                       });
                     }}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                   />
                 </div>
                 <div>
@@ -1065,7 +1081,7 @@ const HRDashboard = () => {
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
                 rows="4"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                 placeholder="Please provide detailed reason for rejection"
                 required
               />
@@ -1132,7 +1148,7 @@ const HRDashboard = () => {
                 value={remarkText}
                 onChange={(e) => setRemarkText(e.target.value)}
                 rows="4"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                 placeholder="Add your remark here..."
                 required
               />
