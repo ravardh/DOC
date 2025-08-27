@@ -75,9 +75,18 @@ const applicantSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "interview", "onboarded", "rejected"],
+      enum: ["pending", "interview", "onboarded", "active", "inactive", "rejected"],
       default: "pending",
     },
+    rejectionReason: {
+      type: String,
+      default: "",
+    },
+    remarks: [{
+      text: { type: String, required: true },
+      date: { type: Date, default: Date.now },
+      author: { type: String, required: true }
+    }],
     assignedPosition: {
       type: String,
       default: "",

@@ -53,10 +53,33 @@ const DonationPage = () => {
       setScreenshot(null);
     } catch (error) {
       console.error("Error submitting donation:", error);
-      toast.error(
-        `Error ${error?.response?.status || "503"} : ${
-          error?.response?.data?.message || "Service Unavailable"
-        }`);
+      
+      // Handle network errors
+      if (!error.response) {
+        toast.error("Network Error: Please check your internet connection");
+        return;
+      }
+
+      // Handle specific status codes
+      switch (error.response.status) {
+        case 400:
+          toast.error(error.response.data.message || "Invalid donation details provided");
+          break;
+        case 413:
+          toast.error("Screenshot file size is too large. Please upload a smaller file (max 1MB)");
+          break;
+        case 415:
+          toast.error("Invalid file type. Please upload only images");
+          break;
+        case 429:
+          toast.error("Too many requests. Please try again later");
+          break;
+        case 500:
+          toast.error("Server error. Please try again later");
+          break;
+        default:
+          toast.error(error.response.data.message || "An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }

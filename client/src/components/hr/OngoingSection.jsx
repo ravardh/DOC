@@ -1,11 +1,12 @@
 import React from "react";
-import { FaEye, FaEdit } from "react-icons/fa";
+import { FaEye, FaEdit, FaCommentAlt } from "react-icons/fa";
 
 const OngoingSection = ({
   applicants,
   onStatusChange,
   onEdit,
   onViewDetails,
+  onAddRemark,
 }) => {
   // Filter out Active and Inactive applicants, then sort by date
   const sortedApplicants = [...applicants]
@@ -26,6 +27,8 @@ const OngoingSection = ({
       case "active":
         return "bg-green-100 text-green-800";
       case "inactive":
+        return "bg-gray-100 text-gray-800";
+      case "rejected":
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -112,23 +115,38 @@ const OngoingSection = ({
                     <option value="onboarded">Onboarded</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
+                    <option value="rejected">Rejected</option>
                   </select>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button
-                    onClick={() => onViewDetails(applicant)}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
-                  >
-                    <FaEye className="inline-block mr-1" />
-                    View
-                  </button>
-                  <button
-                    onClick={() => onEdit(applicant)}
-                    className="text-indigo-600 hover:text-indigo-900"
-                  >
-                    <FaEdit className="inline-block mr-1" />
-                    Edit
-                  </button>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      onClick={() => onViewDetails(applicant)}
+                      className="text-blue-600 hover:text-blue-900"
+                      title="View Details"
+                    >
+                      <FaEye className="inline-block" />
+                    </button>
+                    <button
+                      onClick={() => onEdit(applicant)}
+                      className="text-indigo-600 hover:text-indigo-900"
+                      title="Edit"
+                    >
+                      <FaEdit className="inline-block" />
+                    </button>
+                    <button
+                      onClick={() => onAddRemark(applicant)}
+                      className="text-green-600 hover:text-green-900"
+                      title="Add Remark"
+                    >
+                      <FaCommentAlt className="inline-block" />
+                      {applicant.remarks?.length > 0 && (
+                        <span className="ml-1 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                          {applicant.remarks.length}
+                        </span>
+                      )}
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

@@ -28,6 +28,10 @@ const HRDashboard = () => {
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showOnboardingModal, setShowOnboardingModal] = useState(false);
+  const [showRejectionModal, setShowRejectionModal] = useState(false);
+  const [showRemarkModal, setShowRemarkModal] = useState(false);
+  const [remarkText, setRemarkText] = useState("");
+  const [rejectionReason, setRejectionReason] = useState("");
   const [editFormData, setEditFormData] = useState(null);
   const [selectedApplicant, setSelectedApplicant] = useState(null);
   const [onboardingData, setOnboardingData] = useState({
@@ -98,6 +102,11 @@ const HRDashboard = () => {
       // Handle status transitions
       if (newStatus === "interview" && currentStatus === "pending") {
         updateData.interviewDate = currentDate;
+      } else if (newStatus === "rejected") {
+        const applicant = applicants.find(a => a._id === id);
+        setSelectedApplicant(applicant);
+        setShowRejectionModal(true);
+        return;
       } else if (newStatus === "onboarded" && currentStatus === "interview") {
         const applicant = applicants.find(a => a._id === id);
         setSelectedApplicant(applicant);
@@ -170,6 +179,53 @@ const HRDashboard = () => {
     } catch (error) {
       setError("Error processing onboarding");
       console.error("Error processing onboarding:", error);
+    }
+  };
+
+  const handleRejectionSubmit = async () => {
+    try {
+      if (!rejectionReason.trim()) {
+        setError("Please provide a rejection reason");
+        return;
+      }
+
+      await axios.put(`/api/hr/applicants/${selectedApplicant._id}`, {
+        status: "rejected",
+        rejectionReason: rejectionReason,
+        remarks: [{
+          text: rejectionReason,
+          author: JSON.parse(localStorage.getItem("user")).email
+        }]
+      });
+      setShowRejectionModal(false);
+      setRejectionReason("");
+      fetchData();
+    } catch (error) {
+      setError("Error processing rejection");
+      console.error("Error processing rejection:", error);
+    }
+  };
+
+  const handleRemarkSubmit = async () => {
+    try {
+      if (!remarkText.trim()) {
+        setError("Please provide a remark");
+        return;
+      }
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      await axios.put(`/api/hr/applicants/${selectedApplicant._id}`, {
+        remarks: [...(selectedApplicant.remarks || []), {
+          text: remarkText,
+          author: user.email
+        }]
+      });
+      setShowRemarkModal(false);
+      setRemarkText("");
+      fetchData();
+    } catch (error) {
+      setError("Error adding remark");
+      console.error("Error adding remark:", error);
     }
   };
 
@@ -437,6 +493,10 @@ const HRDashboard = () => {
             onStatusChange={handleApplicantStatusChange}
             onEdit={handleEdit}
             onViewDetails={handleViewDetails}
+            onAddRemark={(applicant) => {
+              setSelectedApplicant(applicant);
+              setShowRemarkModal(true);
+            }}
           />
         )}
         {activeTab === "volunteers" && (
@@ -586,6 +646,31 @@ const HRDashboard = () => {
                   <span className="font-semibold">Interests:</span>{' '}
                   {interestOptions.find(opt => opt.value === selectedItem?.interests)?.label || selectedItem?.interests}
                     </div>
+
+                    {/* Show rejection reason if rejected */}
+                    {selectedItem.status === 'rejected' && selectedItem.rejectionReason && (
+                      <div className="col-span-2 mt-4 p-4 bg-red-50 rounded-md">
+                        <h3 className="text-lg font-medium text-red-800 mb-2">Rejection Reason</h3>
+                        <p className="text-red-700">{selectedItem.rejectionReason}</p>
+                      </div>
+                    )}
+
+                    {/* Show remarks history */}
+                    {selectedItem.remarks && selectedItem.remarks.length > 0 && (
+                      <div className="col-span-2 mt-4">
+                        <h3 className="text-lg font-medium text-gray-900 mb-3">Remarks History</h3>
+                        <div className="space-y-3">
+                          {selectedItem.remarks.map((remark, index) => (
+                            <div key={index} className="bg-gray-50 p-3 rounded-md">
+                              <p className="text-gray-700">{remark.text}</p>
+                              <div className="text-sm text-gray-500 mt-1">
+                                By {remark.author} on {formatDate(remark.date)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     </div>
                   </div>
             <div className="sticky bottom-0 bg-white p-6 border-t">
@@ -962,6 +1047,114 @@ const HRDashboard = () => {
                   {selectedAnnouncement ? 'Save Changes' : 'Add Announcement'}
               </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rejection Modal */}
+      {showRejectionModal && selectedApplicant && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+            <h2 className="text-xl font-semibold mb-4">Reject Application - {selectedApplicant.name}</h2>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Rejection Reason <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={rejectionReason}
+                onChange={(e) => setRejectionReason(e.target.value)}
+                rows="4"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Please provide detailed reason for rejection"
+                required
+              />
+            </div>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowRejectionModal(false);
+                  setRejectionReason("");
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRejectionSubmit}
+                disabled={!rejectionReason.trim()}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:bg-red-300"
+              >
+                Confirm Rejection
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Remark Modal */}
+      {showRemarkModal && selectedApplicant && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Add Remark - {selectedApplicant.name}</h2>
+              <button
+                onClick={() => setShowRemarkModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <FaTimes />
+              </button>
+            </div>
+            
+            {/* Previous Remarks */}
+            {selectedApplicant.remarks && selectedApplicant.remarks.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-lg font-medium mb-3">Previous Remarks</h3>
+                <div className="space-y-3 max-h-40 overflow-y-auto">
+                  {selectedApplicant.remarks.map((remark, index) => (
+                    <div key={index} className="bg-gray-50 p-3 rounded-md">
+                      <div className="text-sm text-gray-700">{remark.text}</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        By {remark.author} on {formatDate(remark.date)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* New Remark Input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                New Remark <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={remarkText}
+                onChange={(e) => setRemarkText(e.target.value)}
+                rows="4"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Add your remark here..."
+                required
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowRemarkModal(false);
+                  setRemarkText("");
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRemarkSubmit}
+                disabled={!remarkText.trim()}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+              >
+                Add Remark
+              </button>
             </div>
           </div>
         </div>

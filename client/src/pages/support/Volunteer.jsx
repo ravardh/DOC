@@ -49,10 +49,29 @@ function Volunteer() {
         agreeToTerms: false,
       });
     } catch (error) {
-      toast.error(
-        `Error ${error?.response?.status || "503"} : ${
-          error?.response?.data?.message || "Service Unavailable"
-        }`);
+      console.error("Error submitting volunteer application:", error);
+      
+      if (!error.response) {
+        toast.error("Network Error: Please check your internet connection");
+        return;
+      }
+
+      switch (error.response.status) {
+        case 400:
+          toast.error(error.response.data.message || "Please fill all required fields correctly");
+          break;
+        case 409:
+          toast.error("You have already applied for volunteering");
+          break;
+        case 429:
+          toast.error("Too many applications submitted. Please try again later");
+          break;
+        case 500:
+          toast.error("Server error. Please try again later");
+          break;
+        default:
+          toast.error(error.response.data.message || "Failed to submit application. Please try again");
+      }
     } finally {
       setLoading(false);
     }

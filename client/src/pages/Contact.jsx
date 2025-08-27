@@ -21,10 +21,25 @@ const Contact = () => {
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Error sending message:", error);
-      toast.error(
-        `Error ${error?.response?.status || "503"} : ${
-          error?.response?.data?.message || "Service Unavailable"
-        }`);
+      
+      if (!error.response) {
+        toast.error("Network Error: Please check your internet connection");
+        return;
+      }
+
+      switch (error.response.status) {
+        case 400:
+          toast.error(error.response.data.message || "Please provide all required information");
+          break;
+        case 429:
+          toast.error("Too many messages sent. Please try again later");
+          break;
+        case 500:
+          toast.error("Server error. Please try again later");
+          break;
+        default:
+          toast.error(error.response.data.message || "Failed to send message. Please try again");
+      }
     }
   };
 
