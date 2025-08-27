@@ -75,13 +75,6 @@ const InternsSection = ({ interns, onStatusChange, onEdit, onViewDetails }) => {
                   >
                     <FaEdit />
                   </button>
-                  <button
-                    onClick={() => onViewDetails(intern)}
-                    className="text-green-600 hover:text-green-900"
-                    title="View Remarks"
-                  >
-                    View Remarks
-                  </button>
                 </td>
               </tr>
             ))}

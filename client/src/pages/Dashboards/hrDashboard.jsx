@@ -647,19 +647,52 @@ const HRDashboard = () => {
                   {interestOptions.find(opt => opt.value === selectedItem?.interests)?.label || selectedItem?.interests}
                     </div>
 
+                    {/* Move rejection reason to the bottom */}
+                    {selectedItem.remarks && selectedItem.remarks.length > 0 && (
+                      <div className="col-span-2 mt-4">
+                        <h3 className="text-lg font-medium text-gray-900 mb-3">Remarks History</h3>
+                        <div className="bg-white rounded-lg shadow overflow-hidden">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Remark</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added By</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {selectedItem.remarks.map((remark, index) => (
+                                <tr key={index}>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {formatDate(remark.date)}
+                                  </td>
+                                  <td className="px-6 py-4 text-sm text-gray-900">
+                                    {remark.text}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {remark.author}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Show rejection reason if rejected */}
                     {selectedItem.status === 'rejected' && selectedItem.rejectionReason && (
-                      <div className="col-span-2 mt-4 p-4 bg-red-50 rounded-md">
-                        <h3 className="text-lg font-medium text-red-800 mb-2">Rejection Reason</h3>
+                      <div className="col-span-2 mt-6 p-4 bg-red-50 rounded-md">
+                        <h3 className="text-lg font-medium text-red-800 mb-2">Rejection&nbsp;Reason</h3>
                         <p className="text-red-700">{selectedItem.rejectionReason}</p>
                       </div>
                     )}
 
                     {/* Only show rejection reason input if status is rejected */}
                     {selectedItem.status === 'rejected' && (
-                      <div className="col-span-2 mt-4">
+                      <div className="col-span-2 mt-6">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Rejection Reason <span className="text-red-500">*</span>
+                          Rejection&nbsp;Reason <span className="text-red-500">*</span>
                         </label>
                         <textarea
                           value={editFormData?.rejectionReason || ''}

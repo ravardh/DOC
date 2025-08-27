@@ -75,13 +75,7 @@ const VolunteersSection = ({ volunteers, onStatusChange, onEdit, onViewDetails }
                   >
                     <FaEdit />
                   </button>
-                  <button
-                    onClick={() => onViewDetails(volunteer)}
-                    className="text-green-600 hover:text-green-900"
-                    title="View Remarks"
-                  >
-                    View Remarks
-                  </button>
+                  
                 </td>
               </tr>
             ))}

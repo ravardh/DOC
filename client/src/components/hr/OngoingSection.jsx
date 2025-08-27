@@ -134,13 +134,6 @@ const OngoingSection = ({
                     >
                       <FaEdit className="inline-block" />
                     </button>
-                    <button
-                      onClick={() => onViewDetails(applicant)}
-                      className="text-green-600 hover:text-green-900"
-                      title="View Remarks"
-                    >
-                      View Remarks
-                    </button>
                   </div>
                 </td>
               </tr>
