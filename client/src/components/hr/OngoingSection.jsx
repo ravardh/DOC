@@ -6,7 +6,6 @@ const OngoingSection = ({
   onStatusChange,
   onEdit,
   onViewDetails,
-  onAddRemark,
 }) => {
   // Filter out Active and Inactive applicants, then sort by date
   const sortedApplicants = [...applicants]

@@ -152,7 +152,28 @@ const HRDashboard = () => {
 
   const handleEditSubmit = async () => {
     try {
-      await axios.put(`/api/hr/applicants/${editFormData._id}`, editFormData);
+      // Create a clean copy of the form data
+      const cleanedFormData = {};
+      
+      // Process each field
+      Object.entries(editFormData).forEach(([key, value]) => {
+        if (key === '_id' || key === '__v' || key === 'updatedAt' || key === 'createdAt') return;
+        
+        // Handle date fields
+        if (key.toLowerCase().includes('date') || key === 'doj' || key === 'dol' || key === 'dob') {
+          cleanedFormData[key] = value ? new Date(value).toISOString() : null;
+        }
+        // Handle boolean fields
+        else if (typeof value === 'boolean') {
+          cleanedFormData[key] = value;
+        }
+        // Handle other fields
+        else {
+          cleanedFormData[key] = value || null;
+        }
+      });
+
+      await axios.put(`/api/hr/applicants/${editFormData._id}`, cleanedFormData);
       setShowEditModal(false);
       fetchData();
     } catch (error) {
@@ -163,10 +184,31 @@ const HRDashboard = () => {
 
   const handleOnboardingSubmit = async () => {
     try {
-      await axios.put(`/api/hr/applicants/${selectedApplicant._id}`, {
+      // Validate required fields
+      if (!onboardingData.assignedPosition?.trim()) {
+        setError("Assigned Position is required");
+        return;
+      }
+      if (!onboardingData.assignedTeam?.trim()) {
+        setError("Assigned Team is required");
+        return;
+      }
+      if (!onboardingData.doj) {
+        setError("Date of Joining is required");
+        return;
+      }
+
+      // Create clean onboarding data
+      const cleanedOnboardingData = {
         status: "onboarded",
-        ...onboardingData,
-      });
+        assignedPosition: onboardingData.assignedPosition.trim(),
+        assignedTeam: onboardingData.assignedTeam.trim(),
+        interviewDate: onboardingData.interviewDate ? new Date(onboardingData.interviewDate).toISOString() : null,
+        doj: onboardingData.doj ? new Date(onboardingData.doj).toISOString() : null,
+        dol: onboardingData.dol ? new Date(onboardingData.dol).toISOString() : null
+      };
+
+      await axios.put(`/api/hr/applicants/${selectedApplicant._id}`, cleanedOnboardingData);
       setShowOnboardingModal(false);
       setOnboardingData({
         assignedPosition: "",
@@ -175,6 +217,7 @@ const HRDashboard = () => {
         doj: "",
         dol: "",
       });
+      setError(null);
       fetchData();
     } catch (error) {
       setError("Error processing onboarding");
@@ -295,7 +338,7 @@ const HRDashboard = () => {
   const formatDateForInput = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toISOString();
+    return date.toISOString().split('T')[0];
   };
 
   const handleAnnouncementSubmit = async () => {
@@ -796,7 +839,7 @@ const HRDashboard = () => {
                   // Handle date fields
                   if (key.toLowerCase().includes('date') || key === 'doj' || key === 'dol' || key === 'dob') {
                     inputType = "date";
-                    inputValue = formatDateForInput(value);
+                    inputValue = value ? formatDateForInput(value) : '';
                   }
 
                   // Handle boolean fields
@@ -866,8 +909,16 @@ const HRDashboard = () => {
                       </label>
                       <input
                         type={inputType}
-                        value={inputValue || ""}
-                        onChange={(e) => setEditFormData({ ...editFormData, [key]: e.target.value })}
+                        value={inputValue ?? ""}
+                        onChange={(e) => {
+                          const newValue = e.target.value;
+                          setEditFormData(prev => ({
+                            ...prev,
+                            [key]: inputType === 'date' && newValue 
+                              ? new Date(newValue).toISOString()
+                              : newValue
+                          }));
+                        }}
                         className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                     />
                   </div>
@@ -918,9 +969,10 @@ const HRDashboard = () => {
                   </label>
                   <input
                     type="text"
-                    value={onboardingData.assignedPosition}
-                    onChange={(e) => setOnboardingData({ ...onboardingData, assignedPosition: e.target.value })}
+                    value={onboardingData.assignedPosition ?? ""}
+                    onChange={(e) => setOnboardingData(prev => ({ ...prev, assignedPosition: e.target.value.trim() }))}
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                    required
                   />
                 </div>
                 <div className="col-span-2">
@@ -929,9 +981,10 @@ const HRDashboard = () => {
                   </label>
                   <input
                     type="text"
-                    value={onboardingData.assignedTeam}
-                    onChange={(e) => setOnboardingData({ ...onboardingData, assignedTeam: e.target.value })}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    value={onboardingData.assignedTeam ?? ""}
+                    onChange={(e) => setOnboardingData(prev => ({ ...prev, assignedTeam: e.target.value.trim() }))}
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                    required
                   />
                 </div>
                 <div className="col-span-2">
@@ -940,8 +993,8 @@ const HRDashboard = () => {
                   </label>
                   <input
                     type="date"
-                    value={formatDateForInput(onboardingData.interviewDate)}
-                    onChange={(e) => setOnboardingData({ ...onboardingData, interviewDate: e.target.value })}
+                    value={onboardingData.interviewDate ? formatDateForInput(onboardingData.interviewDate) : ''}
+                    onChange={(e) => setOnboardingData({ ...onboardingData, interviewDate: e.target.value ? new Date(e.target.value).toISOString() : '' })}
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
@@ -951,8 +1004,8 @@ const HRDashboard = () => {
                   </label>
                   <input
                     type="date"
-                    value={formatDateForInput(onboardingData.doj)}
-                    onChange={(e) => setOnboardingData({ ...onboardingData, doj: e.target.value })}
+                    value={onboardingData.doj ? formatDateForInput(onboardingData.doj) : ''}
+                    onChange={(e) => setOnboardingData({ ...onboardingData, doj: e.target.value ? new Date(e.target.value).toISOString() : '' })}
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
@@ -962,8 +1015,8 @@ const HRDashboard = () => {
                   </label>
                       <input
                     type="date"
-                    value={formatDateForInput(onboardingData.dol)}
-                    onChange={(e) => setOnboardingData({ ...onboardingData, dol: e.target.value })}
+                    value={onboardingData.dol ? formatDateForInput(onboardingData.dol) : ''}
+                    onChange={(e) => setOnboardingData({ ...onboardingData, dol: e.target.value ? new Date(e.target.value).toISOString() : '' })}
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       />
                     </div>
