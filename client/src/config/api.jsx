@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://dropsofchange.in/api", //"http://20.3.137.135/api" "http://localhost:4500",
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
   //timeout: 60000, // 60 seconds timeout
 });
@@ -26,23 +26,26 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Handle network errors
     if (!error.response) {
-      console.error('Network error:', error.message);
-      return Promise.reject(new Error('Network error. Please check your connection.'));
+      console.error("Network error:", error.message);
+      return Promise.reject(
+        new Error("Network error. Please check your connection.")
+      );
     }
 
     // Handle token expiration
     if (error.response?.status === 401) {
       // Clear user data and token
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       // Redirect to login page
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
 
     // Handle other errors
-    const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+    const errorMessage =
+      error.response?.data?.message || "An error occurred. Please try again.";
     return Promise.reject(new Error(errorMessage));
-  } 
+  }
 );
 
 export default axiosInstance;

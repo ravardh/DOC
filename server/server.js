@@ -36,11 +36,11 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(morgan("dev"));
 
 // Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/hr", hrRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/public", publicRoutes);
-app.use("/api/team", teamRoutes);
+app.use("/auth", authRoutes);
+app.use("/hr", hrRoutes);
+app.use("/admin", adminRoutes);
+app.use("/public", publicRoutes);
+app.use("/team", teamRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server Connected" });
