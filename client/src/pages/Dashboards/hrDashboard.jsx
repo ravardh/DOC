@@ -21,7 +21,7 @@ import {
   RemarkModal,
   AnnouncementModal
 } from '../../components/hr/Modal';
-import { formatDate, formatDateForInput } from '../../utils/date';
+import { formatDate } from '../../utils/date';
 import VolunteersSection from "../../components/hr/VolunteersSection";
 import InternsSection from "../../components/hr/InternsSection";
 import OngoingSection from "../../components/hr/OngoingSection";
@@ -164,7 +164,6 @@ const HRDashboard = () => {
 
   const handleEdit = (item) => {
     setSelectedItem(item);
-    setEditFormData(item);
     setShowEditModal(true);
   };
 
@@ -173,7 +172,6 @@ const HRDashboard = () => {
     setShowEditModal(false);
     setShowOnboardingModal(false);
     setSelectedItem(null);
-    setEditFormData(null);
   };
 
   // Filter applicants by type
@@ -184,65 +182,7 @@ const HRDashboard = () => {
 
   // formatDate & formatDateForInput now imported from utils/date
 
-  const handleAnnouncementSubmit = async () => {
-    try {
-      // Validate required fields
-      if (!announcementFormData.Title?.trim()) {
-        setError("Title is required");
-        return;
-      }
-      if (!announcementFormData.Announcement?.trim()) {
-        setError("Announcement content is required");
-        return;
-      }
-
-      // Ensure order is a valid number
-      const orderNum = parseInt(announcementFormData.order);
-      if (isNaN(orderNum) || orderNum < 1) {
-        setError("Order must be a positive number");
-        return;
-      }
-
-      const formData = {
-        Title: announcementFormData.Title.trim(),
-        Announcement: announcementFormData.Announcement.trim(),
-        order: orderNum // Ensure it's a number, not a string
-      };
-
-      
-      let response;
-      if (selectedAnnouncement) {
-        response = await axios.put(`/api/public/Announcement/${selectedAnnouncement._id}`, formData);
-      } else {
-        response = await axios.post("/api/public/Announcement", formData);
-      }
-
-      // Clear form and close modal
-      setShowAnnouncementModal(false);
-      setSelectedAnnouncement(null);
-      setAnnouncementFormData({
-        Title: "",
-        Announcement: "",
-        order: 1
-      });
-      setError(null);
-      fetchData(); // Refresh the data
-    } catch (error) {
-      console.error("Error saving announcement:", {
-        error,
-        response: error.response,
-        data: error.response?.data,
-        status: error.response?.status,
-        formData: announcementFormData,
-        selectedId: selectedAnnouncement?._id
-      });
-      
-      const errorMessage = error.response?.data?.message || 
-                         error.response?.data?.error || 
-                         error.message;
-      setError(`Error saving announcement: ${errorMessage}`);
-    }
-  };
+  // Announcement submission logic moved into AnnouncementModal
 
   const handleDeleteAnnouncement = async (id) => {
     try {
