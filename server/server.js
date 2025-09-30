@@ -26,6 +26,7 @@ app.use(
       "http://www.dropsofchange.in",
       "https://dropsofchange.in",
       "https://www.dropsofchange.in",
+      `${process.env.NODE_ENV==="development"?"http://localhost:5173":""}`,
     ],
     credentials: true,
   })

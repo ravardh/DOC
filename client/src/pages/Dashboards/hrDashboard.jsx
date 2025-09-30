@@ -7,13 +7,21 @@ import {
   FaUserGraduate,
   FaUserTie,
   FaEnvelope,
-  FaTimes,
   FaBullhorn,
   FaTrash,
   FaEdit as FaEditIcon,
   FaCalendarAlt,
   FaListAlt
 } from "react-icons/fa";
+import {
+  DetailsModal,
+  EditModal,
+  OnboardingModal,
+  RejectionModal,
+  RemarkModal,
+  AnnouncementModal
+} from '../../components/hr/Modal';
+import { formatDate, formatDateForInput } from '../../utils/date';
 import VolunteersSection from "../../components/hr/VolunteersSection";
 import InternsSection from "../../components/hr/InternsSection";
 import OngoingSection from "../../components/hr/OngoingSection";
@@ -30,27 +38,13 @@ const HRDashboard = () => {
   const [showOnboardingModal, setShowOnboardingModal] = useState(false);
   const [showRejectionModal, setShowRejectionModal] = useState(false);
   const [showRemarkModal, setShowRemarkModal] = useState(false);
-  const [remarkText, setRemarkText] = useState("");
-  const [rejectionReason, setRejectionReason] = useState("");
-  const [editFormData, setEditFormData] = useState(null);
+  // Removed local form states now handled inside modals
   const [selectedApplicant, setSelectedApplicant] = useState(null);
-  const [onboardingData, setOnboardingData] = useState({
-    assignedPosition: "",
-    assignedTeam: "",
-    interviewDate: "",
-    doj: "",
-    dol: "",
-  });
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-  const [announcementFormData, setAnnouncementFormData] = useState({
-    Title: "",
-    Announcement: "",
-    order: 1
-  });
 
   const navigate = useNavigate();
 
@@ -110,13 +104,6 @@ const HRDashboard = () => {
       } else if (newStatus === "onboarded" && currentStatus === "interview") {
         const applicant = applicants.find(a => a._id === id);
         setSelectedApplicant(applicant);
-        setOnboardingData({
-          assignedPosition: applicant.assignedPosition || "",
-          assignedTeam: applicant.assignedTeam || "",
-          interviewDate: applicant.interviewDate ? new Date(applicant.interviewDate).toISOString().split('T')[0] : currentDate.split('T')[0],
-          doj: "",
-          dol: "",
-        });
         setShowOnboardingModal(true);
         return;
       } else if (newStatus === "active" && currentStatus === "onboarded") {
@@ -150,127 +137,7 @@ const HRDashboard = () => {
     }
   };
 
-  const handleEditSubmit = async () => {
-    try {
-      // Create a clean copy of the form data
-      const cleanedFormData = {};
-      
-      // Process each field
-      Object.entries(editFormData).forEach(([key, value]) => {
-        if (key === '_id' || key === '__v' || key === 'updatedAt' || key === 'createdAt') return;
-        
-        // Handle date fields
-        if (key.toLowerCase().includes('date') || key === 'doj' || key === 'dol' || key === 'dob') {
-          cleanedFormData[key] = value ? new Date(value).toISOString() : null;
-        }
-        // Handle boolean fields
-        else if (typeof value === 'boolean') {
-          cleanedFormData[key] = value;
-        }
-        // Handle other fields
-        else {
-          cleanedFormData[key] = value || null;
-        }
-      });
-
-      await axios.put(`/api/hr/applicants/${editFormData._id}`, cleanedFormData);
-      setShowEditModal(false);
-      fetchData();
-    } catch (error) {
-      setError("Error updating applicant details");
-      console.error("Error updating applicant:", error);
-    }
-  };
-
-  const handleOnboardingSubmit = async () => {
-    try {
-      // Validate required fields
-      if (!onboardingData.assignedPosition?.trim()) {
-        setError("Assigned Position is required");
-        return;
-      }
-      if (!onboardingData.assignedTeam?.trim()) {
-        setError("Assigned Team is required");
-        return;
-      }
-      if (!onboardingData.doj) {
-        setError("Date of Joining is required");
-        return;
-      }
-
-      // Create clean onboarding data
-      const cleanedOnboardingData = {
-        status: "onboarded",
-        assignedPosition: onboardingData.assignedPosition.trim(),
-        assignedTeam: onboardingData.assignedTeam.trim(),
-        interviewDate: onboardingData.interviewDate ? new Date(onboardingData.interviewDate).toISOString() : null,
-        doj: onboardingData.doj ? new Date(onboardingData.doj).toISOString() : null,
-        dol: onboardingData.dol ? new Date(onboardingData.dol).toISOString() : null
-      };
-
-      await axios.put(`/api/hr/applicants/${selectedApplicant._id}`, cleanedOnboardingData);
-      setShowOnboardingModal(false);
-      setOnboardingData({
-        assignedPosition: "",
-        assignedTeam: "",
-        interviewDate: "",
-        doj: "",
-        dol: "",
-      });
-      setError(null);
-      fetchData();
-    } catch (error) {
-      setError("Error processing onboarding");
-      console.error("Error processing onboarding:", error);
-    }
-  };
-
-  const handleRejectionSubmit = async () => {
-    try {
-      if (!rejectionReason.trim()) {
-        setError("Please provide a rejection reason");
-        return;
-      }
-
-      await axios.put(`/api/hr/applicants/${selectedApplicant._id}`, {
-        status: "rejected",
-        rejectionReason: rejectionReason,
-        remarks: [{
-          text: rejectionReason,
-          author: JSON.parse(localStorage.getItem("user")).email
-        }]
-      });
-      setShowRejectionModal(false);
-      setRejectionReason("");
-      fetchData();
-    } catch (error) {
-      setError("Error processing rejection");
-      console.error("Error processing rejection:", error);
-    }
-  };
-
-  const handleRemarkSubmit = async () => {
-    try {
-      if (!remarkText.trim()) {
-        setError("Please provide a remark");
-        return;
-      }
-
-      const user = JSON.parse(localStorage.getItem("user"));
-      await axios.put(`/api/hr/applicants/${selectedApplicant._id}`, {
-        remarks: [...(selectedApplicant.remarks || []), {
-          text: remarkText,
-          author: user.email
-        }]
-      });
-      setShowRemarkModal(false);
-      setRemarkText("");
-      fetchData();
-    } catch (error) {
-      setError("Error adding remark");
-      console.error("Error adding remark:", error);
-    }
-  };
+  // Submission handlers now live in modal components
 
   const getFieldLabel = (key) => {
     const labelMap = {
@@ -315,31 +182,7 @@ const HRDashboard = () => {
   );
   const interns = applicants.filter((applicant) => applicant.type === "intern");
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    
-    // Get day of week
-    const weekday = date.toLocaleString('en-IN', { weekday: 'long' });
-    
-    // Get day with leading zero
-    const day = String(date.getDate()).padStart(2, '0');
-    
-    // Get month abbreviation
-    const month = date.toLocaleString('en-IN', { month: 'short' });
-    
-    // Get year
-    const year = date.getFullYear();
-    
-    // Format: Friday, 01 Aug 2025
-    return `${weekday}, ${day} ${month} ${year}`;
-  };
-
-  const formatDateForInput = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
-  };
+  // formatDate & formatDateForInput now imported from utils/date
 
   const handleAnnouncementSubmit = async () => {
     try {
@@ -413,11 +256,6 @@ const HRDashboard = () => {
 
   const handleEditAnnouncement = (announcement) => {
     setSelectedAnnouncement(announcement);
-    setAnnouncementFormData({
-      Title: announcement.Title || "",
-      Announcement: announcement.Announcement || "",
-      order: typeof announcement.order === 'number' ? announcement.order : 1
-    });
     setShowAnnouncementModal(true);
   };
 
@@ -581,14 +419,9 @@ const HRDashboard = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Announcements</h2>
-                        <button
-                          onClick={() => {
+              <button
+                onClick={() => {
                   setSelectedAnnouncement(null);
-                  setAnnouncementFormData({
-                    Title: "",
-                    Announcement: "",
-                    order: 1
-                  });
                   setShowAnnouncementModal(true);
                 }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -645,651 +478,52 @@ const HRDashboard = () => {
         )}
       </div>
 
-      {/* Details Modal */}
-      {showDetailsModal && selectedItem && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[75vh] flex flex-col mx-auto my-auto">
-            <div className="sticky top-0 bg-white p-6 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Details for {selectedItem.name}</h2>
-              <button
-                  onClick={handleCloseModals}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                  <FaTimes />
-              </button>
-            </div>
-                  </div>
-            <div className="p-6 overflow-y-auto flex-1">
-              <div className="grid grid-cols-2 gap-6">
-                {Object.entries(selectedItem).map(([key, value]) => {
-                  if (!shouldShowField(key) || (key === 'interests' && selectedItem.type === 'volunteer')) return null;
-                  
-                  let displayValue = value;
-                  // Format date fields
-                  if (key.toLowerCase().includes('date') || key === 'doj' || key === 'dol' || key === 'dob' || key === 'createdAt') {
-                    displayValue = formatDate(value);
-                  }
-
-                  // Format boolean values
-                  if (typeof value === 'boolean') {
-                    displayValue = value ? 'Yes' : 'No';
-                  }
-
-                  return (
-                    <div key={key} className="col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {getFieldLabel(key)}
-                      </label>
-                      <div className="text-gray-900">{displayValue || 'N/A'}</div>
-                    </div>
-                  );
-                })}
-                    <div>
-                  <span className="font-semibold">Interests:</span>{' '}
-                  {interestOptions.find(opt => opt.value === selectedItem?.interests)?.label || selectedItem?.interests}
-                    </div>
-
-                    {/* Move rejection reason to the bottom */}
-                    {selectedItem.remarks && selectedItem.remarks.length > 0 && (
-                      <div className="col-span-2 mt-4">
-                        <h3 className="text-lg font-medium text-gray-900 mb-3">Remarks History</h3>
-                        <div className="bg-white rounded-lg shadow overflow-hidden">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Remark</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added By</th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {selectedItem.remarks.map((remark, index) => (
-                                <tr key={index}>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {formatDate(remark.date)}
-                                  </td>
-                                  <td className="px-6 py-4 text-sm text-gray-900">
-                                    {remark.text}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {remark.author}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Show rejection reason if rejected */}
-                    {selectedItem.status === 'rejected' && selectedItem.rejectionReason && (
-                      <div className="col-span-2 mt-6 p-4 bg-red-50 rounded-md">
-                        <h3 className="text-lg font-medium text-red-800 mb-2">Rejection&nbsp;Reason</h3>
-                        <p className="text-red-700">{selectedItem.rejectionReason}</p>
-                      </div>
-                    )}
-
-                    {/* Only show rejection reason input if status is rejected */}
-                    {selectedItem.status === 'rejected' && (
-                      <div className="col-span-2 mt-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Rejection&nbsp;Reason <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          value={editFormData?.rejectionReason || ''}
-                          onChange={(e) => setEditFormData({ ...editFormData, rejectionReason: e.target.value })}
-                          rows="4"
-                          className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                          placeholder="Please provide detailed reason for rejection"
-                          required
-                        />
-                      </div>
-                    )}
-
-                    {/* Show remarks history */}
-                    {selectedItem.remarks && selectedItem.remarks.length > 0 && (
-                      <div className="col-span-2 mt-4">
-                        <h3 className="text-lg font-medium text-gray-900 mb-3">Remarks History</h3>
-                        <div className="bg-white rounded-lg shadow overflow-hidden">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Remark</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added By</th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {selectedItem.remarks.map((remark, index) => (
-                                <tr key={index}>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {formatDate(remark.date)}
-                                  </td>
-                                  <td className="px-6 py-4 text-sm text-gray-900">
-                                    {remark.text}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {remark.author}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    )}
-                    </div>
-                  </div>
-            <div className="sticky bottom-0 bg-white p-6 border-t">
-              <div className="flex justify-end">
-              <button
-                  onClick={handleCloseModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                >
-                  Close
-              </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Modal */}
-      {showEditModal && selectedItem && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[75vh] flex flex-col mx-auto my-auto">
-            <div className="sticky top-0 bg-white p-6 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Edit {selectedItem.name}</h2>
-              <button
-                  onClick={handleCloseModals}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                  <FaTimes />
-              </button>
-            </div>
-                  </div>
-            <div className="p-6 overflow-y-auto flex-1">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Interests
-                  </label>
-                  <select
-                    value={editFormData?.interests || ''}
-                    onChange={(e) => setEditFormData({ ...editFormData, interests: e.target.value })}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  >
-                    <option value="">Select Interest</option>
-                    {interestOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  </div>
-                {Object.entries(selectedItem).map(([key, value]) => {
-                  if (!shouldShowField(key) || key === 'interests') return null;
-                  
-                  let inputType = "text";
-                  let inputValue = value;
-
-                  // Handle date fields
-                  if (key.toLowerCase().includes('date') || key === 'doj' || key === 'dol' || key === 'dob') {
-                    inputType = "date";
-                    inputValue = value ? formatDateForInput(value) : '';
-                  }
-
-                  // Handle boolean fields
-                  if (typeof value === 'boolean') {
-                    return (
-                      <div key={key} className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          {getFieldLabel(key)}
-                        </label>
-                        <select
-                          value={value ? 'true' : 'false'}
-                          onChange={(e) => setEditFormData({ ...editFormData, [key]: e.target.value === 'true' })}
-                          className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        >
-                          <option value="true">Yes</option>
-                          <option value="false">No</option>
-                        </select>
-                  </div>
-                    );
-                  }
-
-                  // Handle select fields
-                  if (key === "status") {
-                    return (
-                      <div key={key} className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          {getFieldLabel(key)}
-                        </label>
-                        <select
-                          value={value}
-                          onChange={(e) => setEditFormData({ ...editFormData, [key]: e.target.value })}
-                          className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="interview">Interview</option>
-                          <option value="onboarded">Onboarded</option>
-                          <option value="active">Active</option>
-                          <option value="inactive">Inactive</option>
-                        </select>
-                  </div>
-                    );
-                  }
-
-                  // Handle type field for volunteers and interns
-                  if (key === "type") {
-                    return (
-                      <div key={key} className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          {getFieldLabel(key)}
-                        </label>
-                        <select
-                          value={value}
-                          onChange={(e) => setEditFormData({ ...editFormData, [key]: e.target.value })}
-                          className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        >
-                          <option value="volunteer">Volunteer</option>
-                          <option value="intern">Intern</option>
-                        </select>
-                  </div>
-                    );
-                  }
-
-                  return (
-                    <div key={key} className="col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {getFieldLabel(key)}
-                      </label>
-                      <input
-                        type={inputType}
-                        value={inputValue ?? ""}
-                        onChange={(e) => {
-                          const newValue = e.target.value;
-                          setEditFormData(prev => ({
-                            ...prev,
-                            [key]: inputType === 'date' && newValue 
-                              ? new Date(newValue).toISOString()
-                              : newValue
-                          }));
-                        }}
-                        className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                    />
-                  </div>
-                  );
-                })}
-                </div>
-              </div>
-            <div className="sticky bottom-0 bg-white p-6 border-t">
-              <div className="flex justify-end space-x-3">
-              <button
-                  onClick={handleCloseModals}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                  onClick={handleEditSubmit}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-              >
-                  Save Changes
-              </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Onboarding Modal */}
-      {showOnboardingModal && selectedApplicant && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[75vh] flex flex-col mx-auto my-auto">
-            <div className="sticky top-0 bg-white p-6 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Onboard {selectedApplicant.name}</h2>
-              <button
-                  onClick={() => setShowOnboardingModal(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                  <FaTimes />
-              </button>
-            </div>
-                </div>
-            <div className="p-6 overflow-y-auto flex-1">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Assigned Position
-                  </label>
-                  <input
-                    type="text"
-                    value={onboardingData.assignedPosition ?? ""}
-                    onChange={(e) => setOnboardingData(prev => ({ ...prev, assignedPosition: e.target.value.trim() }))}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                    required
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Assigned Team
-                  </label>
-                  <input
-                    type="text"
-                    value={onboardingData.assignedTeam ?? ""}
-                    onChange={(e) => setOnboardingData(prev => ({ ...prev, assignedTeam: e.target.value.trim() }))}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                    required
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Interview Date
-                  </label>
-                  <input
-                    type="date"
-                    value={onboardingData.interviewDate ? formatDateForInput(onboardingData.interviewDate) : ''}
-                    onChange={(e) => setOnboardingData({ ...onboardingData, interviewDate: e.target.value ? new Date(e.target.value).toISOString() : '' })}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Date of Joining
-                  </label>
-                  <input
-                    type="date"
-                    value={onboardingData.doj ? formatDateForInput(onboardingData.doj) : ''}
-                    onChange={(e) => setOnboardingData({ ...onboardingData, doj: e.target.value ? new Date(e.target.value).toISOString() : '' })}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Date of Leaving
-                  </label>
-                      <input
-                    type="date"
-                    value={onboardingData.dol ? formatDateForInput(onboardingData.dol) : ''}
-                    onChange={(e) => setOnboardingData({ ...onboardingData, dol: e.target.value ? new Date(e.target.value).toISOString() : '' })}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    </div>
-              </div>
-            <div className="sticky bottom-0 bg-white p-6 border-t">
-              <div className="flex justify-end space-x-3">
-              <button
-                  onClick={() => setShowOnboardingModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                  onClick={handleOnboardingSubmit}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-              >
-                  Complete Onboarding
-              </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Announcement Modal */}
-      {showAnnouncementModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[75vh] flex flex-col mx-auto my-auto">
-            <div className="sticky top-0 bg-white p-6 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">
-                  {selectedAnnouncement ? 'Edit Announcement' : 'Add New Announcement'}
-                </h2>
-              <button
-                  onClick={() => {
-                    setShowAnnouncementModal(false);
-                    setSelectedAnnouncement(null);
-                    setAnnouncementFormData({
-                      Title: "",
-                      Announcement: "",
-                      order: 1
-                    });
-                    setError(null);
-                  }}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                  <FaTimes />
-              </button>
-            </div>
-                </div>
-            <div className="p-6 overflow-y-auto flex-1">
-              {error && (
-                <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                  {error}
-                </div>
-              )}
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Order <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    value={announcementFormData.order}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const numValue = parseInt(value);
-                      setAnnouncementFormData({
-                        ...announcementFormData,
-                        order: value === "" ? "" : Math.max(1, numValue || 1)
-                      });
-                    }}
-                    onBlur={(e) => {
-                      const value = e.target.value;
-                      const numValue = parseInt(value);
-                      setAnnouncementFormData({
-                        ...announcementFormData,
-                        order: Math.max(1, numValue || 1)
-                      });
-                    }}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Title <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={200}
-                    value={announcementFormData.Title}
-                    onChange={(e) => setAnnouncementFormData({
-                      ...announcementFormData,
-                      Title: e.target.value
-                    })}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Announcement <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    required
-                    maxLength={1000}
-                    value={announcementFormData.Announcement}
-                    onChange={(e) => setAnnouncementFormData({
-                      ...announcementFormData,
-                      Announcement: e.target.value
-                    })}
-                    rows={4}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-                </div>
-                </div>
-            <div className="sticky bottom-0 bg-white p-6 border-t">
-              <div className="flex justify-end space-x-3">
-              <button
-                  onClick={() => {
-                    setShowAnnouncementModal(false);
-                    setSelectedAnnouncement(null);
-                    setAnnouncementFormData({
-                      Title: "",
-                      Announcement: "",
-                      order: 1
-                    });
-                    setError(null);
-                  }}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                  onClick={handleAnnouncementSubmit}
-                  disabled={!announcementFormData.Title?.trim() || !announcementFormData.Announcement?.trim()}
-                  className={`px-4 py-2 text-sm font-medium text-white rounded-md ${
-                    !announcementFormData.Title?.trim() || !announcementFormData.Announcement?.trim()
-                      ? 'bg-blue-400 cursor-not-allowed'
-                      : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
-                >
-                  {selectedAnnouncement ? 'Save Changes' : 'Add Announcement'}
-              </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Rejection Modal */}
-      {showRejectionModal && selectedApplicant && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[75vh] flex flex-col mx-auto my-auto p-6">
-            <h2 className="text-xl font-semibold mb-4">Reject Application - {selectedApplicant.name}</h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rejection Reason <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                value={rejectionReason}
-                onChange={(e) => setRejectionReason(e.target.value)}
-                rows="4"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                placeholder="Please provide detailed reason for rejection"
-                required
-              />
-            </div>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => {
-                  setShowRejectionModal(false);
-                  setRejectionReason("");
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleRejectionSubmit}
-                disabled={!rejectionReason.trim()}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:bg-red-300"
-              >
-                Confirm Rejection
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Remark Modal */}
-      {showRemarkModal && selectedApplicant && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[75vh] overflow-hidden flex flex-col">
-            <div className="flex justify-between items-center p-6 border-b">
-              <h2 className="text-xl font-semibold">Remarks - {selectedApplicant.name}</h2>
-              <button
-                onClick={() => setShowRemarkModal(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <FaTimes />
-              </button>
-            </div>
-
-            <div className="overflow-y-auto flex-1 p-6">
-              <div className="bg-white rounded-lg shadow">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Remark</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added By</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {selectedApplicant.remarks && selectedApplicant.remarks.map((remark, index) => (
-                      <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {formatDate(remark.date)}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">
-                          {remark.text}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {remark.author}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* New Remark Input */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                New Remark <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                value={remarkText}
-                onChange={(e) => setRemarkText(e.target.value)}
-                rows="4"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                placeholder="Add your remark here..."
-                required
-              />
-            </div>
-
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => {
-                  setShowRemarkModal(false);
-                  setRemarkText("");
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleRemarkSubmit}
-                disabled={!remarkText.trim()}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-blue-300"
-              >
-                Add Remark
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Consolidated Modal Components */}
+      <DetailsModal
+        showModal={showDetailsModal}
+        selectedItem={selectedItem}
+        onClose={handleCloseModals}
+        formatDate={formatDate}
+        getFieldLabel={getFieldLabel}
+        shouldShowField={shouldShowField}
+        interestOptions={interestOptions}
+      />
+      <EditModal
+        showModal={showEditModal}
+        selectedItem={selectedItem}
+        onClose={handleCloseModals}
+        onSuccess={fetchData}
+        getFieldLabel={getFieldLabel}
+        shouldShowField={shouldShowField}
+        interestOptions={interestOptions}
+      />
+      <OnboardingModal
+        showModal={showOnboardingModal}
+        selectedApplicant={selectedApplicant}
+        onClose={() => setShowOnboardingModal(false)}
+        onSuccess={fetchData}
+      />
+      <AnnouncementModal
+        showModal={showAnnouncementModal}
+        selectedAnnouncement={selectedAnnouncement}
+        onClose={() => {
+          setShowAnnouncementModal(false);
+          setSelectedAnnouncement(null);
+        }}
+        onSuccess={fetchData}
+      />
+      <RejectionModal
+        showModal={showRejectionModal}
+        selectedApplicant={selectedApplicant}
+        onClose={() => setShowRejectionModal(false)}
+        onSuccess={fetchData}
+      />
+      <RemarkModal
+        showModal={showRemarkModal}
+        selectedApplicant={selectedApplicant}
+        onClose={() => setShowRemarkModal(false)}
+        onSuccess={fetchData}
+      />
     </div>
     
   );
