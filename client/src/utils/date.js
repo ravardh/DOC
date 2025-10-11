@@ -13,3 +13,13 @@ export const formatDateForInput = (dateString) => {
   const date = new Date(dateString);
   return date.toISOString().split('T')[0];
 };
+
+// Simple DD/MM/YYYY formatter (no weekday/month name)
+export const formatDateDDMMYYYY = (dateString) => {
+  if (!dateString) return '';
+  const d = new Date(dateString);
+  const day = String(d.getDate()).padStart(2,'0');
+  const month = String(d.getMonth()+1).padStart(2,'0');
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+};

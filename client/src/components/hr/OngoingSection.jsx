@@ -7,12 +7,10 @@ const OngoingSection = ({
   onEdit,
   onViewDetails,
 }) => {
-  // Filter out Active and Inactive applicants, then sort by date
+  // Show only applicants still in progress (tweak as needed)
+  const ONGOING_STATUSES = ["pending", "interview", "onboarded"]; // adjust if you want to include others
   const sortedApplicants = [...applicants]
-    .filter(
-      (applicant) =>
-        applicant.status !== "active" && applicant.status !== "inactive"
-    )
+    .filter(applicant => ONGOING_STATUSES.includes(applicant.status))
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   const getStatusColor = (status) => {
@@ -46,7 +44,7 @@ const OngoingSection = ({
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-semibold mb-4">Ongoing Applications</h2>
+  <h2 className="text-2xl font-semibold mb-4">Ongoing Applications ({sortedApplicants.length})</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

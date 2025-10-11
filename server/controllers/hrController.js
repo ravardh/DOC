@@ -191,11 +191,11 @@ export const updateApplicant = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-
+    console.log("Updating applicant...", updateData);
     const updatedApplicant = await Applicant.findByIdAndUpdate(id, updateData, {
       new: true,
     });
-
+      console.log("Update Done");
     if (!updatedApplicant) {
       return res.status(404).json({ message: "Applicant not found" });
     }

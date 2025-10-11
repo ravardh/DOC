@@ -179,6 +179,8 @@ const HRDashboard = () => {
     (applicant) => applicant.type === "volunteer"
   );
   const interns = applicants.filter((applicant) => applicant.type === "intern");
+  // Ongoing count (pending, interview, onboarded only)
+  const ongoingCount = applicants.filter(a => ["pending","interview","onboarded"].includes(a.status)).length;
 
   // formatDate & formatDateForInput now imported from utils/date
 
@@ -247,7 +249,7 @@ const HRDashboard = () => {
           }`}
         >
           <FaListAlt className="mr-2" />
-          Ongoing ({applicants.length})
+          Ongoing ({ongoingCount})
         </button>
         <button
           onClick={() => setActiveTab("volunteers")}

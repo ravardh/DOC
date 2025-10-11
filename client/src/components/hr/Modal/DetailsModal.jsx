@@ -1,15 +1,15 @@
-import React from 'react';
-import { FaTimes } from 'react-icons/fa';
-import { formatDate as formatDisplayDate } from '../../../utils/date';
+import React from "react";
+import { FaTimes } from "react-icons/fa";
+import { formatDate as formatDisplayDate } from "../../../utils/date";
 
-const DetailsModal = ({ 
-  showModal, 
-  selectedItem, 
-  onClose, 
-  formatDate, 
-  getFieldLabel, 
+const DetailsModal = ({
+  showModal,
+  selectedItem,
+  onClose,
+  formatDate,
+  getFieldLabel,
   shouldShowField,
-  interestOptions
+  interestOptions,
 }) => {
   if (!showModal || !selectedItem) return null;
 
@@ -18,8 +18,13 @@ const DetailsModal = ({
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[75vh] flex flex-col mx-auto my-auto">
         <div className="sticky top-0 bg-white p-6 border-b">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Details for {selectedItem.name}</h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <h2 className="text-xl font-semibold">
+              Details for {selectedItem.name}
+            </h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
               <FaTimes />
             </button>
           </div>
@@ -27,17 +32,33 @@ const DetailsModal = ({
         <div className="p-6 overflow-y-auto flex-1">
           <div className="grid grid-cols-2 gap-6">
             {Object.entries(selectedItem).map(([key, value]) => {
-              if (!shouldShowField(key) || (key === 'interests' && selectedItem.type === 'volunteer')) return null;
-              
-              let displayValue = value;
-              // Format date fields
-              if (key.toLowerCase().includes('date') || key === 'doj' || key === 'dol' || key === 'dob' || key === 'createdAt') {
-                displayValue = (formatDate || formatDisplayDate)(value);
+              // Skip internal / non-display or separately rendered fields
+              if (
+                key === "__v" ||
+                key === "updatedAt" ||
+                key === "remarks" || // handled by dedicated section
+                key === "rejectionReason" || // shown conditionally below
+                key === "interests" || // rendered in custom block
+                key === "_id" // usually not user-facing
+              ) return null;
+
+              if (!shouldShowField(key)) return null;
+
+              // Avoid attempting to directly render objects / arrays
+              if (Array.isArray(value) || (typeof value === 'object' && value !== null)) {
+                return null; // defensive skip; add explicit section if needed
               }
 
-              // Format boolean values
-              if (typeof value === 'boolean') {
-                displayValue = value ? 'Yes' : 'No';
+              let displayValue = value;
+              if (
+                key.toLowerCase().includes("date") ||
+                ["doj", "dol", "dob", "createdAt"].includes(key)
+              ) {
+                displayValue = value ? (formatDate || formatDisplayDate)(value) : '';
+              }
+
+              if (typeof value === "boolean") {
+                displayValue = value ? "Yes" : "No";
               }
 
               return (
@@ -45,26 +66,37 @@ const DetailsModal = ({
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {getFieldLabel(key)}
                   </label>
-                  <div className="text-gray-900">{displayValue || 'N/A'}</div>
+                  <div className="text-gray-900">{displayValue || "N/A"}</div>
                 </div>
               );
             })}
-            <div>
-              <span className="font-semibold">Interests:</span>{' '}
-              {interestOptions.find(opt => opt.value === selectedItem?.interests)?.label || selectedItem?.interests}
-            </div>
+            {selectedItem.interests && (
+              <div className="col-span-2">
+                <span className="font-semibold">Interests:</span>{' '}
+                {Array.isArray(selectedItem.interests)
+                  ? selectedItem.interests.join(', ')
+                  : (interestOptions.find(
+                      (opt) => opt.value === selectedItem.interests
+                    )?.label || selectedItem.interests || 'N/A')}
+              </div>
+            )}
 
             {/* Show remarks history */}
             {selectedItem.remarks && selectedItem.remarks.length > 0 && (
               <div className="col-span-2 mt-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-3">Remarks History</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-3">
+                  Remarks History
+                </h3>
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Remark</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added By</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                          Date
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                          Remark
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -76,9 +108,6 @@ const DetailsModal = ({
                           <td className="px-6 py-4 text-sm text-gray-900">
                             {remark.text}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {remark.author}
-                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -88,12 +117,15 @@ const DetailsModal = ({
             )}
 
             {/* Show rejection reason if rejected */}
-            {selectedItem.status === 'rejected' && selectedItem.rejectionReason && (
-              <div className="col-span-2 mt-6 p-4 bg-red-50 rounded-md">
-                <h3 className="text-lg font-medium text-red-800 mb-2">Rejection&nbsp;Reason</h3>
-                <p className="text-red-700">{selectedItem.rejectionReason}</p>
-              </div>
-            )}
+            {selectedItem.status === "rejected" &&
+              selectedItem.rejectionReason && (
+                <div className="col-span-2 mt-6 p-4 bg-red-50 rounded-md">
+                  <h3 className="text-lg font-medium text-red-800 mb-2">
+                    Rejection&nbsp;Reason
+                  </h3>
+                  <p className="text-red-700">{selectedItem.rejectionReason}</p>
+                </div>
+              )}
           </div>
         </div>
         <div className="sticky bottom-0 bg-white p-6 border-t">

@@ -1,9 +1,9 @@
 import axios from "axios";
 
+
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
-  //timeout: 60000, // 60 seconds timeout
 });
 
 // Add a request interceptor to attach the Bearer token from localStorage
@@ -12,6 +12,11 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (config.url && config.url.startsWith('/api/')) {
+      config.url = config.url.slice(4); // remove leading '/api'
+    } else if (config.url === '/api') {
+      config.url = '/';
     }
     return config;
   },
@@ -32,7 +37,7 @@ axiosInstance.interceptors.response.use(
       );
     }
 
-    // Handle token expiration
+    
     if (error.response?.status === 401) {
       // Clear user data and token
       localStorage.removeItem("user");
