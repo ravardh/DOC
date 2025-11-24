@@ -240,7 +240,7 @@ function About() {
                         member.profilePhotoPath || "/path/to/default-image.png"
                       }
                       alt={member.name}
-                      className="w-48 h-60 rounded-lg mx-auto mb-4 border-2"
+                      className="w-48 h-48 rounded-full mx-auto mb-4 border-2"
                     />
                     <h3 className="text-2xl font-semibold text-gray-800">
                       {member.name}
