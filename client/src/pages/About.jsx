@@ -247,26 +247,30 @@ function About() {
                     </h3>
                     <p className="text-[#FF6F00]">{member.position}</p>
                     <div className="mt-2 flex justify-center space-x-4">
-                      {member.linkedin && (
-                        <a
-                          href={member.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600"
-                        >
-                          <LinkedIn className="h-6 w-6 transition-transform duration-300 hover:scale-125" />
-                        </a>
-                      )}
-                      {member.instagram && (
-                        <a
-                          href={member.instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-pink-600"
-                        >
-                          <Insta className="h-6 w-6 transition-transform duration-300 hover:scale-125" />
-                        </a>
-                      )}
+                      {member.linkedin &&
+                        member.linkedin !==
+                          "https://www.linkedin.com/company/drops-of-change-welfare-society" && (
+                          <a
+                            href={member.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600"
+                          >
+                            <LinkedIn className="h-6 w-6 transition-transform duration-300 hover:scale-125" />
+                          </a>
+                        )}
+                      {member.instagram &&
+                        member.instagram !==
+                          "https://www.instagram.com/dropsofchange" && (
+                          <a
+                            href={member.instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-pink-600"
+                          >
+                            <Insta className="h-6 w-6 transition-transform duration-300 hover:scale-125" />
+                          </a>
+                        )}
                     </div>
                   </div>
                 ))}
