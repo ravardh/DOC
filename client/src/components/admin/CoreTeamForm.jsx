@@ -188,7 +188,7 @@ const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
       )} */}
       {showCropper && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[60]">
-          {console.log("🎭 Cropper modal is rendering")}
+          {/* {console.log("🎭 Cropper modal is rendering")} */}
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 shadow-xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-gray-800">
