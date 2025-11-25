@@ -72,44 +72,75 @@ const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
   }, [member]);
 
   const handlePhotoChange = (e) => {
+    console.log('📸 File input changed');
     const file = e.target.files[0];
+    console.log('📁 Selected file:', file);
+    
     if (file) {
+      console.log('✅ File is valid, starting FileReader');
       const reader = new FileReader();
+      
       reader.onload = () => {
+        console.log('📖 FileReader loaded, data URL length:', reader.result?.length);
         setImageToCrop(reader.result);
         setShowCropper(true);
+        console.log('🎨 Cropper modal should now be visible');
       };
+      
+      reader.onerror = (error) => {
+        console.error('❌ FileReader error:', error);
+      };
+      
       reader.readAsDataURL(file);
+    } else {
+      console.log('⚠️ No file selected');
     }
   };
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    console.log('✂️ Crop complete - Area:', croppedArea);
+    console.log('📐 Crop pixels:', croppedAreaPixels);
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
   const handleCropSave = async () => {
+    console.log('💾 Save crop button clicked');
+    console.log('🖼️ Image to crop:', imageToCrop?.substring(0, 50) + '...');
+    console.log('📏 Cropped area pixels:', croppedAreaPixels);
+    
     try {
+      console.log('🔄 Starting crop operation...');
       const croppedBlob = await getCroppedImg(imageToCrop, croppedAreaPixels);
+      console.log('✅ Cropped blob created:', croppedBlob);
+      
       const croppedFile = new File([croppedBlob], 'profile-photo.jpg', {
         type: 'image/jpeg',
       });
+      console.log('📦 File object created:', croppedFile);
+      
       setProfilePhoto(croppedFile);
-      setPreviewUrl(URL.createObjectURL(croppedBlob));
+      const previewURL = URL.createObjectURL(croppedBlob);
+      setPreviewUrl(previewURL);
+      console.log('👁️ Preview URL set:', previewURL);
+      
       setShowCropper(false);
       setImageToCrop(null);
       setFileInputKey(Date.now());
+      console.log('✨ Cropper closed, states reset');
     } catch (error) {
-      console.error('Error cropping image:', error);
+      console.error('❌ Error cropping image:', error);
       setError('Failed to crop image');
     }
   };
 
   const handleCropCancel = () => {
+    console.log('❌ Crop cancelled by user');
     setShowCropper(false);
     setImageToCrop(null);
     setCrop({ x: 0, y: 0 });
     setZoom(1);
     setFileInputKey(Date.now());
+    console.log('🔄 All crop states reset');
   };
 
   const handleSubmit = async (e) => {
@@ -149,8 +180,10 @@ const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
 
   return (
     <>
+      {console.log('🔍 Render - showCropper:', showCropper, 'imageToCrop:', !!imageToCrop)}
       {showCropper && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[60]">
+          {console.log('🎭 Cropper modal is rendering')}
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 shadow-xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-gray-800">Crop Profile Photo</h3>
