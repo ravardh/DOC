@@ -56,6 +56,7 @@ const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [fileInputKey, setFileInputKey] = useState(Date.now());
 
   useEffect(() => {
     if (member) {
@@ -96,6 +97,7 @@ const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
       setPreviewUrl(URL.createObjectURL(croppedBlob));
       setShowCropper(false);
       setImageToCrop(null);
+      setFileInputKey(Date.now());
     } catch (error) {
       console.error('Error cropping image:', error);
       setError('Failed to crop image');
@@ -107,6 +109,7 @@ const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
     setImageToCrop(null);
     setCrop({ x: 0, y: 0 });
     setZoom(1);
+    setFileInputKey(Date.now());
   };
 
   const handleSubmit = async (e) => {
@@ -304,6 +307,7 @@ const CoreTeamForm = ({ member, onSuccess, onCancel }) => {
                 Profile Photo (Max Size : 1MB)
               </label>
               <input
+                key={fileInputKey}
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
