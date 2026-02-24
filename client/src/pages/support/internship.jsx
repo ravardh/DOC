@@ -189,6 +189,7 @@ function Internship() {
                   <option value="social-media">Social Media</option>
                   <option value="graphic-Designing">Graphic Designing</option>
                   <option value="content-writing">Content Writing</option>
+                  <option value="video-editing">Video Editing</option>
                   <option value="administration">Administration</option>
                 </select>
                 <select

@@ -55,6 +55,7 @@ const HRDashboard = () => {
     { value: 'social-media', label: 'Social Media' },
     { value: 'graphic-Designing', label: 'Graphic Designing' },
     { value: 'content-writing', label: 'Content Writing' },
+    { value: 'video-editing', label: 'Video Editing' },
     { value: 'administration', label: 'Administration' },
   ];
 

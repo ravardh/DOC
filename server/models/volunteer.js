@@ -15,7 +15,7 @@ const volunteerSchema = new mongoose.Schema({
   status: { type: String, default: 'active' },
   interests: { 
     type: String, 
-    enum: ['teaching', 'fundraising', 'events', 'social-media', 'graphic-Designing', 'content-writing', 'administration'],
+    enum: ['teaching', 'fundraising', 'events', 'social-media', 'graphic-Designing', 'content-writing', 'video-editing', 'administration'],
     required: true 
   },
   photo: { type: String },
