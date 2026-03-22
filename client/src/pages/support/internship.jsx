@@ -200,7 +200,6 @@ function Internship() {
                   className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
                 >
                   <option value="">Internship Duration</option>
-                  <option value="3-month">3 Month</option>
                   <option value="6-months">6 Months</option>
                   <option value="12-months">12 Months</option>
                 </select>
@@ -269,7 +268,7 @@ function Internship() {
                 <div className="flex items-start">
                   <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
                   <p className="ml-3 text-gray-600">
-                    Minimum three months commitment required
+                    Minimum Six months commitment required
                   </p>
                 </div>
                 <div className="flex items-start">
