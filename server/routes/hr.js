@@ -9,6 +9,12 @@ import {
   addStudent,
   updateStudent,
   sendBirthdayWish,
+
+  // Exit request controllers
+  
+  submitExitRequest,
+  getExitRequests,
+  updateExitRequest,
 } from '../controllers/hrController.js';
 import { protect, hr } from '../middleware/auth.js';
 
@@ -27,6 +33,11 @@ router.get('/contact', protect, hr, getContacts);
 router.get('/students', protect, hr, getStudents);
 router.post('/students', protect, hr, addStudent);
 router.put('/students/:id', protect, hr, updateStudent);
+
+// Exit request routes
+router.post('/exit-requests', protect, submitExitRequest);
+router.get('/exit-requests', protect, hr, getExitRequests);
+router.put('/exit-requests/:id', protect, hr, updateExitRequest);
 
 // Birthday wish route
 router.post('/send-birthday-wish', protect, hr, sendBirthdayWish);

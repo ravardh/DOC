@@ -1,4 +1,6 @@
 import Applicant from "../models/Applicant.js";
+import User from "../models/User.js";
+import ExitRequest from "../models/ExitRequest.js";
 import Contact from "../models/Contact.js";
 import Student from "../models/Student.js";
 import { sendNotificationEmail } from "../utils/emailService.js";
@@ -268,5 +270,82 @@ export const sendBirthdayWish = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+// Exit Request Controllers
+
+export const submitExitRequest = async (req, res) => {
+  try {
+    const { reason, lastWorkingDay, comments, volunteer } = req.body;
+
+    if (!reason || !lastWorkingDay) {
+      return res.status(400).json({ message: "Reason and Last Working Day are required." });
+    }
+
+    // Use req.user._id if available, otherwise use volunteer from body (for testing)
+    const volunteerId = req.user?._id || volunteer;
+
+    if (!volunteerId) {
+      return res.status(400).json({ message: "Volunteer ID is required." });
+    }
+
+    const exitRequest = await ExitRequest.create({
+      volunteer: volunteerId,
+      reason,
+      lastWorkingDay,
+      comments,
+    });
+
+    return res.status(201).json({ message: "Exit request submitted successfully!", exitRequest });
+  } catch (error) {
+    console.error("Error in submitExitRequest:", error);
+    return res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+export const getExitRequests = async (req, res) => {
+  try {
+    const exitRequests = await ExitRequest.find()
+      .populate("volunteer", "name email")
+      .populate("reviewedBy", "name email")
+      .sort({ createdAt: -1 });
+
+    res.json(exitRequests);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateExitRequest = async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    if (!["approved", "rejected"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status." });
+    }
+
+    const exitRequest = await ExitRequest.findByIdAndUpdate(
+      req.params.id,
+      {
+        status,
+        reviewedBy: req.user._id,
+        reviewedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!exitRequest) {
+      return res.status(404).json({ message: "Exit request not found." });
+    }
+
+    // Update volunteer status if approved
+    if (status === "approved") {
+      await User.findByIdAndUpdate(exitRequest.volunteer, { status: "inactive" });
+    }
+
+    return res.json({ message: `Exit request ${status} successfully!`, exitRequest });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
