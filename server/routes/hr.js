@@ -9,6 +9,17 @@ import {
   addStudent,
   updateStudent,
   sendBirthdayWish,
+
+  submitExitRequest,    
+  getExitRequests,      
+  updateExitRequest,    
+
+  // Certificate controllers
+
+  addCertificate,       
+  getCertificates,      
+  updateCertificate,    
+  deleteCertificate,
 } from '../controllers/hrController.js';
 import { protect, hr } from '../middleware/auth.js';
 
@@ -30,5 +41,16 @@ router.put('/students/:id', protect, hr, updateStudent);
 
 // Birthday wish route
 router.post('/send-birthday-wish', protect, hr, sendBirthdayWish);
+
+// Exit request routes
+router.post('/exit-requests', protect, submitExitRequest);
+router.get('/exit-requests', protect, hr, getExitRequests);
+router.put('/exit-requests/:id', protect, hr, updateExitRequest);
+
+// Certificate routes
+router.post('/certificates', protect, hr, addCertificate);
+router.get('/certificates', protect, hr, getCertificates);
+router.put('/certificates/:id', protect, hr, updateCertificate);
+router.delete('/certificates/:id', protect, hr, deleteCertificate);
 
 export default router;
