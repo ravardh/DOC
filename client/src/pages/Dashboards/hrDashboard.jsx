@@ -11,7 +11,8 @@ import {
   FaTrash,
   FaEdit as FaEditIcon,
   FaCalendarAlt,
-  FaListAlt
+  FaListAlt,
+  FaDoorOpen  // For exit requests
 } from "react-icons/fa";
 import {
   DetailsModal,
@@ -45,6 +46,7 @@ const HRDashboard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [exitRequests, setExitRequests] = useState([]);
 
   const navigate = useNavigate();
 
@@ -68,26 +70,29 @@ const HRDashboard = () => {
     fetchData();
   }, [navigate]);
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [applicantsRes, contactsRes, announcementsRes] = await Promise.all([
-        axios.get("/api/hr/applicants"),
-        axios.get("/api/hr/contact"),
-        axios.get("/api/public/Announcement"),
-      ]);
 
-      setApplicants(applicantsRes.data);
-      setContacts(contactsRes.data);
-      setAnnouncements(announcementsRes.data);
-      setError(null);
-    } catch (error) {
-      setError("Error fetching data. Please try again later.");
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchData = async () => {
+  try {
+    setLoading(true);
+    const [applicantsRes, contactsRes, announcementsRes, exitRequestsRes] = await Promise.all([
+      axios.get("/api/hr/applicants"),
+      axios.get("/api/hr/contact"),
+      axios.get("/api/public/Announcement"),
+      axios.get("/api/hr/exit-requests"),  //  new API call for exit requests
+    ]);
+
+    setApplicants(applicantsRes.data);
+    setContacts(contactsRes.data);
+    setAnnouncements(announcementsRes.data);
+    setExitRequests(exitRequestsRes.data); // store exit requests in state
+    setError(null);
+  } catch (error) {
+    setError("Error fetching data. Please try again later.");
+    console.error("Error fetching data:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleApplicantStatusChange = async (id, newStatus, currentStatus) => {
     try {
@@ -307,6 +312,20 @@ const HRDashboard = () => {
           <FaBullhorn className="mr-2" />
           Announcements ({announcements.length})
         </button>
+
+        
+
+        <button
+          onClick={() => setActiveTab("exitRequests")}
+          className={`px-4 py-2 rounded-md flex items-center ${
+              activeTab === "exitRequests"
+                 ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+           }`}
+         >
+  <FaDoorOpen className="mr-2" />
+  Exit Requests ({exitRequests.length})
+</button>
       </div>
 
       {/* Content */}
@@ -420,6 +439,75 @@ const HRDashboard = () => {
           </div>
         )}
       </div>
+
+      {activeTab === "exitRequests" && (
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-semibold mb-6">Exit Requests</h2>
+            {exitRequests.length === 0 ? (
+              <p className="text-gray-500">No exit requests found.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reason</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last Working Day</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Comments</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {exitRequests.map((req) => (
+                      <tr key={req._id}>
+                        <td className="px-6 py-4">{req.volunteer?.name}</td>
+                        <td className="px-6 py-4">{req.volunteer?.email}</td>
+                        <td className="px-6 py-4">{req.reason}</td>
+                        <td className="px-6 py-4">{formatDate(req.lastWorkingDay)}</td>
+                        <td className="px-6 py-4">{req.comments || "-"}</td>
+                        <td className="px-6 py-4">
+                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            req.status === 'approved' ? 'bg-green-100 text-green-800' :
+                            req.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                            'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {req.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          {req.status === 'pending' && (
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={async () => {
+                                  await axios.put(`/api/hr/exit-requests/${req._id}`, { status: 'approved' });
+                                  fetchData();
+                                }}
+                                className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
+                              >
+                                Approve
+                              </button>
+                              <button
+                                onClick={async () => {
+                                  await axios.put(`/api/hr/exit-requests/${req._id}`, { status: 'rejected' });
+                                  fetchData();
+                                }}
+                                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+                              >
+                                Reject
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
 
       {/* Consolidated Modal Components */}
       <DetailsModal
