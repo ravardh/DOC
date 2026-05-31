@@ -2,7 +2,10 @@ import Applicant from "../models/Applicant.js";
 import Contact from "../models/Contact.js";
 import Student from "../models/Student.js";
 import { sendNotificationEmail } from "../utils/emailService.js";
-
+import Leave from "../models/Leave.js";
+import ExitRequest from "../models/ExitRequest.js";
+import User from "../models/User.js";
+import Certificate from "../models/Certificate.js";
 // Applicant Controllers
 export const submitVolunteerApplication = async (req, res) => {
   try {
@@ -268,5 +271,167 @@ export const sendBirthdayWish = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+// Leave Controllers
+
+
+export const addLeave = async (req, res) => {
+  try {
+    const { leaveType, startDate, endDate, reason, volunteer } = req.body;
+
+    if (!leaveType || !startDate || !endDate || !reason) {
+      return res.status(400).json({ message: "All required fields must be filled." });
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const totalDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+    const volunteerId = req.user?._id || volunteer;
+
+    const leave = await Leave.create({
+      volunteer: volunteerId,
+      leaveType,
+      startDate,
+      endDate,
+      totalDays,
+      reason,
+    });
+
+    return res.status(201).json({ message: "Leave request submitted successfully!", leave });
+  } catch (error) {
+    console.error("Error in addLeave:", error);
+    return res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+export const getLeaves = async (req, res) => {
+  try {
+    const leaves = await Leave.find()
+      .populate("volunteer", "name email")
+      .populate("reviewedBy", "name email")
+      .sort({ createdAt: -1 });
+
+    res.json(leaves);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateLeave = async (req, res) => {
+  try {
+    const { status, comments } = req.body;
+
+    if (!["approved", "rejected"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status." });
+    }
+
+    const leave = await Leave.findByIdAndUpdate(
+      req.params.id,
+      {
+        status,
+        comments,
+        reviewedBy: req.user._id,
+        reviewedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!leave) {
+      return res.status(404).json({ message: "Leave not found." });
+    }
+
+    return res.json({ message: `Leave ${status} successfully!`, leave });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Exit Request Controllers
+
+export const submitExitRequest = async (req, res) => {
+  try {
+    const { reason, lastWorkingDay, comments, volunteer } = req.body;
+    if (!reason || !lastWorkingDay) {
+      return res.status(400).json({ message: "Reason and Last Working Day are required." });
+    }
+    const volunteerId = req.user?._id || volunteer;
+    if (!volunteerId) return res.status(400).json({ message: "Volunteer ID is required." });
+    const exitRequest = await ExitRequest.create({ volunteer: volunteerId, reason, lastWorkingDay, comments });
+    return res.status(201).json({ message: "Exit request submitted successfully!", exitRequest });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+export const getExitRequests = async (req, res) => {
+  try {
+    const exitRequests = await ExitRequest.find()
+      .populate("volunteer", "name email")
+      .populate("reviewedBy", "name email")
+      .sort({ createdAt: -1 });
+    res.json(exitRequests);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateExitRequest = async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!["approved", "rejected"].includes(status)) return res.status(400).json({ message: "Invalid status." });
+    const exitRequest = await ExitRequest.findByIdAndUpdate(req.params.id, { status, reviewedBy: req.user._id, reviewedAt: new Date() }, { new: true });
+    if (!exitRequest) return res.status(404).json({ message: "Exit request not found." });
+    if (status === "approved") await User.findByIdAndUpdate(exitRequest.volunteer, { status: "inactive" });
+    return res.json({ message: `Exit request ${status} successfully!`, exitRequest });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Certificate Controllers
+
+
+export const addCertificate = async (req, res) => {
+  try {
+    const { volunteer, certificateName, issuedBy, issueDate, expiryDate, documentUrl, description } = req.body;
+    if (!volunteer || !certificateName || !issuedBy || !issueDate) {
+      return res.status(400).json({ message: "Volunteer, Certificate Name, Issued By and Issue Date are required." });
+    }
+    const certificate = await Certificate.create({ volunteer, certificateName, issuedBy, issueDate, expiryDate, documentUrl, description });
+    return res.status(201).json({ message: "Certificate added successfully!", certificate });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+export const getCertificates = async (req, res) => {
+  try {
+    const certificates = await Certificate.find().populate("volunteer", "name email").sort({ createdAt: -1 });
+    res.json(certificates);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateCertificate = async (req, res) => {
+  try {
+    const certificate = await Certificate.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+    if (!certificate) return res.status(404).json({ message: "Certificate not found." });
+    return res.json({ message: "Certificate updated successfully!", certificate });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteCertificate = async (req, res) => {
+  try {
+    const certificate = await Certificate.findByIdAndDelete(req.params.id);
+    if (!certificate) return res.status(404).json({ message: "Certificate not found." });
+    return res.json({ message: "Certificate deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
