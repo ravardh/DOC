@@ -192,17 +192,29 @@ function Internship() {
                   <option value="video-editing">Video Editing</option>
                   <option value="administration">Administration</option>
                 </select>
-                <select
-                  name="duration"
-                  value={formData.duration}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
+                 <select
+                 name="duration"
+                 value={formData.duration}
+                 onChange={handleChange}
+                 required
+                 className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
                 >
-                  <option value="">Internship Duration</option>
-                  <option value="6-months">6 Months</option>
-                  <option value="12-months">12 Months</option>
+                <option value="">Internship Duration</option>
+                <option value="6-months">6 Months</option>
+                <option value="12-months">12 Months</option>
+                <option value="custom">Custom (Specify below)</option>
                 </select>
+
+                {formData.duration === "custom" && (
+                <input
+               type="text"
+                name="duration"
+                value={formData.duration === "custom" ? formData.customDuration || "" : ""}
+                onChange={(e) => setFormData((prev) => ({ ...prev, customDuration: e.target.value, duration: e.target.value }))}
+                placeholder="Enter duration (e.g. 15 days, 1 month, 45 days)"
+                 className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
+                />
+                )}
                 <select
                   name="availability"
                   value={formData.availability}
