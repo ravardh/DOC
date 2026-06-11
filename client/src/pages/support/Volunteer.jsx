@@ -6,16 +6,8 @@ import toast from "react-hot-toast";
 
 function Volunteer() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    gender: "",
-    dob: "",
-    area: "",
-    experience: "",
-    availability: "",
-    referralSource: "",
-    agreeToTerms: false,
+    name: "", email: "", phone: "", gender: "", dob: "", area: "",
+    experience: "", availability: "", referralSource: "", agreeToTerms: false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -23,144 +15,51 @@ function Volunteer() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    if (!formData.agreeToTerms) {
-      toast.error("Please accept the terms and conditions.");
-      setLoading(false);
-      return;
-    }
-
+    if (!formData.agreeToTerms) { toast.error("Please accept the terms and conditions."); setLoading(false); return; }
     try {
-      const response = await axios.post(
-        "/api/hr/applicants/volunteer",
-        formData
-      );
+      await axios.post("/api/hr/applicants/volunteer", formData);
       toast.success("Application submitted successfully! We'll contact you soon.");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        gender: "",
-        dob: "",
-        area: "",
-        experience: "",
-        availability: "",
-        referralSource: "",
-        agreeToTerms: false,
-      });
+      setFormData({ name: "", email: "", phone: "", gender: "", dob: "", area: "", experience: "", availability: "", referralSource: "", agreeToTerms: false });
     } catch (error) {
-      console.error("Error submitting volunteer application:", error);
-      
-      if (!error.response) {
-        toast.error("Network Error: Please check your internet connection");
-        return;
-      }
-
+      if (!error.response) { toast.error("Network Error: Please check your internet connection"); return; }
       switch (error.response.status) {
-        case 400:
-          toast.error(error.response.data.message || "Please fill all required fields correctly");
-          break;
-        case 409:
-          toast.error("You have already applied for volunteering");
-          break;
-        case 429:
-          toast.error("Too many applications submitted. Please try again later");
-          break;
-        case 500:
-          toast.error("Server error. Please try again later");
-          break;
-        default:
-          toast.error(error.response.data.message || "Failed to submit application. Please try again");
+        case 400: toast.error(error.response.data.message || "Please fill all required fields correctly"); break;
+        case 409: toast.error("You have already applied for volunteering"); break;
+        case 429: toast.error("Too many applications submitted. Please try again later"); break;
+        case 500: toast.error("Server error. Please try again later"); break;
+        default: toast.error(error.response.data.message || "Failed to submit application. Please try again");
       }
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
+
   return (
     <div className="min-h-screen bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">
-            Volunteer With Us
-          </h1>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <h1 className="text-4xl font-bold text-gray-900 mb-8">Volunteer With Us</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md p-8">
-              <h2 className="text-2xl font-semibold mb-6">
-                Volunteer Application Form
-              </h2>
+              <h2 className="text-2xl font-semibold mb-6">Volunteer Application Form</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your Name"
-                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your Email"
-                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                />
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your Phone"
-                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                />
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                >
+                <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Your Name" className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50" />
+                <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Your Email" className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50" />
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="Your Phone" className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50" />
+                <select name="gender" value={formData.gender} onChange={handleChange} required className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50">
                   <option value="">Select Gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
                 </select>
                 <div className="flex justify-around items-center">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleChange}
-                    required
-                    placeholder="Date of Birth"
-                    className="mt-1 px-5 w-6/12 h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                  />
+                  <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
+                  <input type="date" name="dob" value={formData.dob} onChange={handleChange} required className="mt-1 px-5 w-6/12 h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50" />
                 </div>
-                <select
-                  name="area"
-                  value={formData.area}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                >
+                <select name="area" value={formData.area} onChange={handleChange} required className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50">
                   <option value="">Area of Interest</option>
                   <option value="teaching">Teaching</option>
                   <option value="fundraising">Fundraising</option>
@@ -171,32 +70,9 @@ function Volunteer() {
                   <option value="video-editing">Video Editing</option>
                   <option value="administration">Administration</option>
                 </select>
-                <textarea
-                  name="experience"
-                  value={formData.experience}
-                  onChange={handleChange}
-                  rows="4"
-                  placeholder="Previous Experience in Details"
-                  className="mt-1 p-3 w-full rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                ></textarea>
-                <input
-                  type="number"
-                  name="availability"
-                  value={formData.availability}
-                  onChange={handleChange}
-                  max={72}
-                  min={5}
-                  required
-                  placeholder="Your Avaibility in Hours per Week (min 5 hours)"
-                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                />
-                <select
-                  name="referralSource"
-                  value={formData.referralSource}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"
-                >
+                <textarea name="experience" value={formData.experience} onChange={handleChange} rows="4" placeholder="Previous Experience in Details" className="mt-1 p-3 w-full rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50"></textarea>
+                <input type="number" name="availability" value={formData.availability} onChange={handleChange} max={72} min={5} required placeholder="Your Availability in Hours per Week (min 5 hours)" className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50" />
+                <select name="referralSource" value={formData.referralSource} onChange={handleChange} required className="mt-1 px-5 w-full h-12 rounded-md shadow shadow-slate-500 focus:border-[#80CBC4] focus:ring focus:ring-[#80CBC4] focus:ring-opacity-50">
                   <option value="">Where did you hear about us?</option>
                   <option value="facebook">Facebook</option>
                   <option value="instagram">Instagram</option>
@@ -208,81 +84,40 @@ function Volunteer() {
                   <option value="other">Other</option>
                 </select>
                 <div className="flex items-start">
-                  <input
-                    type="checkbox"
-                    name="agreeToTerms"
-                    checked={formData.agreeToTerms}
-                    onChange={handleChange}
-                    required
-                    className="mt-1 h-4 w-4 text-[#80CBC4] focus:ring-[#80CBC4] cursor-pointer"
-                  />
-                  <label className="ml-2 block text-sm text-gray-700">
-                    I agree to the volunteer terms and conditions.
-                  </label>
+                  <input type="checkbox" name="agreeToTerms" checked={formData.agreeToTerms} onChange={handleChange} required className="mt-1 h-4 w-4 text-[#80CBC4] focus:ring-[#80CBC4] cursor-pointer" />
+                  <label className="ml-2 block text-sm text-gray-700">I agree to the volunteer terms and conditions.</label>
                 </div>
-                <button
-                  type="submit"
-                  className="w-full bg-[#FF6F00] text-white px-6 py-3 rounded-md hover:bg-[#FF8F00] transition duration-300"
-                  disabled={loading}
-                >
+                <button type="submit" className="w-full bg-[#FF6F00] text-white px-6 py-3 rounded-md hover:bg-[#FF8F00] transition duration-300" disabled={loading}>
                   {loading ? "Submitting..." : "Submit Application"}
                 </button>
               </form>
             </div>
+
             <div className="bg-white rounded-lg shadow-md p-8">
-              <h2 className="text-2xl font-semibold mb-6">
-                Terms & Conditions
-              </h2>
+              <h2 className="text-2xl font-semibold mb-6">Terms & Conditions</h2>
               <div className="space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
-                  <p className="ml-3 text-gray-600">
-                    Minimum commitment of 3 months required
-                  </p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
-                  <p className="ml-3 text-gray-600">
-                    Must attend orientation and training sessions
-                  </p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
-                  <p className="ml-3 text-gray-600">
-                    Minimum 5 hours of volunteering per week is required
-                  </p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
-                  <p className="ml-3 text-gray-600">
-                    75% participation in all NGO events and campaigns is compulsory
-                  </p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
-                  <p className="ml-3 text-gray-600">
-                    Background check required for working with children
-                  </p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
-                  <p className="ml-3 text-gray-600">
-                    Maintain confidentiality of sensitive information
-                  </p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
-                  <p className="ml-3 text-gray-600">
-                    Follow organization's code of conduct and maintain professionalism
-                  </p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" />
-                  <p className="ml-3 text-gray-600">
-                    Volunteers must complete assigned tasks and report progress regularly
-                  </p>
-                </div>
+                <div className="flex items-start"><CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" /><p className="ml-3 text-gray-600">Minimum commitment of 3 months required</p></div>
+                <div className="flex items-start"><CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" /><p className="ml-3 text-gray-600">Must attend orientation and training sessions</p></div>
+                <div className="flex items-start"><CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" /><p className="ml-3 text-gray-600">Minimum 5 hours of volunteering per week is required</p></div>
+                <div className="flex items-start"><CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" /><p className="ml-3 text-gray-600">75% participation in all NGO events and campaigns is compulsory</p></div>
+                <div className="flex items-start"><CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" /><p className="ml-3 text-gray-600">Background check required for working with children</p></div>
+                <div className="flex items-start"><CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" /><p className="ml-3 text-gray-600">Maintain confidentiality of sensitive information</p></div>
+                <div className="flex items-start"><CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" /><p className="ml-3 text-gray-600">Follow organization's code of conduct and maintain professionalism</p></div>
+                <div className="flex items-start"><CheckCircle className="h-6 w-6 text-[#80CBC4] mt-1 flex-shrink-0" /><p className="ml-3 text-gray-600">Volunteers must complete assigned tasks and report progress regularly</p></div>
               </div>
+
+              {/* ✅ FEE SECTION ADDED */}
+              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <h3 className="text-lg font-semibold text-green-800 mb-3">💰 Fee Details</h3>
+                <div className="flex items-center justify-between p-3 bg-white rounded-md shadow-sm">
+                  <span className="text-gray-700 font-medium">Volunteer Fee</span>
+                  <span className="text-xl font-bold text-green-600">₹200</span>
+                </div>
+                <p className="mt-3 text-sm text-gray-500">
+                  * Fee is to be paid after selection confirmation. It covers administrative and training costs.
+                </p>
+              </div>
+
             </div>
           </div>
         </motion.div>
