@@ -41,7 +41,6 @@ const HRDashboard = () => {
   });
   const [leaves, setLeaves] = useState([]);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
-  const [selectedLeave, setSelectedLeave] = useState(null);
   const [leaveForm, setLeaveForm] = useState({
     volunteer: "", leaveType: "casual", startDate: "", endDate: "", reason: "",
   });
@@ -86,7 +85,6 @@ const HRDashboard = () => {
       setError(null);
     } catch (error) {
       setError("Error fetching data. Please try again later.");
-      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -97,8 +95,8 @@ const HRDashboard = () => {
       let updateData = { status: newStatus };
       const currentDate = new Date().toISOString();
       if (newStatus === "interview" && currentStatus === "pending") { updateData.interviewDate = currentDate; }
-      else if (newStatus === "rejected") { const applicant = applicants.find((a) => a._id === id); setSelectedApplicant(applicant); setShowRejectionModal(true); return; }
-      else if (newStatus === "onboarded" && currentStatus === "interview") { const applicant = applicants.find((a) => a._id === id); setSelectedApplicant(applicant); setShowOnboardingModal(true); return; }
+      else if (newStatus === "rejected") { setSelectedApplicant(applicants.find((a) => a._id === id)); setShowRejectionModal(true); return; }
+      else if (newStatus === "onboarded" && currentStatus === "interview") { setSelectedApplicant(applicants.find((a) => a._id === id)); setShowOnboardingModal(true); return; }
       else if (newStatus === "active" && currentStatus === "onboarded") { const applicant = applicants.find((a) => a._id === id); if (!applicant.doj) updateData.doj = currentDate; }
       else if (newStatus === "inactive") { updateData.dol = currentDate; }
       await axios.put(`/api/hr/applicants/${id}`, updateData);
@@ -130,12 +128,10 @@ const HRDashboard = () => {
     catch (error) { setError("Error deleting announcement"); }
   };
   const handleEditAnnouncement = (a) => { setSelectedAnnouncement(a); setShowAnnouncementModal(true); };
-
   const handleExitRequestUpdate = async (id, status) => {
     try { await axios.put(`/api/hr/exit-requests/${id}`, { status }); fetchData(); }
-    catch (error) { console.error("Error updating exit request:", error); }
+    catch (error) { console.error(error); }
   };
-
   const handleCertificateSubmit = async () => {
     try {
       if (selectedCertificate) { await axios.put(`/api/hr/certificates/${selectedCertificate._id}`, certificateForm); }
@@ -143,34 +139,30 @@ const HRDashboard = () => {
       setShowCertificateModal(false); setSelectedCertificate(null);
       setCertificateForm({ volunteer: "", certificateName: "", issuedBy: "", issueDate: "", expiryDate: "", documentUrl: "", description: "" });
       fetchData();
-    } catch (error) { console.error("Error saving certificate:", error); }
+    } catch (error) { console.error(error); }
   };
-
   const handleDeleteCertificate = async (id) => {
     if (window.confirm("Delete this certificate?")) {
       try { await axios.delete(`/api/hr/certificates/${id}`); fetchData(); }
-      catch (error) { console.error("Error deleting certificate:", error); }
+      catch (error) { console.error(error); }
     }
   };
-
   const handleEditCertificate = (cert) => {
     setSelectedCertificate(cert);
     setCertificateForm({ volunteer: cert.volunteer?._id || cert.volunteer, certificateName: cert.certificateName, issuedBy: cert.issuedBy, issueDate: cert.issueDate ? cert.issueDate.split("T")[0] : "", expiryDate: cert.expiryDate ? cert.expiryDate.split("T")[0] : "", documentUrl: cert.documentUrl || "", description: cert.description || "" });
     setShowCertificateModal(true);
   };
-
   const handleLeaveSubmit = async () => {
     try {
       await axios.post("/api/hr/leaves", leaveForm);
       setShowLeaveModal(false);
       setLeaveForm({ volunteer: "", leaveType: "casual", startDate: "", endDate: "", reason: "" });
       fetchData();
-    } catch (error) { console.error("Error saving leave:", error); }
+    } catch (error) { console.error(error); }
   };
-
   const handleLeaveUpdate = async (id, status) => {
     try { await axios.put(`/api/hr/leaves/${id}`, { status }); fetchData(); }
-    catch (error) { console.error("Error updating leave:", error); }
+    catch (error) { console.error(error); }
   };
 
   if (loading) return (<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div></div>);
