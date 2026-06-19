@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Disallow private/internal areas
+Disallow: /admin-dashboard
+Disallow: /hr-dashboard
+Disallow: /member-dashboard
+Disallow: /login
+
+# Sitemap location
+Sitemap: https://dropsofchange.in/sitemap.xml
