@@ -16,11 +16,14 @@ const aboutContent = {
       content: (
         <>
           <div className="grid gap-3">
+            <p className="text-lg font-semibold text-[#FF6F00]">
+              <strong>Drops Of Change Welfare Society</strong> is a registered nonprofit 
+              organization working to educate underprivileged children across India. The 
+              organization operates through its official website <strong>dropsofchange.in</strong>.
+            </p>
             <p>
-              Drops of Change Welfare Society is a registered NGO with a clear
-              mission. Our team is working together to educate children in slums
-              and settlement areas. We use various campaigns and programmes to
-              ensure a child labor free and poverty free India.
+              Our team is working together to educate children in slums and settlement areas. 
+              We use various campaigns and programmes to ensure a child labor free and poverty free India.
             </p>
             <p>
               We are not committed only to teach children. We also give them all
@@ -37,7 +40,7 @@ const aboutContent = {
               pond or a lake.
             </p>
             <p>
-              Hence, the creation of the name of our NGO ‘Drops of Change’:
+              Hence, the creation of the name of our NGO '<strong>Drops Of Change Welfare Society</strong>':
               because every effort no matter how small counts. The NGO has been
               active since January, 2022 under the leadership of the founder of
               the organisation Mr. Vishal Hindustani.

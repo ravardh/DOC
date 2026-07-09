@@ -57,6 +57,47 @@ function Home() {
           </div>
         </section>
 
+        {/* Official Organization Statement - High Priority for Google Verification */}
+        <section className="py-16 bg-gradient-to-r from-[#FF6F00] to-[#FF8F00]">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center text-white"
+            >
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                Drops Of Change Welfare Society
+              </h2>
+              <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-8 md:p-12">
+                <p className="text-xl md:text-2xl leading-relaxed mb-4">
+                  <strong className="text-white">Drops Of Change Welfare Society</strong> is a 
+                  registered nonprofit organization in India.
+                </p>
+                <p className="text-lg md:text-xl leading-relaxed">
+                  <strong className="underline">dropsofchange.in</strong> is the official website 
+                  and primary domain of Drops Of Change Welfare Society.
+                </p>
+                <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link
+                    to="/google-verification"
+                    className="bg-white text-[#FF6F00] px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300"
+                  >
+                    Google Verification Page
+                  </Link>
+                  <Link
+                    to="/legal-information"
+                    className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-[#FF6F00] transition duration-300"
+                  >
+                    Legal Information
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         {/* Initiatives Section */}
         <section className="py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

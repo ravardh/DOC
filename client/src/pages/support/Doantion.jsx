@@ -93,6 +93,9 @@ const DonationPage = () => {
           Your contribution helps us create lasting impact. All donations are
           eligible for tax benefits under sections 80G and 12A.
         </p>
+        <p className="text-sm mt-2 bg-white bg-opacity-20 inline-block px-4 py-2 rounded-full">
+          <strong>80G Registration:</strong> AAETD0782EF20221
+        </p>
       </div>
 
       {/* Tax Benefits Section */}
@@ -150,7 +153,7 @@ const DonationPage = () => {
                 Why Choose Us for CSR?
               </h3>
               <ul className="list-disc list-inside text-gray-600 space-y-2">
-                <li>Registered under Section 80G and 12A</li>
+                <li>Registered under Section 80G (AAETD0782EF20221) and 12A (AAETD0782EE20221)</li>
                 <li>Transparent fund utilization</li>
                 <li>Regular impact reports</li>
                 <li>Customized CSR programs</li>

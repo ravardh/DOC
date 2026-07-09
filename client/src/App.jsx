@@ -16,6 +16,12 @@ const Contact = lazy(() => import("./pages/Contact"));
 const Publications = lazy(() => import("./pages/Publications"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
+// Legal pages
+const GoogleVerification = lazy(() => import("./pages/GoogleVerification"));
+const LegalInformation = lazy(() => import("./pages/LegalInformation"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsConditions = lazy(() => import("./pages/TermsConditions"));
+
 // Campaign pages
 const NariShakti = lazy(() => import("./pages/campaigns/NariShakti"));
 const SuSikshaPathshala = lazy(() => import("./pages/campaigns/SuSikshaPathshala"));
@@ -68,6 +74,10 @@ const PAGE_TITLES = {
   "/campaigns/streetanimalcare": "Paws & Care",
   "/campaigns/greenearth": "Green Earth Initiative",
   "/campaigns/basta": "Basta: Daily Pathshala",
+  "/google-verification": "Google Verification",
+  "/legal-information": "Legal Information",
+  "/privacy-policy": "Privacy Policy",
+  "/terms-conditions": "Terms & Conditions",
 };
 
 function TitleManager() {
@@ -147,6 +157,10 @@ function App() {
               <Route path="/support/internship" element={<Internship />} />
               <Route path="/support/donate" element={<Donate />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/google-verification" element={<GoogleVerification />} />
+              <Route path="/legal-information" element={<LegalInformation />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
               <Route path="/login" element={<Login />} />
               <Route path="/admin-dashboard" element={<AdminDashboard />} />
               <Route path="/hr-dashboard" element={<HRDashboard />} />

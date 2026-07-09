@@ -41,18 +41,23 @@ function Footer() {
     <>
       <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Organization Info */}
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            {/* Organization Info - spans 2 columns on large screens */}
+            <div className="lg:col-span-2">
               <div className="flex items-center mb-4">
                 <span className="text-lg font-bold text-[#FF6F00]">
                   Drops of Change Welfare Society
                 </span>
               </div>
-              <p className="text-gray-400">
+              <p className="text-gray-400 mb-4">
                 Reaching every corner of the nation to educate young minds and
                 eradicate unemployment and financial distress resulting from
                 persistent illiteracy.
+              </p>
+              <p className="text-sm text-gray-300 bg-gray-800 p-3 rounded-lg">
+                <strong className="text-white">Drops Of Change Welfare Society</strong> is a registered 
+                nonprofit organization in India. <strong className="text-[#FF6F00]">dropsofchange.in</strong> is 
+                the official website and primary domain of Drops Of Change Welfare Society.
               </p>
             </div>
 
@@ -121,6 +126,47 @@ function Footer() {
                 <li>
                   <Link to="/support" className="text-gray-400 hover:text-white">
                     Sponsor a Child
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal & Information */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-[#FF6F00]">
+                Legal & Information
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    to="/legal-information"
+                    className="text-gray-400 hover:text-white"
+                  >
+                    Legal Information
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/google-verification"
+                    className="text-gray-400 hover:text-white"
+                  >
+                    Google Verification
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/privacy-policy"
+                    className="text-gray-400 hover:text-white"
+                  >
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/terms-conditions"
+                    className="text-gray-400 hover:text-white"
+                  >
+                    Terms & Conditions
                   </Link>
                 </li>
               </ul>
@@ -198,7 +244,7 @@ function Footer() {
           <div className="border-t border-gray-800 mt-4 pt-4">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
               <p className="text-gray-400 text-sm sm:text-base text-center sm:text-left">
-                © {new Date().getFullYear()} Drops of Change. All rights reserved.
+                © {new Date().getFullYear()} Drops of Change Welfare Society. All rights reserved.
               </p>
               <span className="text-lg sm:text-xl font-bold text-[#FF6F00] order-first sm:order-none">
                 Total Visitors: {visitorCount.toLocaleString()}

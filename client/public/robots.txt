@@ -1,6 +1,14 @@
 User-agent: *
 Allow: /
 
+# Explicitly allow verification and legal pages (important for Google verification)
+Allow: /google-verification
+Allow: /legal-information
+Allow: /privacy-policy
+Allow: /terms-conditions
+Allow: /about
+Allow: /contact
+
 # Disallow private/internal areas
 Disallow: /admin-dashboard
 Disallow: /hr-dashboard
