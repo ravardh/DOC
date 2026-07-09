@@ -158,7 +158,7 @@ function PrivacyPolicy() {
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Children's Privacy</h2>
               <p className="text-gray-700 leading-relaxed">
-                Our services are not directed to children under 13. We do not knowingly collect 
+                Our services are not directed to children under 5. We do not knowingly collect 
                 personal information from children. If you believe we have collected information 
                 from a child, please contact us immediately.
               </p>
